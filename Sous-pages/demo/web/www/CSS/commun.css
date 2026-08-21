@@ -1,0 +1,141 @@
+
+html {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position:  center;
+  background-attachment:fixed;
+  height : 100%;
+  font-family: "Ironmonger";
+}
+body {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 2fr 1fr;
+
+}
+
+header {
+  grid-row : 1;
+  margin-top : 0px;
+  background : transparent;
+}
+main {
+  grid-row : 2;
+}
+footer {
+  grid-row: 3 ;
+  margin-top: 5%;
+}
+footer > nav{
+  margin-left : auto;
+  margin-right: auto;
+  text-align : center;
+  display: flex;
+  justify-content: center;
+  border-radius : 50px;
+  width : 25em;
+}
+main > nav{
+  overflow: scroll;
+  overflow-x: hidden;
+}
+a{
+  color: white;
+}
+
+h1 {
+  font-size : 3rem;
+  text-align : center;
+  padding : 0px;
+}
+
+
+a {
+  text-decoration : none;
+}
+
+footer {
+  margin-top : 2%;
+}
+footer > nav {
+  width : 30em;
+}
+footer > nav > * {
+  font-size : 1em;
+}
+
+#wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+#selection {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+
+  display: flex ;
+  flex-direction : column;
+  border-radius: 5px;
+
+  pointer-events: none;
+  transform: translateX(-50%) ;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#inputnav {
+  display: none;
+}
+
+#inputnav:checked ~ #selection {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#boutnav {
+  border: hidden;
+  background-color: transparent;
+}
+.liens {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.liens:hover {
+  font-size: 1.1em;
+} 
+
+
+/*Version portrait telephone et tablette (plus adapté aux telephones)*/
+@media (hover :none) and (orientation: portrait) {
+h1 {
+  font-size : 7rem;
+  text-align : center;
+  padding : 0px;
+}
+
+footer > nav {
+  width : 55em;
+}
+footer > nav > * {
+  font-size : 5em;
+}
+  .liens {
+    font-size : 0.5em;
+  }
+}
+/*Version paysage telephone et tablette (plus adapté aux tablettes)*/
+@media (hover :none) and (orientation: landscape) {
+h1 {
+  font-size : 4rem;
+  text-align : center;
+  padding : 0px;
+}
+
+footer > nav {
+  width : 55em;
+}
+footer > nav > * {
+  font-size : 2em;
+}
+}

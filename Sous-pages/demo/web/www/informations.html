@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta property="og:site_name" content="Coeur de Fer : toutes les étoiles">
+        <meta property="og:description" content="Informations diverse sur le site inspiré de Heart of Iron 4">
+        <meta property="og:title" content="Informations">
+        <link rel="stylesheet" type="text/css" href="CSS/myreset.css"/>
+        <link rel="stylesheet" type="text/css" href="CSS/commun.css"/>
+        <link rel="stylesheet" type="text/css" href="CSS/histoire.css"/>
+        <title>Informations</title>
+    </head>
+    <body>
+        <header>
+            <h1>Cœurs De Fer : TOUTES LES ÉTOILES</h1>
+        </header>
+        <main>
+            <nav>
+                <section>
+                  <a class="chap" href="#chap1">Site</a>
+                </section>
+
+                <section>
+                  <a  class="chap" href="#chap2">Contenu</a>
+                </section>
+
+                <section>
+                  <a  class="chap" href="#chap3">Fonctionnalités</a>
+                </section>
+
+                <section>
+                  <a class="chap" href="#chap4">Remarques</a>
+                  <ul class="ulpart">
+                    <li ><a class="part" href="#c4part1">variables CSS</a></li>
+                    <li><a class="part" href="#c4part2">Media Queries</a></li>
+                  </ul>
+                </section>
+            </nav>
+            <article>
+                    <h2 id="chap1">Site</h2>
+                    <p>Ce site reprend le fonctionnement du jeu Hearts of Iron IV, jeu vidéo de grande stratégie dont l'éditeur (Paradox) est crédité dans le pied de page de cette page.
+                        Ce jeu se déroule habituellement au cours de la seconde guerre mondiale (1936-1949), le joueur pouvant changer le cours de l'Histoire par ses actions.
+                        Notre site ne reprend cependant pas ce scénario et se base sur un univers complètement différent, inventé pour se détacher du jeu original.
+                        Ce site a été crée par Guillaume BEUVOT et Enzo BOUCHE, étudiants de Prep'ISIMA 2.
+                    </p>
+
+                    <h2 id="chap2">Contenu</h2>
+                    <p>
+                        Ce site contient, à l'instar du jeu, un menu, un sélecteur de pays majeurs avec un menu cliquable (MENU -> Pays Majeurs), donnant des information sur ces derniers (nom, drapeau, description, drigeant).<br>
+                        Il contient aussi une liste complète des pays (MENU -> Liste Pays), cliquable aussi et donnant aussi des informations sur ces derniers.
+                        Il contient une page expliquant le contexte historique du scénario (MENU -> Histoire), ainsi que des cartes de l'univers de ce site .
+                        Il contient aussi un formulaire (MENU -> formulaire).
+                    </p>
+
+                    <h2 id="chap3">Fonctionnalités</h2>
+                    <p>Ce site, réalisé dans le cadre du projet <i>Technologie de Web - Côté Client</i>, doit répondre à certaines contraintes imposées. Ces contraintes ont été implémentées sur différentes pages à travers ce site :</p>
+                        <ul>
+                            <li>Intégrer plusieurs types de balises (HTML) : Ce site utilise plusieurs balises html, conteneurs et textuels</li>
+                            <li>Organiser en paragraphes (HTML) : Cette page même, tout comme la page histoire sont organisées en paragraphes avec des balises <strong>strong</strong> ou <b>b</b> et <em>em</em> ou <i>i</i> </li>
+                            <li>Intégrer une liste (HTML) : Ce contenu est lui-même présent dans une liste</li>
+                            <li>Intégrer une image avec une légende (HTML) : La (les) carte(s) sont des images liées avec une légende</li>
+                            <li>Intégrer un tableau avec les balises adaptées (HTML) : Un tableau est présent dans la page de la liste complète des pays</li>
+                            <li>Intégrer des balises Open Graph (HTML) : Des balises donnant le nom du site, le titre de la page courante ainsi qu'une breve description de ce qu'elle contient sont présentes sur l'ensemble des pages.</li>
+                            <li>Intégrer des liens hypertextes (HTML) : Le pied de page de cette page (et du site) contient un lien vers un site externe (paradoxinteractive.com), un lien vers le menu, un lien vers le haut de la page (sur la page du menu), et des liens sur des parties/chapitres de texte (pages informations/histoires)</li>
+                            <li>Utiliser une balise myreset.css et une balise commun.css (CSS) : Cela est présent sur le site</li>
+                            <li>Adapter la taille du contenu en fonction de la taille de la fenêtre (CSS) : Cela est présent sur le site</li>
+                            <li>Utiliser des transitions (CSS) : Présent sur le site (pied de page)</li>
+                            <li>Utiliser des <i>media queries</i> pour adapter la visibilité du site en fonction de différents appareils : Ce site est adapté, grâce à cette fonctionnalitée, aux écrans d'ordinateur, de téléphone (en mode portrait) et de tablette (en mode paysage)</li>
+                            <li>Adapter la visibilité du site en fonction des différents handicaps visuels possibles : ce site a été créé pour être visible par tous les types de daltonisme et tous les types de problème de contraste</li>
+                            <li>Intégrer un formulaire (Javascript / Ecmascript) : Présent dans la page Formulaire</li>
+                            <li>Faire fonctionner le formulaire avec un serveur python (Javascript/Ecmascript et python) : Cela a été implémenté avec le formulaire</li>
+                        </ul>
+                    <h2 id="chap4">Remarques</h2>
+                    <h3 id="c4part1">A propos des variables css</h3>
+                    <p>Il y a quelques repetitions au niveau des pages css, nottament au niveau de la gestion des couleurs et du dynamisme de la barre de naviguation de bas de page. Cela devrait pouvoir être limiter en se servant de commun.css et en uniformisant les couleurs de chaque pages (ici on a plusieurs pages en blanc, d'autres en noire, d'autre avec du vert ...). On pourrait alors penser à utiliser les variables css de couleurs pour gerer un mode nuit/jour.</p> 
+                    <h3 id="c4part2">A propos des Media Queries</h3>
+                    <p>Les media queries sont à geométrie variable. Si le menu est assez bien pensé et adapté pour une utilisation sur téléphone ce n'est pas le cas des pages listes pays et pays majeurs. Il faudrait peut être revoir totalement ces pages ci pour les rendres plus adaptable. Pour l'instant elles sont surtout pensées pour une utilisation pc et aurrait peut être du, avant implémentation, être pensées pour chaque utilisations voulues de ce site.</p> 
+            </article>
+        </main>
+        <footer>
+          <nav>
+            <a href="https://www.paradoxinteractive.com/games/hearts-of-iron-iv/about">Paradox</a>
+            <a href="index.html">Menu</a>
+            <div id="wrapper">
+              <input type="checkbox" id="inputnav">
+              <label for="inputnav" id="boutnav">| | |</label>
+
+              <div id="selection">
+                <a class="liens" href="liste_pays/paysMajeurs.html">Pays Majeurs</a>
+                <a class="liens" href="liste_pays/tousLesPays.html">Liste des Pays</a>
+                <a class="liens" href="carte.html">Carte</a>
+                <a class="liens" href="histoire.html">Histoire</a>
+                <a class="liens" href="formulaire/formulaire.html">Formulaire</a>
+              </div>
+            </div>
+          </nav>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,145 @@
+:root {
+  --couleur-principal:#1f1f1f;
+  --couleur-secondaire:#003f00;
+  --couleur-titre: #ffffff;
+  --couleur-titre-hover: #00ffff;
+  --couleur-texte: #000000;
+  --couleur-section : #ffd084;
+  --couleur-li-hover: #067906;
+}
+html{
+  background-image: url(../src/images/fond.png);
+}
+h1, h2, h3, h4{
+  color: var(--couleur-titre);
+}
+section > * {
+  color: var(--couleur-texte);
+}
+main{
+  background-color: var(--couleur-principal); 
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  width:80%;
+
+  margin-left: auto;
+  margin-right: auto;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  border : solid;
+  border-radius: 3px;
+}
+article {
+  padding : 2% ;
+  margin : 0px;
+  display:none;
+  justify-content: space-around;   
+  overflow : scroll;
+  overflow-x : hidden;
+}
+section{
+  /*background-color: var(--couleur-section);*/
+  background-image: url("../src/images/fond1.png");
+  border: thick double var(--couleur-section);
+  width: 45%;
+  max-height: 25em;
+  padding: 2%;
+  text-align: justify;
+  margin : 0px;
+  margin-right: 2px;
+  overflow : scroll;
+  
+}
+
+section > img {
+  padding: 0px;
+  max-width : 30%;
+  border: 7px ridge var(--couleur-principal);
+  border-radius: 3px;
+}
+
+ul{
+  display: flex;
+  list-style-type: none;
+  justify-content: space-evenly;
+}
+
+li{
+  text-align: center;
+  border: 1px solid var(--couleur-titre);
+  background-color:var(--couleur-secondaire);
+}
+
+footer > nav {
+  background-color : var(--couleur-principal);
+}
+footer > nav > * {
+  color : var(--couleur-titre);
+}
+
+li:hover{
+  background-color: var(--couleur-li-hover);
+  cursor: pointer;
+  font-size: 1.1em;
+}
+footer > nav >*:hover {
+  color : var(--couleur-titre-hover);
+  font-size: 1.1em;
+}
+
+#boutnav:hover {
+  cursor: pointer;
+  font-size: 1.1em;
+}
+#selection {
+  background-color: var(--couleur-principal);
+}
+.liens {
+  color : var(--couleur-titre);
+}
+.liens:hover {
+  color : var(--couleur-titre-hover);
+}
+
+main>nav{
+  overflow-y: hidden;
+}
+
+/*Version portrait telephone et tablette (plus adapté aux telephones)*/
+@media (hover :none) and (orientation: portrait) {
+  
+  main {
+    width : 100%;
+    max-width : 100vw;
+  }
+  article {
+    flex-direction : column;
+  }
+  section {
+    width:100%;
+    max-height: 50em;
+  }
+  ul {
+    overflow:scroll;
+  }
+  h2 {
+    font-size : 5em;
+  }
+  h3 {
+    font-size : 3em;
+  }
+  p{
+    font-size : 2em;
+  }
+  li {
+    border : solid;
+    border-color: var(--couleur-titre);
+    font-size : 2em;
+  }
+  footer {
+    margin-top : 10em;
+  }
+}

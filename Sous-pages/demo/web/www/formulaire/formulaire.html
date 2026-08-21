@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <link href="../CSS/myreset.css" rel="stylesheet" type="text/css" />
+        <link href="../CSS/commun.css" rel="stylesheet" type="text/css" />
+        <link href="../CSS/formulaire.css" rel="stylesheet" type="text/css" />
+        <title>Formulaire</title>
+    </head>
+    <body>
+        <header>
+          <h1>COEUR DE FER toutes les étoiles</h1>
+        </header>
+        <main>
+        
+        <form method = "POST" id = formulaire>
+            <h2>Formulaire d'inscription</h2>
+            <div class = "entree">
+                <label for="lastname">Le super nom de famille&nbsp;:</label>
+                <input type = "text" id = "lastname" placeholder = "DUPONT" required>
+            </div>
+            <div class = "entree">
+                <label for="firstname">L'extraordinaire prénom&nbsp;:</label>
+                <input type = "text" id = "firstname" placeholder = "Pierre" required/>
+            </div>
+            <div class = "entree">
+                <label for="useremail">L'incroyable adresse courriel&nbsp;:</label>
+                <input type = "email" id = "useremail" placeholder = "bonjour@exemple.test" required/>
+            </div>
+            <div class = "entree">
+                <label for="username">Le sublime nom d'utilisateur&nbsp;:</label>
+                <input type = "text" id = "username" placeholder = "6 caractères minimum"/>
+            </div>
+            <div class = "entree">
+                <label for="userpwd">L'intrépide mot de mot de passe&nbsp;:</label>
+                <input type = "password" id = "userpwd" required/>
+            </div>
+            <div class = "entree">
+                <label for="birthdate">L'unique date de naissance&nbsp;:</label>
+                <input type = "date" id = "birthdate"/>
+            </div>
+            <button>Soumettre</button>
+            <span id = "erreur"></span>
+        </form>
+        <article>
+            <h2>Merci </h2>
+            <p></p>
+        </article>
+        </main>
+        <footer>
+          <nav>
+            <a href="https://www.paradoxinteractive.com/games/hearts-of-iron-iv/about">Paradox</a>
+            <a href="../index.html">Menu</a>
+
+            <div id="wrapper">
+              <input type="checkbox" id="inputnav">
+              <label for="inputnav" id="boutnav">| | |</label>
+
+              <div id="selection">
+                <a class="liens" href="../liste_pays/paysMajeurs.html">Pays Majeurs</a>
+                <a class="liens" href="../liste_pays/tousLesPays.html">Liste des Pays</a>
+                <a class="liens" href="../histoire.html">Histoire</a>
+                <a class="liens" href="../carte.html">Carte</a>
+                <a class="liens" href="../informations.html">Informations</a>
+              </div>
+            </div>
+          </nav>
+        </footer>
+    <script src="../javascript/formulaire.js"></script>
+    <script src="../javascript/enregistrement.js"></script>
+    </body>
+</html>
