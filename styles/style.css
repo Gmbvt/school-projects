@@ -1,0 +1,91 @@
+html {
+    background-image: url(https://www.yonder.fr/sites/default/files/destinations/CP-0430-Aurlandsfjorden-tatt-fra-Aurlandsvangen-kred-Bergen-Reiselivslag-Girish-Chouhan-visitBergen.com-1863729-Photo_Girish_Chouhan.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #e1f7fa;
+}
+div.document{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-direction: column;
+    padding: 0px 10px;
+}
+div.Descbox{
+    position: relative;
+    float: left;
+
+    border-radius: 25px;
+    background-color: #909090;
+    color: black;
+    width: 500px;
+    padding: 0 20px 20px 20px;
+    opacity: 0.8;
+    transition: 0.2s ease-in-out;
+  }
+div.Descbox:hover{
+    background-color: #D0D0D0;
+    color: darkred;
+    opacity: 0.9;
+  }
+h1.Title {
+    color: #000000;
+    font-size: 60px;
+    text-align: center;
+    padding: 0 20px 20px 20px;
+    opacity: 0.8;
+}
+h2 {
+    color: #000000;
+    font-size: 30px;
+    text-align: center;
+    padding: 0 20px 20px 20px;
+    opacity: 0.8;    
+}
+.Btitle {
+
+    text-align: center;
+    font-size: 30px;
+    font-weight: 100;
+}
+.sidebar {
+    height: 100%;
+    width: 160px;
+    position: fixed;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    background-color: #000000;
+    overflow-x: hidden;
+    padding-top: 20px;
+    opacity: 0.8;
+}
+.sidebar a,.sidebar span {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    
+    color: #818181;
+    display: block;
+}
+.sidebar a:hover, .sidebar span:hover {
+    color: #f1f1f1;
+}
+#Sside{
+    margin-left: 160px;
+    width: 0;
+    opacity: 0.9;
+    transition: 0.2s;
+}
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
