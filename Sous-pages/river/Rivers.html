@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <link href="styles/style.css" rel="stylesheet" type="text/css" />
+        <meta name = "viewport" content="width=device-width" />
+        <title>Rapport River I et II</title>
+        
+    </head>
+    <body>        
+        <div class="sidebar">
+            <a><strong>Table des Matières</strong></a>
+            <ul>
+                <li><a class="Chap" href="#Introduction">Introduction</a></li>
+                <li><a class="Chap" href="#Pb1">Premier Problème</a></li>
+                <ol>
+                    <li><a class="SousChap" href = "#Entrees1">Données en entrée</a></li>
+                    <li><a class="SousChap" href = "#Sortie1">Données en sortie</a></li>
+                </ol>
+                <li><a class="Chap" href="#Resolution1">Résolution</a></li>           
+                <ol>
+                    <li><a class="SousChap" href = "#Resume1">Résumé de la méthode</a></li>
+                    <li><a class="SousChap" href = "#Algo1">Transposition en langage C</a></li>
+                    <li><a class="SousChap" href = "#Code1">Code C de la résolution</a></li>
+                    <li><a class="SousChap" href = "#Comparaison1">Comparaison avec un autre Codingamer</a></li>
+                </ol> 
+                <li><a class="Chap" href="#Pb2">Deuxième problème</a></li>
+                <ol>
+                    <li><a class="SousChap" href = "#Entrees2">Données en entrée</a></li>
+                    <li><a class="SousChap" href = "#Sortie2">Données en sortie</a></li>
+                </ol> 
+                <li><a class="Chap" href="#Resolution2">Résolution du deuxième puzzle</a></li>
+                <li><a class="Chap" href="#Bilan">Bilan</a></li>
+            </ul>
+        </div>
+        <header>
+            <h1 class = "Title" >The River</h1>
+            <img id = "UCA" src="https://www.isima.fr/wp-content/uploads/2023/01/Logo_ISIMA_INP.jpg" alt="UCA">
+            <img id = "RiverPicture" src ="https://geekazine.com/wp-content/uploads/2017/09/raft.jpg" alt="Rivière">
+            <a href="https://geekazine.com/news/guy-straps-six-rafts-together-for-crazy-white-water-rafting-experience/" target="_blank">Source</a> 
+            <subheader><h3>Par Guillaume BEUVOT, étudiant de prep'ISIMA 1, 2024/2025</h3></subheader>
+        </header>
+
+        <main>
+            <h2 id = "Introduction">Introduction au puzzle</h2>
+            <p>
+                En mathématiques, le concept de rivière est simple à comprendre. Il peut être défini récursivement par : 
+                <ol>
+                    <li>Prendre un nombre <strong>supérieur à 0</strong></li>
+                    <li>Additionner les chiffres qui le composent</li>
+                    <li>Additionner le résultat avec le nombre de départ</li>
+                    <li>Répéter les étapes 1., 2. et 3. avec le nombre obtenu</li>
+                </ol>
+                <p>Soit, en prenant par exemple le nombre 1867 on obtient :</p>
+                <ol>
+                    <li>1 8 6 7</li>
+                    <li>1 + 8 + 6 + 7 = 22</li>
+                    <li>1867 + 22 = 1889</li>
+                    <p> </p>
+                    <li><ol>
+                            <li>1 8 8 9</li>
+
+                            <li>1 + 8 + 8 + 9 = 26</li>
+
+                            <li>1889 + 26 = 1915</li>
+                            <p> </p>
+                            <li><ol>
+                                <li>1 9 1 5</li>
+
+                                <li>1 + 9 + 1 + 5 = 16</li>
+
+                                <li>1915 + 16 = 1931</li>
+                                <p> </p>
+                                <li>. . .</li>
+                            </ol></li>                    
+                    </ol></li>
+                </ol>
+            </p>
+            <p>
+                Une rivière est donc une suite dont la croissance est infinie. Une rivière peut contenir deux types de nombres :
+                <ul>
+                    <li>Des point de confluence, ou des nombres ayant deux ou plus termes précédents, comme 519, qui a comme termes précédents 498 et 507.</li>
+                    <li>Des sources, ou des nombres présents dans une seule rivière (celle qu'ils débutent), comme 20 qui n'est présent que dans la rivière commençant par 20</li>
+                </ul> 
+                <p>Le problème en langage C à traiter est, dans un premier temps, de créer un programme qui puisse connaître le point de confluence de deux nombres donnés, et dans un deuxième temps, de déterminer si un nombre donné est une source.</p>
+                <p>Nous allons d'abord traiter le premier cas, puis utiliser les bases de l'algorithme utilisé pour résoudre le deuxième problème.</p>
+            </p>
+            <h2 id="Pb1">Premier problème</h2>
+            <h3 id = "Entrees1">Les données auxquelles nous disposons sont donc :</h3>
+                <ul>
+                    <li>r1, le premier nombre</li>
+                    <li>r2, le deuxième nombre</li>
+                </ul>
+            <p>
+                r1 et r2 ne sont pas explicitement positionnés dans un ordre quelconque, r1 peut être supérieur <em>OU</em> inférieur à r2.
+            </p>
+            <h3 id = "Sortie1">Les données à renvoyer sont donc :</h3>
+            <ul><li>Le point de confluence commun à ces deux nombres</li></ul>
+            <h2 id = "Resolution1">Résolution du premier puzzle</h2>
+
+            <h3 id = "Resume1">Résumé de la méthode</h3>
+            <p>L'algorithme qui donne pour un nombre son terme suivant reprendra exactement celui évoqué en introduction. </p>
+            <p>La résolution de ce puzzle étant écrite en langage C, il n'est pas possible de facilement transformer un nombre en chaîne de caractères, puis d'extraire chacun des chiffres pour les additionner.</p>
+            <p>Nous allons trouver une autre solution sans chaîne de caractères, que nous verrons dans la prochain partie. La suite de l'algorithme consistera à choisir quand faire passer un nombre à son terme suivant dans la rivière.</p>
+            <p>Pour répondre à cette question, nous initialeriseront une boucle qui sera exécutée tant que les deux nombres r1 et r2 sont différents. Pour chaque itération de la boucle nous appliqueront l'algorithme de rivière au nombre qui est inférieur à l'autre.</p>
+            <h3 id = "Algo1">Transposition en langage C</h3>
+                <p>Nous commençons par créer un tableau qui contiendra les chiffres de r1 ou de r2. Il est de taille 10, car les nombres r1 et r2 sont inférieurs à 10<sup>9</sup></p>
+                <p>Après l'entrée des valeurs de r1 et r2, la boucle suivante s'effectue tant que r1 est différent de r2 :</p>
+            <ol>
+                <li>On prend le plus petit nombre entre r1 et r2.</li>
+                <li>On le stocke dans une variable temporaire</li>
+                <li>On effectue une boucle tant que cette variable est non-vide :</li>
+                <ul>
+                    <li>Soit i l'indice de l'itération de la boucle</li>
+                    <li>Tant que la variable temporaire n'est pas divisible par 10<sup>i</sup> (i est initialisé à 1):
+                    <ul>On retire 10<sup>i-1</sup> à notre variable temporaire et on ajoute 1 à la i-1<sup>ème</sup>case du tableau</ul></li>
+                    <li>On ajoute 1 à i</li>
+                </ul>
+                <li>On ajoute chaque nombre du tableau au nombre de départ.</li>
+            </ol>
+
+            <h3 id = "Code1">Code en C de la résolution</h3>
+                <pre>
+                    <code>
+                        int i = 1, test = 0;
+                        long long number_r [10];
+                    </code>
+                </pre>
+            <p>Le programme commence par l'initialisation des variables. Le type long long permet de stocker des valeurs allant jusqu'à 2<sup>63</sup>-1</p>
+
+            <pre>
+                <code>
+                    while (r_1 != r_2)
+                </code>
+            </pre>
+            <p>C'est la boucle qui va s'exécuter tant que les variables r1 et r2 ont des valeurs différentes.</p>
+            <p>Nous allons traiter le cas générique du test <code>r1>r2</code>, puisque les deux cas ne diffèrent que par le nom de la variable traitée. Dans le code suivant la variable sera r.</p>
+            <pre>
+                <code>
+                    test = r;
+                    i = 1;
+                </code>
+            </pre>
+            <p>On initialise la variable temporaire à r. C'est cette variable sur laquelle on travaillera par la suite</p>
+            <p>i est initialisée à 1</p>
+
+            
+            <pre>
+                <code>
+                    while (test != 0) {
+                    }
+                </code>
+            </pre>
+            <p>Cette boucle s'effectuera tant que la variable temporaire sera non-nulle.</p>
+            <pre>
+                <code>
+                        number_r[i-1] = 0;
+                        while ((test % (int)pow(10,i)) != 0) {
+                            test -= (int)pow(10,i-1);
+                            number_r[i-1] +=1;
+                        }
+                        i++;
+                </code>
+            </pre>
+            <p>La case i-1 est initialisée à 0, pour éviter de garder les valeurs précédemment ajoutées.</p>
+            <p>Tant que la variable temporaire n'est pas divisible par 10<sup>i</sup>, on enlève 10<sup>i-1</sup> à notre variable temporaire et on ajoute 1 à la case i de notre tableau. (Par exemple, pour une variable temporaire de valeur 426 et i = 1, tant que 426 n'est pas divisible par 10<sup>1</sup>, on retire 1 et on ajoute 1 à la première case du tableau jusqu'à obtenir le nombre 420)</p>
+            <p>On finit par ajouter 1 à i.</p>
+
+            <pre>
+                <code>
+                    for (int k = 0; k < 10; k++) {
+                        r += number_r[k];
+                    }
+                </code>
+            </pre>
+            <p>Enfin, on ajoute chaque nombre du tableau à notre variable de départ(sachant que les cases non remplies ont une valeur de 0 et n'influeront pas sur le résultat).</p>
+            
+
+            <h3 id="Comparaison1">Comparaison avec un autre Codingamer</h3>
+
+            <p>Le code donné par l'utilisateur <a href="https://www.codingame.com/profile/907c9ccd81091cee022baa60234db551987988" target="_blank">Alain-Delpuch</a> sur Codingame propose une solution différente de celle étudiée dans cette première partie.</p>
+                
+            <p>Il commence par créer une fonction <em>s</em>, prenant en entrée un entier et retourne son terme suivant dans la rivière</p>
+            <pre>
+                <code>
+                    int s(int n) {
+                        return n ? n % 10 + s( n / 10 ) : 0 ;
+                    }
+                </code>
+            </pre>
+            <p>La valeur retournée n'est pas évidente pour un lecteur non renseigné. Elle utilise l'opérateur '?', qui est l'opérateur conditionel. Si l'expression booléenne placée avant le '?' est vraie, alors le programme exécute l'instruction placée entre le '?' et le ':', sinon il exécute l'instruction placée après le ':'</p>
+            <p>Ici, si n est non-nul, la fonction retourne le reste de la division entière de n par 10 ajouté à l'image par la fonction <em>s</em> du quotient de la division entière de n par 10, faisant donc de <em>s</em> une fonction récursive</p>
+            <p>Si n est nul, la fonction renvoie 0.</p>
+
+            <pre>
+                <code>
+                    main(r1, r2) {
+                        if ( r1 == 1  ) scanf("%d %d", &r1, &r2);
+                        if ( r1 == r2 ) printf("%d", r1);
+                        if ( r1 > r2  ) main ( r1         , r2 + s(r2) );
+                        if ( r1 < r2  ) main ( r1 + s(r1) , r2         ); 
+                    }
+                </code>
+            </pre>
+            <p>Ici, la fonction principale est aussi rendue récursive, s'appelant elle-même.</p>
+            <ul>
+                <li>Si r1 est égal à 1, cela veut dire que nous sommes au début du programme, les instructions permettant d'entrer les valeurs r1 et r2 sont donc effectuées</li>
+                <li>Si r1 est égal à r2, le résultat r1, point de confluence est renvoyé</li>
+                <li>Si r1 est supérieur à r2, un appel à la fonction principale est réalisé, prenant en argument r1 et l'image de r2 par la fonction récursive <em>s</em></li>
+                <li>Si r1 est inférieur à r2, un appel à la fonction principale est réalisé, prenant en argument l'image de r1 par la fonction récursive <em>s</em> et r2</li>
+            </ul>
+
+
+            <p>Le détail le plus attirant est sans-doute le fait que le code ne comporte que 13 lignes en comptant la directive de préprocesseur #include tout en restant efficace</p>
+            <p>La récursivité rend aussi ce code très élégant, y compris dans la fonction principale (le Codingamer ajoutera dans un commentaire que "<em>le premier argument est fixé à 1 au début du programme, puisque les programmes Codingame sont appelés sans argument</em>", ce qui explique le premier test effectué)</p>
+            
+            
+
+            <h2 id = "Pb2">Deuxième problème</h2>
+            <p>Nous allons maintenant résoudre le deuxième problème, qui consiste à savoir si un nombre donné est présent dans plusieures rivières ou non.</p>
+
+            <h3 id = "Entrees2">Les données auxquelles nous disposons sont donc :</h3>
+                <ul>
+                    <li>r1, le nombre à tester</li>
+                </ul>
+            <h3 id = "Sortie2">Les données à renvoyer sont donc :</h3>
+            <ul><li>La réponse "YES" ("OUI") ou "NO" ("NON") à la question de la présence du nombre dans une autre rivière.</li></ul>
+            <h2 id = "Resolution2">Résolution du deuxième puzzle</h2>
+            <p>Pour cette partie, nous allons prendre l'algorithme étudié dans la première partie.</p>
+            <p>Nous vérifieront, pour chaque entier entre r_1-1 et 1, si son terme suivant dans la rivière est égal à r_1, signifiant que ce n'est plus une source.</p>
+            <p>Le procédé est très similaire à celui du premier problème</p>
+            <p>En langage C, cela se traduit par : </p>
+            <ol>
+                <li>Notre nombre à tester prend la valeur de r_1-1</li>
+                <li>Dans la boucle principale, tester le terme suivant dans la rivière de notre nombre à tester</li>
+                <li>S'il est égal à r_1, sortir de la boucle</li>
+                <li>Diminuer le nombre à tester de 1 (effectuer une recherche en décroissance est plus efficace que partir de 1 et augmenter à chaque itération)</li>
+                <li>Après la boucle, si r n'a pas été retrouvé dans une autre rivière, envoyer non, envoyer oui sinon</li>
+            </ol>
+
+            <p>Au niveau du code on a (<a href="#Code1">en plus du code précédent</a>):</p>
+            <ul>
+                <li><code>int answer = 0</code>, la variable booléenne de réponse (un test sera fait, renvoyant non si <code>answer == 0</code>, oui sinon)</li>
+                <li><code>int t = r_1</code>, le nombre à tester dans la boucle principale</li>
+                <li><code>while (t > 1 && answer == 0)</code>, la boucle principale, qui s'exécute tant que le nombre à tester est supérieur à 1 et que r_1 n'a pas été trouvé dans une rivière</li>
+            </ul>
+            <p>Enfin, avant d'envoyer la réponse, un simple test pour déterminer la réponse à envoyer :</p>
+            <pre>
+                <code>
+                    if (answer == 0) {
+                        printf("NO\n");
+                    }
+                    else {
+                        printf("YES\n");
+                    }
+                </code>
+            </pre>
+
+
+            <h2 id = "Bilan">Bilan</h2>
+            
+            <p>Ce puzzle est un très bon moyen, en réfléchissant avec l'algorithme proposé d'apprendre ou de maîtriser le concept de tableaux en langage C, qui propose un moyen différent du Python de traiter des types <em>conteneurs</em></p>
+            <p>La combinaison des deux puzzles permet de réfléchir "à long terme" en se forçant à créer du code s'insérant facilement dans un autre programme, réalisant une économie de temps plus ou moins efficace</p>
+            <p>La partie Comparaison avec un autre Codingamer m'a permi de faire des recherches et de mieux comprendre l'opérateur <em>'?'</em> qui est l'opérateur conditionnel</p>    
+        </main>
+    </body>

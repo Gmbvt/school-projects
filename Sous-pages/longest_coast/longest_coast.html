@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-04 dim. 22:42 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Longest Coast</title>
+<meta name="author" content="Guillaume BEUVOT - Prep'ISIMA" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/search.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/search.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Longest Coast</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org32f89dc">1. Introduction au puzzle</a>
+<ul>
+<li><a href="#org340f89a">1.1. Les données auxquelles nous disposons sont donc :</a></li>
+<li><a href="#org07bec7d">1.2. Les données à renvoyer sont donc :</a></li>
+</ul>
+</li>
+<li><a href="#orgf757036">2. Résolution du puzzle</a>
+<ul>
+<li><a href="#org881a582">2.1. Résumé de la méthode</a></li>
+<li><a href="#org5eb631a">2.2. Tansposition en langage C</a></li>
+<li><a href="#orgbd78cb6">2.3. Code en langage C de la résolution</a></li>
+</ul>
+</li>
+<li><a href="#org248f1f7">3. Solution d&rsquo;un autre CodinGamer</a></li>
+<li><a href="#org471381f">4. Bilan</a></li>
+</ul>
+</div>
+</div>
+
+<div id="org5df5afa" class="figure">
+<p><img src="images/uca.jpg" alt="uca.jpg" />
+</p>
+</div>
+
+<p>
+<img src="images/coast.jpg" alt="coast.jpg" />
+<a href="longest_coast.txt">Lien vers le document .org</a>
+</p>
+<div id="outline-container-org32f89dc" class="outline-2">
+<h2 id="org32f89dc"><span class="section-number-2">1.</span> Introduction au puzzle</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+En imaginant une grille remplie soit de cases d&rsquo;eau soit de cases d&rsquo;île, il faut pouvoir déterminer l&rsquo;île qui a la plus grande côte, soit le nombre total de cases d&rsquo;eau adjacentes à ses cases d&rsquo;îles.
+</p>
+
+<p>
+Une île est bien-sûr définie par la connexion de plusieures cases d&rsquo;îles. Une case d&rsquo;île est connectée à une autre si les deux sont adjacentes (donc les diagonales ne sont pas valides)
+</p>
+
+<p>
+Le problème en langage C à traiter est donc, à partir d&rsquo;une carte, dont les côtés ont la même longueur, de donner l&rsquo;île avec la plus grande côte ainsi que la taille de la côte, ou le nombre de cases d&rsquo;eau adjacentes à chaque cases d&rsquo;île, sans compter pour autant deux fois la même case d&rsquo;eau si elle est adjacente à deux cases d&rsquo;île.
+</p>
+</div>
+<div id="outline-container-org340f89a" class="outline-3">
+<h3 id="org340f89a"><span class="section-number-3">1.1.</span> Les données auxquelles nous disposons sont donc :</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Un entier compris enre 3 et 50, qui représente la longueur des côtés de la grille</li>
+<li>La grille, ou carte, où les cases d&rsquo;eau sont représentées par le caractère <code>~</code> et les cases d&rsquo;île par le caractère <code>#</code></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org07bec7d" class="outline-3">
+<h3 id="org07bec7d"><span class="section-number-3">1.2.</span> Les données à renvoyer sont donc :</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Un entier représentant le numéro de l&rsquo;île qui possède la plus grande côte, suivie de la longueur total de ses côtes (sous forme d&rsquo;entier)</li>
+</ul>
+<p>
+Pour pouvoir donner le numéro de l&rsquo;île, il est précisé que l&rsquo;ordre est le suivant :
+</p>
+
+<ul class="org-ul">
+<li>Nous partons du coin supérieur gauche.</li>
+
+<li>Nous parcourons de gauche à droite chaque ligne, puis, en arrivant à la fin d&rsquo;une ligne, nous passons à la ligne en-dessous</li>
+
+<li>Sur le parcours, si une case d&rsquo;île qui n&rsquo;a pas été découverte est rencontrée, l&rsquo;île en question devient la suivante dans l&rsquo;ordre des îles</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf757036" class="outline-2">
+<h2 id="orgf757036"><span class="section-number-2">2.</span> Résolution du puzzle</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org881a582" class="outline-3">
+<h3 id="org881a582"><span class="section-number-3">2.1.</span> Résumé de la méthode</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Nous explorons la grille de la manière qui a été précisée.
+</p>
+
+<p>
+En rencontrant une île, nous entammons un processus &ldquo;d&rsquo;exploration&rdquo; de l&rsquo;île, nous découvrons chaque case liée à l&rsquo;île, puis nous comptons la longueur de la côte de l&rsquo;île, que nous sauvegarderons, avant de &ldquo;faire couler&rdquo; l&rsquo;île, pour recommencer la recherche, jusqu&rsquo;à la fin de l&rsquo;exploration de la grille, c&rsquo;est-à-dire lorsque la grille est totalement couverte de cases d&rsquo;eau.
+</p>
+
+<p>
+Enfin, nous comparons les côtes de chaque île, puis renvoynons la plus grande.
+</p>
+</div>
+</div>
+<div id="outline-container-org5eb631a" class="outline-3">
+<h3 id="org5eb631a"><span class="section-number-3">2.2.</span> Tansposition en langage C</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Nous commençons par sauvegarder la carte dans un tableau de chaînes de caractères.
+</p>
+
+<p>
+Nous entrons ensuite dans la phase de recherche d&rsquo;îles, qui sera une boucle imbriquée dans une autre, qui parcourent l&rsquo;ensemble de la grille:
+</p>
+<ul class="org-ul">
+<li>Si la case rencontrée est un case d&rsquo;île :
+<ul class="org-ul">
+<li>La case actuelle est comptée comme &ldquo;explorée&rdquo;, et change de caractère.</li>
+<li>Nous entrons ensuite dans une nouvelle boucle, qui ne s&rsquo;arrête pas tant que l&rsquo;île entière n&rsquo;a pas été explorée, c&rsquo;est-à-dire qu&rsquo;aucune case sur l&rsquo;île ne soit une case d&rsquo;île non explorée.
+<ul class="org-ul">
+<li>Cela nous fait entrer dans une autre boucle, qui parcourt l&rsquo;ensemble de la carte :</li>
+<li>Si la case rencontrée est une case d&rsquo;île, nous regardons chaque case adjacente à cette case: s&rsquo;il y a au moins une case d&rsquo;île explorée, la case rencontrée est transformée en cases d&rsquo;île explorée</li>
+</ul></li>
+<li>Après l&rsquo;exploration, nous regardons chaque case d&rsquo;île explorée, cette fois-ci encore, dans une boucle qui parcourt l&rsquo;ensemble de la grille :
+<ul class="org-ul">
+<li>Si la case rencontrée est une case d&rsquo;île explorée, nous regardons chaque case adjacente à cette case : chaque case d&rsquo;eau ajoute 1 à la longueur de la côte de l&rsquo;île et est transformée en case d&rsquo;eau explorée, pour éviter de la compter une deuxième fois.</li>
+</ul></li>
+<li>Enfin, après avoir sauvegardé le numéro de l&rsquo;île et la longueur de ses côtes, nous entrons dans une boucle qui parcourt chaque case de la grille, puis remplace chaque case d&rsquo;île explorée et d&rsquo;eau explorée en case d&rsquo;eau, pour éviter de les retrouver dans la suite de l&rsquo;exploration de la grille.</li>
+<li>Nous passons ensuite à l&rsquo;île suivante</li>
+</ul></li>
+</ul>
+<p>
+Lorsque toutes les îles ont été explorées, nous entrons dans une boucle qui compare les longueur des côtes de chaque île :
+</p>
+<ul class="org-ul">
+<li>Si la longueur des côtes de l&rsquo;île actuelle est plus grand que la longueur des côtes de l&rsquo;île avec la plus grande côte, l&rsquo;île actuelle devient l&rsquo;île avec la plus grande côte.</li>
+</ul>
+<p>
+Nous renvoyons enfin le numéro de l&rsquo;île avec la plus grande longueur de côte, suivie de la longueur de sa côte.
+</p>
+</div>
+</div>
+<div id="outline-container-orgbd78cb6" class="outline-3">
+<h3 id="orgbd78cb6"><span class="section-number-3">2.3.</span> Code en langage C de la résolution</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Nous déclarons nos variables :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">map1</span>[<span style="color: #da8548; font-weight: bold;">64</span>][<span style="color: #da8548; font-weight: bold;">64</span>];
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">island</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">coast</span>[<span style="color: #da8548; font-weight: bold;">256</span>]={<span style="color: #da8548; font-weight: bold;">0</span>};
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">max</span>[<span style="color: #da8548; font-weight: bold;">2</span>] = {<span style="color: #da8548; font-weight: bold;">0</span>};
+</pre>
+</div>
+<ul class="org-ul">
+<li><code>char map1[64][64]</code> sera la grille sur laquelle nous travaillerons, c&rsquo;est un tableau de chaînes de caractères</li>
+<li><code>int island</code> sera le numero de chaque île, permettant de les placer dans le tableau répertoriant les longueurs de côtes, c&rsquo;est un entier</li>
+<li><code>int coast[256]</code> sera le tableau répertoriant les longueurs des côtes de chaque île, c&rsquo;est un tableau d&rsquo;entiers</li>
+<li><code>int max[2]</code> nous servira à trouver l&rsquo;île à renvoyer et la longueur de ses côtes, c&rsquo;est un tableau d&rsquo;entiers</li>
+</ul>
+
+<p>
+Nous sauvegardons ensuite la carte dans notre grille, ou tableau de chaînes de caractères:
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; n; i++) {
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">row</span>[n + <span style="color: #da8548; font-weight: bold;">1</span>];
+    scanf(<span style="color: #98be65;">"%[^\n]"</span>, row); fgetc(stdin);
+    sprintf(map1[i], <span style="color: #98be65;">"%s"</span>, row);
+}
+</pre>
+</div>
+<p>
+Chaque ligne tapée est une chaîne de caractère sauvegardée dans <code>map1</code>, permettant de créer une grille.
+</p>
+
+
+<p>
+Nous entrons ensuite dans la boucle de recherche, qui parcourt toute la grille :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i&lt;n; i++) {
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = <span style="color: #da8548; font-weight: bold;">0</span>; j&lt;n;j++) {
+</pre>
+</div>
+
+
+<p>
+Nous nous arrêtons si nous avou=ns découvert une case d&rsquo;île:
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(map1[i][j]==<span style="color: #98be65;">'#'</span>){
+    map1[i][j]=<span style="color: #98be65;">'+'</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">explored</span> = <span style="color: #da8548; font-weight: bold;">1</span>;
+</pre>
+</div>
+<p>
+Nous la transformons en case d&rsquo;île explorée, représentée par le caractère <code>+</code>
+</p>
+
+<p>
+Nous commençons ensuite l&rsquo;exploration de l&rsquo;île, la variable booléenne d&rsquo;exploration est initialisée à 1, signifiant que l&rsquo;île n&rsquo;a été explorée entièrement.
+</p>
+
+<p>
+L&rsquo;exploration se traduit par une boucle, qui s&rsquo;arrête quand l&rsquo;exploration est terminée, donc que la variable d&rsquo;exploration est nulle :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">while</span>(explored) {
+    explored = <span style="color: #da8548; font-weight: bold;">0</span>;
+</pre>
+</div>
+<p>
+La variable d&rsquo;exploration est mise à 0, nous partons ici du principe que l&rsquo;île a entièrement été explorée, nou allons donc vérifier chaque case de l&rsquo;île.
+</p>
+
+<p>
+Nous entrons dans une nouvelle boucle, qui parcourt toute la grille.
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span> = <span style="color: #da8548; font-weight: bold;">0</span>; a &lt; n; a++) {
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span> = <span style="color: #da8548; font-weight: bold;">0</span>; b &lt; n; b++) {
+</pre>
+</div>
+
+
+
+<p>
+Nous nous arrêtons si nous rencontrons une case d&rsquo;île :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(map1[a][b] == <span style="color: #98be65;">'#'</span>) {
+    <span style="color: #51afef;">if</span>(map1[a+<span style="color: #da8548; font-weight: bold;">1</span>][b] == <span style="color: #98be65;">'+'</span> || map1[a][b+<span style="color: #da8548; font-weight: bold;">1</span>] == <span style="color: #98be65;">'+'</span> || map1[a-<span style="color: #da8548; font-weight: bold;">1</span>][b] == <span style="color: #98be65;">'+'</span> || map1[a][b-<span style="color: #da8548; font-weight: bold;">1</span>] == <span style="color: #98be65;">'+'</span>){
+        explored = <span style="color: #da8548; font-weight: bold;">1</span>;
+        map1[a][b] = <span style="color: #98be65;">'+'</span>;
+    }
+}
+</pre>
+</div>
+<p>
+Si une <code>+</code> case d&rsquo;île explorée se trouve au-dessus, en-dessous, à gauche ou à droite de cette case, nous mettons la variable d&rsquo;exploration à 1, ce qui veut dire que l&rsquo;exploration n&rsquo;est pas terminée, et nous transformons cette case en case d&rsquo;île explorée.
+</p>
+
+<p>
+Après avoir expolré toute l&rsquo;île, nous pouvons maintenant mesurer la longueur des côtes de l&rsquo;île avec une boucle qui parcourt toute la grille:
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span> = <span style="color: #da8548; font-weight: bold;">0</span>; a &lt; n; a++) {
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span> = <span style="color: #da8548; font-weight: bold;">0</span>; b &lt; n; b++) {
+</pre>
+</div>
+
+
+<p>
+Nous nous arrêtons si nous rencontrns une case d&rsquo;île explorée:
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(map1[a][b] == <span style="color: #98be65;">'+'</span>){
+</pre>
+</div>
+
+
+<p>
+Nous regardons chaque case adjacente à cette case :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(map1[a-<span style="color: #da8548; font-weight: bold;">1</span>][b] == <span style="color: #98be65;">'~'</span>) {
+    map1[a-<span style="color: #da8548; font-weight: bold;">1</span>][b] = <span style="color: #98be65;">'!'</span>;
+    coast[island]++;
+}
+<span style="color: #51afef;">if</span>(map1[a+<span style="color: #da8548; font-weight: bold;">1</span>][b] == <span style="color: #98be65;">'~'</span>) {
+    map1[a+<span style="color: #da8548; font-weight: bold;">1</span>][b] = <span style="color: #98be65;">'!'</span>;
+    coast[island]++;
+}
+<span style="color: #51afef;">if</span>(map1[a][b-<span style="color: #da8548; font-weight: bold;">1</span>] == <span style="color: #98be65;">'~'</span>) {
+    map1[a][b-<span style="color: #da8548; font-weight: bold;">1</span>] = <span style="color: #98be65;">'!'</span>;
+    coast[island]++;
+}
+<span style="color: #51afef;">if</span>(map1[a][b+<span style="color: #da8548; font-weight: bold;">1</span>] == <span style="color: #98be65;">'~'</span>) {
+    map1[a][b+<span style="color: #da8548; font-weight: bold;">1</span>] = <span style="color: #98be65;">'!'</span>;
+    coast[island]++;
+} 
+</pre>
+</div>
+<p>
+Si une case d&rsquo;eau est trouvée, nous transformons la case d&rsquo;eau en case d&rsquo;eau explorée puis nous augmentons la taille de la côte de l&rsquo;île.
+</p>
+
+<p>
+Enfin, après avoir parcouru toutes la côte de l&rsquo;île, nous réalisons un dernier parcours de toute la grille, pour remplacer les cases explorées par des cases d&rsquo;eau :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span> = <span style="color: #da8548; font-weight: bold;">0</span>; a &lt; n; a++) {
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span> = <span style="color: #da8548; font-weight: bold;">0</span>; b &lt; n; b++) {
+        <span style="color: #51afef;">if</span>(map1[a][b]==<span style="color: #98be65;">'!'</span> || map1[a][b]==<span style="color: #98be65;">'+'</span>)map1[a][b]=<span style="color: #98be65;">'~'</span>;
+    }
+}
+</pre>
+</div>
+
+
+<p>
+Nous passons ainsi à l&rsquo;île suivante, que nous allons devoir chercher :
+</p>
+<div class="org-src-container">
+<pre class="src src-c">island++;
+</pre>
+</div>
+
+
+<p>
+Finalement, à la fin de la boucle principale, nous comparons les côtes des îles :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt;island; i++) {
+    <span style="color: #51afef;">if</span>(max[<span style="color: #da8548; font-weight: bold;">1</span>] &lt; coast[i]) {
+        max[<span style="color: #da8548; font-weight: bold;">0</span>] = i;
+        max[<span style="color: #da8548; font-weight: bold;">1</span>] = coast[i];
+    }
+}
+</pre>
+</div>
+<p>
+Nous remplaçons l&rsquo;île ayant une longueur de côte maximale par une île qui a une plus grande côte.
+La première case du tableau <code>max</code> correspond au numéro de l&rsquo;île, la deuxième case correspond à la longueur des côtes de l&rsquo;île.
+</p>
+
+
+<p>
+Nous finissons par renvoyer le numéro de l&rsquo;île avec la plus grande côte, suivi par la longueur de ses côtes.
+</p>
+<div class="org-src-container">
+<pre class="src src-c">printf(<span style="color: #98be65;">"%d %d\n"</span>, <span style="color: #ECBE7B;">max</span>[<span style="color: #da8548; font-weight: bold;">0</span>]+<span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #ECBE7B;">max</span>[<span style="color: #da8548; font-weight: bold;">1</span>]);
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org248f1f7" class="outline-2">
+<h2 id="org248f1f7"><span class="section-number-2">3.</span> Solution d&rsquo;un autre CodinGamer</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+L&rsquo;utilisateur <a href="https://www.codingame.com/profile/1a90baa85a42949605163c749d82a0110245803">MJZ</a> utilise une méthode avec un algorithme demandant moins de place en mémoire, en offrant une solution incluant une fonction <code>count_water</code> récursive :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">count_water</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">r</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">c</span>){
+    <span style="color: #51afef;">if</span>(r &lt; <span style="color: #da8548; font-weight: bold;">0</span> || r &gt;= n)  <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">if</span>(c &lt; <span style="color: #da8548; font-weight: bold;">0</span> || c &gt;= n)  <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">if</span>(map[r][c] == <span style="color: #98be65;">'~'</span>){
+        map[r][c] = <span style="color: #98be65;">'W'</span>;
+        <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">1</span>;
+    }
+    <span style="color: #51afef;">if</span>(map[r][c] == <span style="color: #98be65;">'#'</span>){
+        map[r][c] = <span style="color: #98be65;">'X'</span>;
+        <span style="color: #51afef;">return</span> count_water(r+<span style="color: #da8548; font-weight: bold;">1</span>, c) + count_water(r, c+<span style="color: #da8548; font-weight: bold;">1</span>) +
+               count_water(r-<span style="color: #da8548; font-weight: bold;">1</span>, c) + count_water(r, c-<span style="color: #da8548; font-weight: bold;">1</span>);
+    }
+    <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+}
+</pre>
+</div>
+<ul class="org-ul">
+<li>Dans le cas où la case ne se trouve pas sur la grille, la fonction renvoie 0,</li>
+<li>Dans le cas où la case est une case d&rsquo;eau, la case est transformée en case d&rsquo;eau explorée <code>W</code> et renvoie 1,</li>
+<li>Dans le cas où la case est une case d&rsquo;île, la case est transformée en case d&rsquo;île explorée <code>X</code> et renvoie la somme de ce que renvoie <code>count_water</code> pour les case adjacentes.</li>
+</ul>
+
+<p>
+Il utilise ensuite une fonction <code>restore_water</code> pour rétablir les cases d&rsquo;eau :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">restore_water</span>(){
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">r</span> = <span style="color: #da8548; font-weight: bold;">0</span>; r &lt; n; r++)
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">c</span> = <span style="color: #da8548; font-weight: bold;">0</span>; c &lt; n; c++)
+            <span style="color: #51afef;">if</span>(map[r][c] == <span style="color: #98be65;">'W'</span>)
+                map[r][c] = <span style="color: #98be65;">'~'</span>;
+}
+</pre>
+</div>
+<p>
+Cette fonction parcourt toute la grille et remplace les cases d&rsquo;eau explorée en cases d&rsquo;eau.
+</p>
+
+<p>
+La fonction principale :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">main</span>(){
+    scanf(<span style="color: #98be65;">"%d"</span>, &amp;n);
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">r</span> = <span style="color: #da8548; font-weight: bold;">0</span>; r &lt; n; r++)
+        scanf(<span style="color: #98be65;">"%s"</span>, map[r]);
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">r</span> = <span style="color: #da8548; font-weight: bold;">0</span>; r &lt; n; r++)
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">c</span> = <span style="color: #da8548; font-weight: bold;">0</span>; c &lt; n; c++)
+            <span style="color: #51afef;">if</span>(map[r][c] == <span style="color: #98be65;">'#'</span>){
+                water[islands++] = count_water(r, c);
+                restore_water();
+            }
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">imax</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">1</span>; i &lt; islands; i++)
+        <span style="color: #51afef;">if</span>(water[imax] &lt; water[i])
+            imax = i;
+    printf(<span style="color: #98be65;">"%i %i"</span>, imax + <span style="color: #da8548; font-weight: bold;">1</span>, water[imax]);
+}
+</pre>
+</div>
+
+<p>
+Il parcourt la grille avec une boucle :
+</p>
+<ul class="org-ul">
+<li>Pour chaque île non explorée (à la rencontre d&rsquo;une case d&rsquo;île non explorée) :
+<ul class="org-ul">
+<li>Il compte les côtes de l&rsquo;île avec la fonction <code>count_water</code></li>
+<li>Il appelle ensuite la fonction <code>restore_water</code></li>
+</ul></li>
+</ul>
+<p>
+Enfin, il compare les tailles de côte et renvoie l&rsquo;île avec la côte la plus grande et la taille de sa côte.
+</p>
+
+
+<p>
+Cette solution est intéressante car elle utilise moins de mémoire car elle effectue moins de parcours de grille, en utilisant notamment une fonction récursive.
+</p>
+
+<p>
+Le code est ainsi compact, avec 43 lignes.
+</p>
+</div>
+</div>
+<div id="outline-container-org471381f" class="outline-2">
+<h2 id="org471381f"><span class="section-number-2">4.</span> Bilan</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+La résolution de ce puzzle est un travail de réflexion algorithmique qui permet de se mettre à l&rsquo;épreuve en tant que programmeur afin de pouvoir trouver une solution à un problème qui, malgré un énoncé simple, demande un travail  de réflexion plus poussé.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guillaume BEUVOT - Prep&rsquo;ISIMA</p>
+<p class="date">Created: 2025-05-04 dim. 22:42</p>
+</div>
+</body>
+</html>

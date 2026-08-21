@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-04 Sun 22:10 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tic Tac Toe</title>
+<meta name="author" content="Guillaume BEUVOT - Prep'ISIMA" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/search.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/search.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
+</script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Tic Tac Toe</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7964362">1. Introduction au challenge</a>
+<ul>
+<li><a href="#org5a32de9">1.1. Les données auxquelles nous disposons sont donc</a></li>
+<li><a href="#orga2aab73">1.2. Les données à renvoyer sont donc</a></li>
+</ul>
+</li>
+<li><a href="#orge51cc71">2. Résolution du puzzle</a>
+<ul>
+<li><a href="#orge4544f3">2.1. Résumé de la solution</a></li>
+<li><a href="#orga616de3">2.2. Transposition en langage C</a></li>
+<li><a href="#org86d94d8">2.3. Code en langage C de la solution</a></li>
+</ul>
+</li>
+<li><a href="#org7420e1e">3. Bilan</a></li>
+</ul>
+</div>
+</div>
+
+<div id="orgaee3280" class="figure">
+<p><img src="images/uca.jpg" alt="uca.jpg" />
+</p>
+</div>
+
+
+
+
+<div id="orgdb8d807" class="figure">
+<p><img src="images/tic-tac-toe.png" alt="tic-tac-toe.png" />
+</p>
+</div>
+
+
+<p>
+<a href="TicTacToe.txt">Lien vers le document .org</a>
+</p>
+
+<p>
+*Préambule
+</p>
+
+<p>
+Nous ne traiterons pas ici d&rsquo;un puzzle classique mais d&rsquo;un challenge, faisant s&rsquo;affronter les algorithmes de deux joueurs.
+</p>
+<div id="outline-container-org7964362" class="outline-2">
+<h2 id="org7964362"><span class="section-number-2">1.</span> Introduction au challenge</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Le tic-tac-toe(ou morpion ou oxo) est un jeu au tour par tour faisant s&rsquo;affronter deux adversaires sur une grille de 3x3 cases sur lesquelles l&rsquo;un des joueurs doit poser des symboles (généralement une croix) jusqu&rsquo;à en aligner trois horizontalement, verticalement ou diagonalement, tout en empêchant l&rsquo;autre joueur d&rsquo;aligner trois symboles(généralement des ronds)
+</p>
+
+<p>
+Le but de ce challenge est, en tant que l&rsquo;un des deux joueurs, créer un algorithme capable de gagner contre les autres algorithmes.
+</p>
+
+<p>
+Nous étudierons ici une solution utilisant l&rsquo;algorithme MinMax, pour comprendre son fonctionnement, voir la résolution du puzzle Simple Minimax Example
+</p>
+</div>
+<div id="outline-container-org5a32de9" class="outline-3">
+<h3 id="org5a32de9"><span class="section-number-3">1.1.</span> Les données auxquelles nous disposons sont donc</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Un entier qui est le numéro de la ligne à laquelle appartient la case prise par l&rsquo;adversaire. Si l&rsquo;adversaire n&rsquo;a pas encore pris de case, cette valeur vaut -1</li>
+<li>Un entier qui est le numéro de la colonne à laquelle appartient la case prise par l&rsquo;adversaire. Si l&rsquo;adversaire n&rsquo;a pas encore pris de case, cette valeur vaut -1</li>
+<li>Un entier qui représente le nombre de case restantes</li>
+<li>Les lignes auxquelles appartiennent toutes les cases restantes (non-prises). Ce sont des entiers</li>
+<li>Les colonnes auxquelles appartiennent toutes les cases restantes (non-prises). Ce sont des entiers</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orga2aab73" class="outline-3">
+<h3 id="orga2aab73"><span class="section-number-3">1.2.</span> Les données à renvoyer sont donc</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>La ligne à laquelle appartient la case à prendre pour ce tour</li>
+<li>La colonne à laquelle appartient la case à prendre pour ce tour</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orge51cc71" class="outline-2">
+<h2 id="orge51cc71"><span class="section-number-2">2.</span> Résolution du puzzle</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orge4544f3" class="outline-3">
+<h3 id="orge4544f3"><span class="section-number-3">2.1.</span> Résumé de la solution</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Nous allons ici utiliser l&rsquo;algorithme minimmax, afin de garantir un score final le moins bas possible et non obtenir un score final élevé avec risque.
+</p>
+
+<p>
+L&rsquo;arbre utilisé sera donc plus complexe qu&rsquo;un arbre binaire (où chaque noeud se divise en 2 branche seulement).
+</p>
+
+<p>
+En effet, chaque noeud se divisera en autant de branche qu&rsquo;il restera de cases libres sur la grille.
+</p>
+
+<p>
+Pour le premier tour, où toutes les cases sont libres, cela donne :
+</p>
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label= "Tour 0"]b,c,d,e,f,g,h,i,j[label= "Tour 1"]
+    a-&gt;{b,c,d,e,f,g,h,i,j}
+
+    }
+
+
+
+</pre>
+</div>
+
+
+<div id="org186d1a4" class="figure">
+<p><img src="gr1.png" alt="gr1.png" />
+</p>
+</div>
+
+<p>
+Car, en effet, il y a neuf cases libres, donc neuf possibilités.
+</p>
+
+
+<p>
+Donc, au tour n, il y a 9-n possibilités, donc 9-n divisions du noeud représentant le tour n.
+</p>
+</div>
+</div>
+<div id="outline-container-orga616de3" class="outline-3">
+<h3 id="orga616de3"><span class="section-number-3">2.2.</span> Transposition en langage C</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Nous commençons par créer deux tableaux: un qui contiendra les colonnes des cases conseillées, et un qui contiendra les lignes des cases conseillées
+Nous créons aussi un tableau en deux dimensions qui représentera le plateau, et sera remmpli au fur et à mesure avec nos coups et ceux de l&rsquo;adversaire
+</p>
+
+<p>
+Nous remplissons ensuite les tableaux des cases conseillées avec toutes les cases possibles
+</p>
+
+<p>
+Nous appelons ensuite la fonction minimax, qui nous donnera l&rsquo;indice de la case recommendée.
+</p>
+
+<p>
+Cette fonction récursive reprend le principe de la fonction MinMax (ou minimax):
+</p>
+
+<p>
+Elle prend en argument la profondeur (le nombre de cases restantes), un paramètre alpha, un paramètre beta, le plateau, un tableau contenant les lignes des cases libres et un tableau contenant les colonnes des cases libres.
+</p>
+
+
+<p>
+Deux cas se présentent ainsi à nous : 
+</p>
+
+<p>
+S&rsquo;il reste moins de cinq cases libres, nous regardons la grille pour voir si la partie n&rsquo;est pas déjà terminée
+En effet, s&rsquo;il reste strictement moins de cinq cases, cela veut dire que cinq cases sont remplies, donc que le premier joueur a posé trois croix.
+Si ces trois croix sont alignées, il préférable de le savoir le plus tôt possible.
+Dans ce cas, nous vérifions si trois symboles sont alignés, et si tel est le cas, le noeud devient une feuille de l&rsquo;arbre et nous renvoyons le score.
+</p>
+
+<p>
+S&rsquo;il reste cinq cases ou plus, ou que la partie n&rsquo;est pas terminée (donc que trois symboles ne sont pas alignés), deux cas se présentent à nouveau à nous :
+</p>
+
+<p>
+Dans le premier cas, le tour actuel doit être joué par le joueur 1 (Nous), ainsi nous nous fixons un score de -10 (qui doit être battu avec une valeur supérieure)
+Ainsi, pour chaque case libre :
+</p>
+
+<p>
+Nous copions la grille et les tableaux contenant les cases libres, en retirant la case libre étudiée et en la plaçant sur la grille, puis en faisant jouer le joueur 2
+</p>
+
+<p>
+Nous faisons appel à la fonction minimax avec la grille et les tableaux de cases libres modifiées, afin d&rsquo;en récupérer la valeur du noeud inférieur
+</p>
+
+<p>
+Nous regardons si cette valeur est supérieure au score à battre, si oui, elle remplace le score à battre, en sauvegardant le chemin pris.
+</p>
+
+<p>
+Nous regardons ensuite si alpha est supérieur au score à battre, pour pouvoir le remplacer dans le cas contraire.
+</p>
+
+<p>
+Nous regardons ensuite si alpha est supérieur ou égal à beta.
+</p>
+
+<p>
+Dans un tel cas, nous arrêtons la recherche pour éviter de passer plus de temps sur la recherche
+</p>
+
+<p>
+Nous renvoyons ensuite le score à battre, qui est donc le plus haut possible.
+</p>
+
+
+
+<p>
+Si c&rsquo;est au tour du deuxième joueur, nous répétons ces instructions, avec plusieurs changements.
+Le score à battre commence par être à 10, est doit être battu en étant inférieur.
+L&rsquo;appel à la fonction minimax change en faisant jouer le premier joueur au tour suivant.
+La valeur récupérée par le noeud inférieur doit donc être la plus faible possible.
+Cette fois-ci, c&rsquo;est beta qui est changé, remplacé par la plus faible valeur possible.
+</p>
+
+<p>
+Ces appels récursifs s&rsquo;effectuent jusqu&rsquo;à trouver parmi les feuilles la grille la plus avantageuse possible pour le premier joueur, en prenant en compte les choix du deuxième joueur.
+</p>
+
+<p>
+La fonction renvoie ainsi le coup le plus efficace possible pour le joueur.
+</p>
+
+<p>
+Nous renvoyons donc la case correspondante dans les tableaux contenant les coups possibles.
+</p>
+</div>
+</div>
+<div id="outline-container-org86d94d8" class="outline-3">
+<h3 id="org86d94d8"><span class="section-number-3">2.3.</span> Code en langage C de la solution</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">rowsTab</span> = <span style="color: #a9a1e1;">NULL</span>, *<span style="color: #dcaeea;">colsTab</span> = <span style="color: #a9a1e1;">NULL</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>] = {{<span style="color: #da8548; font-weight: bold;">0</span>}};
+</pre>
+</div>
+<p>
+Nous commençons par initialiser les variables : rowsTab contiendra les lignes (ordonnées) des cases libres, colsTab les colonnes(abscisses) et board sera une représentation de la grille à chaque tour
+</p>
+
+
+<p>
+Nous entrons ensuite dans une boucle infinie, qui s&rsquo;arrête lorsque la partie est terminée ou qu&rsquo;un programme ne fonctionne pas
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(opponent_row != -<span style="color: #da8548; font-weight: bold;">1</span>) {
+        board[opponent_row][opponent_col] = -<span style="color: #da8548; font-weight: bold;">1</span>;
+    }    
+</pre>
+</div>
+<p>
+Pour chaque tour, si l&rsquo;adversaire a pris une case, nous récupérons les coordonnées de cette case, puis nous l&rsquo;inscrivons dans la grille, -1 représente le symbole de l&rsquo;adversaire et 1 représente notre symbole, 
+cela nous sera utile au moment de chercher le meilleur coup.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    rowsTab = malloc(valid_action_count*<span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+    colsTab = malloc(valid_action_count*<span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+    <span style="color: #51afef;">if</span>(rowsTab == <span style="color: #a9a1e1;">NULL</span> || colsTab == <span style="color: #a9a1e1;">NULL</span>) {
+        exit(<span style="color: #da8548; font-weight: bold;">1</span>);
+    }
+</pre>
+</div>
+<p>
+Nous créons ainsi les tableaux de cases libres, dont la taille est le nombre de cases libres qui a été donné.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; valid_action_count; i++) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">row</span>;
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">col</span>;
+        scanf(<span style="color: #98be65;">"%d%d"</span>, &amp;row, &amp;col);
+        rowsTab[i] = row;
+        colsTab[i] = col;
+    }
+</pre>
+</div>
+<p>
+Pour chaque case libre nous renseignons son abscisse et son ordonnée dans la même case de leur tableau respectif, pour faciliter la recherche
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">output</span> = abs(minimax(valid_action_count, -<span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #da8548; font-weight: bold;">1</span>, board, rowsTab, colsTab));
+</pre>
+</div>
+<p>
+Nous appelons ensuite la fonction minimax, afin de nous donner la case à prendre pour ce tour.
+L&rsquo;explication de la valeur absolue sera donnée plus tard.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">minimax</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">d</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">play</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>], <span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">rows</span>, <span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">cols</span>){
+</pre>
+</div>
+<p>
+Voici le prototype de la fonction minimax, elle prend en paramètre :
+</p>
+
+<p>
+d, un entier qui donne le nombre de cases encore non libres
+</p>
+
+<p>
+a, le paramètre alpha, et b, le paramètre beta
+</p>
+
+<p>
+play, un booléen qui indique si c&rsquo;est au joueur 1 de jouer ou au joueur 2
+</p>
+
+<p>
+board, la grille (tableau deux dimensions) remplie de 0 pour les cases libres, 1 pour les cases prises par le joueur 1, -1 pour les cases prises par le joueur 2
+</p>
+
+<p>
+rows et tab, des tableaux d&rsquo;entiers qui contiennent les coordonnées des cases libres(lignes, et colonnes)
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span> (d &lt; <span style="color: #da8548; font-weight: bold;">5</span>){
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">test</span> = calcScore(board);
+        <span style="color: #51afef;">if</span>(test || <span style="color: #51afef; font-weight: bold;">!</span>d) {
+            <span style="color: #51afef;">return</span> test;
+        }
+    }
+</pre>
+</div>
+<p>
+Premier cas, s&rsquo;il reste moins de cinq cases libres, nous regardons si trois cases prises par le même joueur sont alignés.
+</p>
+
+<p>
+Dans ce cas, nous renvoyons la valeur de la case (1 pour le joueur 1, -1 pour le joueur 2)
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">calcScore</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>]) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">0</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">1</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">2</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+        <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>];
+        <span style="color: #51afef;">return</span> score;
+    }
+</pre>
+</div>
+<p>
+Voici la fonction de calcul du score, elle regarde toutes les combinaisons possibles pour lesquelles un joueur gagne (trois cases prises par un joueur sont alignées)
+</p>
+
+<p>
+Si trois cases prises par un même joueur ne sont pas alignées, nous entrons dans un nouveu cas, qui se divise en deux autres cas : soit le tour du joueur 1, soit le tour du joueur 2
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(play) {
+</pre>
+</div>
+<p>
+Premier cas, le joueur 1 joue
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">maxValue</span> = -<span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #dcaeea;">path</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+</pre>
+</div>
+<p>
+Nous initialisons le score à battre à -10, et le chemin à 0, cette valeur détermine le numéro de la case à prendre dans les tableaux de cases libres
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; d; i++) {
+</pre>
+</div>
+<p>
+Nous effectuons une recherches dans les noeuds inférieurs pour chaque case libre
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board2</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>] = {{<span style="color: #da8548; font-weight: bold;">0</span>}};
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">rows2</span>[<span style="color: #da8548; font-weight: bold;">8</span>], <span style="color: #dcaeea;">cols2</span>[<span style="color: #da8548; font-weight: bold;">8</span>];
+    <span style="color: #c678dd;">memcpy</span>(board2, board, <span style="color: #da8548; font-weight: bold;">3</span> * <span style="color: #da8548; font-weight: bold;">3</span> * <span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">board</span>[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]));
+    <span style="color: #c678dd;">memcpy</span>(rows2, rows, <span style="color: #ECBE7B;">d</span> * <span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+    <span style="color: #c678dd;">memcpy</span>(cols2, cols, <span style="color: #ECBE7B;">d</span> * <span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+    <span style="color: #ECBE7B;">board2</span>[rows2[i]][cols2[i]] = <span style="color: #da8548; font-weight: bold;">1</span>;
+    <span style="color: #c678dd;">removeElement</span>(rows2, i, <span style="color: #ECBE7B;">d</span>);
+    <span style="color: #c678dd;">removeElement</span>(cols2, i, <span style="color: #ECBE7B;">d</span>);
+</pre>
+</div>
+<p>
+Nous copions ensuite la grille et les tableaux de cases libres, avant de les modifier afin de pour prendre la i-ème case libre en test
+</p>
+
+<p>
+memcpy permet de copier les valeurs d&rsquo;un tableau dans un autre
+</p>
+
+<p>
+Nous mettons 1 dans la i-ème case libre, afin de tester tous les coups possibles dans cette configuration
+</p>
+
+<p>
+removeElement est une fonction qui retire un élément d&rsquo;un tableau
+</p>
+
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">removeElement</span>(<span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">array</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">index</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">array_length</span>)
+    {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span>;
+    <span style="color: #51afef;">for</span>(i = index; i &lt; array_length - <span style="color: #da8548; font-weight: bold;">1</span>; i++) array[i] = array[i + <span style="color: #da8548; font-weight: bold;">1</span>];
+    }
+</pre>
+</div>
+<p>
+Voici comment fonctionne la fonctionne removeElement
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">testValue</span> = minimax(d-<span style="color: #da8548; font-weight: bold;">1</span>, a, b, <span style="color: #da8548; font-weight: bold;">0</span>, board2, rows2, cols2); 
+</pre>
+</div>
+<p>
+Nous initialisons ensuite une valeur de test à la valeur maximale du noeud inférieur, avec un appel à la fonction minimax avec la grille et les tableaux modifiés, en donnant le tour au joueur 2
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    testValue = testValue / abs(testValue);
+</pre>
+</div>
+<p>
+Puisque la valeur renvoyée par la fonction peut être négative ou positive, nous voulons la ramener à + ou - 1 pour tester des valeurs faibles
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(testValue &gt; maxValue) {
+        maxValue = testValue;
+        path = i;
+    }
+</pre>
+</div>
+<p>
+Si la valeur de test est supérieure au score à battre, celle-ci est remplacée et la valeur à prendre dans le tableau des cases libres devient la i-ème
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    a = maxValue &gt; a ? maxValue : a;
+    <span style="color: #51afef;">if</span>(b &lt;= a) <span style="color: #51afef;">break</span>;
+</pre>
+</div>
+<p>
+De la même manière alpha prend la valeur maximale entre alpha et le score à battre, et si alpha est supérieur ou égal à beta, nous arrêtons la recherche pour gagner du temps
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">return</span> maxValue*path;
+</pre>
+</div>
+<p>
+Enfin, après la recherche, nous renvoyons le score à battre qui est de 1 si la partie est gagnée pour le joueur 1, -1 si elle est perdu et 0 en cas de match NULL
+</p>
+
+<p>
+Ainsi, la valeur renvoyée nous donne deux informations: si la partie est est gagnée, la valeur est positive, et inversement, et la valeur absolue est la case du tableau de cases libres à prendre
+</p>
+
+
+
+<p>
+En ce qui concerne les changements pour le tour du joueur 2 :
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">maxValue</span> = <span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #dcaeea;">path</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+</pre>
+</div>
+<p>
+Le score à battre est de 10 et doit être le plus bas possible
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">board2</span>[rows2[i]][cols2[i]] = -<span style="color: #da8548; font-weight: bold;">1</span>;
+</pre>
+</div>
+<p>
+Pour chaque tour, le joueur 2 prend une case (-1 est posé sur la grille)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">testValue</span> = minimax(d-<span style="color: #da8548; font-weight: bold;">1</span>, a, b, <span style="color: #da8548; font-weight: bold;">1</span>, board2, rows2, cols2);
+</pre>
+</div>
+<p>
+L&rsquo;appel à la fonction minimax est fait re faisant jouer le premier joueur
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(testValue &lt; maxValue)
+</pre>
+</div>
+<p>
+Le score à battre doit être le plus faible possible
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    b = maxValue &lt; b ? maxValue : b;
+</pre>
+</div>
+<p>
+Beta doit aussi être le plus faible
+</p>
+
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">output</span> = abs(minimax(valid_action_count, -<span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #da8548; font-weight: bold;">1</span>, board, rowsTab, colsTab));
+</pre>
+</div>
+<p>
+La variable output prend donc la valeur absolue de la case à prendre dans les tableaux des cases libres (nous sommes sortis de la fonction)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">board</span>[output][output] = <span style="color: #da8548; font-weight: bold;">1</span>;
+</pre>
+</div>
+<p>
+La grille est donc remplie de façon à prendre la case recommendée
+</p>
+
+<p>
+    printf(&ldquo;%d %d\n&rdquo;, rowsTab[output], colsTab[output]);
+#+end<sub>src</sub>
+Nous renvoyons aussi la case à prendre.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    rowsTab = <span style="color: #a9a1e1;">NULL</span>;
+    colsTab = <span style="color: #a9a1e1;">NULL</span>;
+    <span style="color: #c678dd;">free</span>(rowsTab);
+    <span style="color: #c678dd;">free</span>(colsTab);
+</pre>
+</div>
+
+
+<p>
+Voici le code sans commentaire : 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdlib.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdio.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;string.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdbool.h&gt;</span>
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">calcScore</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>]) {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">0</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">1</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">1</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">2</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">2</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>];
+    <span style="color: #51afef;">if</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">1</span>][<span style="color: #da8548; font-weight: bold;">1</span>] &amp;&amp; board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>]==board[<span style="color: #da8548; font-weight: bold;">2</span>][<span style="color: #da8548; font-weight: bold;">0</span>])score+=board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">2</span>];
+    <span style="color: #51afef;">return</span> score;
+
+}
+
+<span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">removeElement</span>(<span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">array</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">index</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">array_length</span>)
+{
+   <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span>;
+   <span style="color: #51afef;">for</span>(i = index; i &lt; array_length - <span style="color: #da8548; font-weight: bold;">1</span>; i++) array[i] = array[i + <span style="color: #da8548; font-weight: bold;">1</span>];
+}
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">minimax</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">d</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">play</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>], <span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">rows</span>, <span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">cols</span>){
+    <span style="color: #51afef;">if</span> (d &lt; <span style="color: #da8548; font-weight: bold;">5</span>){
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">test</span> = calcScore(board);
+        <span style="color: #51afef;">if</span>(test || <span style="color: #51afef; font-weight: bold;">!</span>d) {
+            <span style="color: #51afef;">return</span> test;
+        }
+    }
+    <span style="color: #51afef;">if</span>(play) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">maxValue</span> = -<span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #dcaeea;">path</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; d; i++) {
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board2</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>] = {{<span style="color: #da8548; font-weight: bold;">0</span>}};
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">rows2</span>[<span style="color: #da8548; font-weight: bold;">8</span>], <span style="color: #dcaeea;">cols2</span>[<span style="color: #da8548; font-weight: bold;">8</span>];
+
+            memcpy(board2, board, <span style="color: #da8548; font-weight: bold;">3</span> * <span style="color: #da8548; font-weight: bold;">3</span> * <span style="color: #51afef;">sizeof</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]));
+
+            memcpy(rows2, rows, (d+<span style="color: #da8548; font-weight: bold;">1</span>) * <span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+
+            memcpy(cols2, cols, d * <span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+
+            board2[rows2[i]][cols2[i]] = <span style="color: #da8548; font-weight: bold;">1</span>; <span style="color: #5B6268;">// </span><span style="color: #5B6268;">-1</span>
+            removeElement(rows2, i, d);
+            removeElement(cols2, i, d);
+
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">testValue</span> = minimax(d-<span style="color: #da8548; font-weight: bold;">1</span>, a, b, <span style="color: #da8548; font-weight: bold;">0</span>, board2, rows2, cols2); <span style="color: #5B6268;">// </span><span style="color: #5B6268;">1</span>
+
+            testValue = testValue / abs(testValue);
+            <span style="color: #51afef;">if</span>(testValue &gt; maxValue) {<span style="color: #5B6268;">// </span><span style="color: #5B6268;">&lt;</span>
+                maxValue = testValue;
+                path = i;
+            }
+
+            a = maxValue &gt; a ? maxValue : a; <span style="color: #5B6268;">// </span><span style="color: #5B6268;">b &lt; b b</span>
+            <span style="color: #51afef;">if</span>(b &lt;= a) <span style="color: #51afef;">break</span>;
+        }
+        <span style="color: #51afef;">return</span> maxValue*path;
+    }
+    <span style="color: #51afef;">else</span> {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">maxValue</span> = <span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #dcaeea;">path</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; d; i++) {
+
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board2</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>] = {{<span style="color: #da8548; font-weight: bold;">0</span>}};
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">rows2</span>[<span style="color: #da8548; font-weight: bold;">8</span>], <span style="color: #dcaeea;">cols2</span>[<span style="color: #da8548; font-weight: bold;">8</span>];
+            memcpy(board2, board, <span style="color: #da8548; font-weight: bold;">3</span> * <span style="color: #da8548; font-weight: bold;">3</span> * <span style="color: #51afef;">sizeof</span>(board[<span style="color: #da8548; font-weight: bold;">0</span>][<span style="color: #da8548; font-weight: bold;">0</span>]));
+            memcpy(rows2, rows, d * <span style="color: #51afef;">sizeof</span>(rows[<span style="color: #da8548; font-weight: bold;">0</span>]));
+            memcpy(cols2, cols, d * <span style="color: #51afef;">sizeof</span>(cols[<span style="color: #da8548; font-weight: bold;">0</span>]));
+
+            board2[rows2[i]][cols2[i]] = -<span style="color: #da8548; font-weight: bold;">1</span>; <span style="color: #5B6268;">// </span><span style="color: #5B6268;">-1</span>
+            removeElement(rows2, i, d);
+            removeElement(cols2, i, d);
+
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">testValue</span> = minimax(d-<span style="color: #da8548; font-weight: bold;">1</span>, a, b, <span style="color: #da8548; font-weight: bold;">1</span>, board2, rows2, cols2); <span style="color: #5B6268;">// </span><span style="color: #5B6268;">1</span>
+            testValue = testValue / abs(testValue);
+            <span style="color: #51afef;">if</span>(testValue &lt; maxValue) {<span style="color: #5B6268;">// </span><span style="color: #5B6268;">&lt;</span>
+                maxValue = testValue;
+                path = i;
+            }
+
+            b = maxValue &lt; b ? maxValue : b; <span style="color: #5B6268;">// </span><span style="color: #5B6268;">b &lt; b b</span>
+            <span style="color: #51afef;">if</span>(b &lt;= a) <span style="color: #51afef;">break</span>;
+        }
+        <span style="color: #51afef;">return</span> maxValue*path;
+    }
+}
+
+
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">main</span>()
+{
+    <span style="color: #ECBE7B;">int</span> *<span style="color: #dcaeea;">rowsTab</span> = <span style="color: #a9a1e1;">NULL</span>, *<span style="color: #dcaeea;">colsTab</span> = <span style="color: #a9a1e1;">NULL</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">board</span>[<span style="color: #da8548; font-weight: bold;">3</span>][<span style="color: #da8548; font-weight: bold;">3</span>] = {{<span style="color: #da8548; font-weight: bold;">0</span>}};
+    <span style="color: #51afef;">while</span> (<span style="color: #da8548; font-weight: bold;">1</span>) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">opponent_row</span>;
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">opponent_col</span>;
+
+
+        scanf(<span style="color: #98be65;">"%d%d"</span>, &amp;opponent_row, &amp;opponent_col);
+        <span style="color: #51afef;">if</span>(opponent_row != -<span style="color: #da8548; font-weight: bold;">1</span>) {
+            board[opponent_row][opponent_col] = -<span style="color: #da8548; font-weight: bold;">1</span>;
+        }
+
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">valid_action_count</span>;
+
+        scanf(<span style="color: #98be65;">"%d"</span>, &amp;valid_action_count);
+        rowsTab = malloc(valid_action_count*<span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+        colsTab = malloc(valid_action_count*<span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+        <span style="color: #51afef;">if</span>(rowsTab == <span style="color: #a9a1e1;">NULL</span> || colsTab == <span style="color: #a9a1e1;">NULL</span>) {
+            exit(<span style="color: #da8548; font-weight: bold;">1</span>);
+        }
+
+        <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; valid_action_count; i++) {
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">row</span>;
+            <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">col</span>;
+            scanf(<span style="color: #98be65;">"%d%d"</span>, &amp;row, &amp;col);
+            rowsTab[i] = row;
+            colsTab[i] = col;
+        }
+
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">output</span> = abs(minimax(valid_action_count, -<span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #da8548; font-weight: bold;">10</span>, <span style="color: #da8548; font-weight: bold;">1</span>, board, rowsTab, colsTab));
+        board[output][output] = <span style="color: #da8548; font-weight: bold;">1</span>;
+        printf(<span style="color: #98be65;">"%d %d\n"</span>, rowsTab[output], colsTab[output]);
+
+        rowsTab = <span style="color: #a9a1e1;">NULL</span>;
+        colsTab = <span style="color: #a9a1e1;">NULL</span>;
+        free(rowsTab);
+        free(colsTab);
+    }
+
+    <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+}
+</pre>
+</div>
+
+<p>
+Nous libérons l&rsquo;espace pris par les tableaux afin d&rsquo;éviter les fuites de mémoire. Le tour est fini et le tour suivant peut commencer.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org7420e1e" class="outline-2">
+<h2 id="org7420e1e"><span class="section-number-2">3.</span> Bilan</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Sur CodinGame, il n&rsquo;est pas possible de voir les autres solutions pour les challenges, il n&rsquo;y aura donc pas d&rsquo;étude d&rsquo;une autre solution.
+</p>
+
+<p>
+Ce challenge permet de tester son code et de le comparer à d&rsquo;autres joueurs afin d&rsquo;en voir la valeur.
+</p>
+
+<p>
+Il permet aussi de familiariser avec l&rsquo;algorithme MinMax, puis avec l&rsquo;algorithme de l&rsquo;arbre de Monte Carlo dans la suite du challenge (dans laquelle MinMax n&rsquo;est plus efficace)
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guillaume BEUVOT - Prep&rsquo;ISIMA</p>
+<p class="date">Created: 2025-05-04 Sun 22:10</p>
+</div>
+</body>
+</html>

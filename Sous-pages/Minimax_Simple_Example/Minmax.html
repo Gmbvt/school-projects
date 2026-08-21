@@ -1,0 +1,1064 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-04 Sun 22:06 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minimax Simple Example</title>
+<meta name="author" content="Guillaume BEUVOT - Prep'ISIMA" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/search.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/search.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Minimax Simple Example</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgbf214dd">1. Introduction au puzzle</a>
+<ul>
+<li><a href="#org06babb6">1.1. Les données auxquelles nous disposons sont donc</a></li>
+<li><a href="#orge78ac4d">1.2. Les données à renvoyer sont donc</a></li>
+</ul>
+</li>
+<li><a href="#org16d2e73">2. Résolution du puzzle</a>
+<ul>
+<li><a href="#org336f899">2.1. Introduction à la solution</a></li>
+<li><a href="#orgb41fa85">2.2. Résumé de la méthode</a></li>
+<li><a href="#orgd1eaa4e">2.3. Transposition en langage C</a></li>
+<li><a href="#orga35a3c1">2.4. Code en langage C de la résolution</a></li>
+</ul>
+</li>
+<li><a href="#orgbfe3f05">3. Solution d&rsquo;un autre CodinGamer</a></li>
+<li><a href="#org45e4a10">4. Bilan</a></li>
+</ul>
+</div>
+</div>
+
+<div id="orgcddea0d" class="figure">
+<p><img src="images/uca.jpg" alt="uca.jpg" />
+</p>
+</div>
+
+
+
+
+<div id="org0498120" class="figure">
+<p><img src="images/scrabble.jpg" alt="scrabble.jpg" />
+</p>
+</div>
+
+
+<p>
+<a href="Minmax.txt">Lien vers le document .org</a>
+</p>
+<div id="outline-container-orgbf214dd" class="outline-2">
+<h2 id="orgbf214dd"><span class="section-number-2">1.</span> Introduction au puzzle</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+2 joueuers s&rsquo;affrontent dans un jeu au tour par tour.
+</p>
+
+<p>
+Une pile de lettres se dresse devant les deux joueurs.
+</p>
+
+<p>
+Chaque tour, un des deux joueurs pioche, au choix, soit la <b>première</b> lettre de la pile, soit la <b>deuxième</b>, pour la garder, puis l&rsquo;autre joueur fait de même, jusqu&rsquo;à ce que la pile de lettres soit vide.
+</p>
+
+<p>
+Ensuite, les deux joueurs voient quels mot ils peuvent former avec les lettres qu&rsquo;ils ont pioché, selon un dictionnaire défini associant un mot avec un score.
+</p>
+
+<p>
+Le but de ce puzzle est de conseiller le premier joueur sur la lettre à prendre entre la première et la deuxième de la pile afin de maximiser l&rsquo;écart de score avec le deuxième joueur à la fin de la partie.
+</p>
+
+<p>
+Ainsi, nous cherchons à créer un algorithme permettant au joueur 1 de s&rsquo;assurer une avance maximale face au joueur 2, au dépend de l&rsquo;optimisation de son propre score.
+</p>
+
+<p>
+<b><i>Exemple</i></b> : Un score final de 4-1 sera préférable à un score final de 15-13.
+</p>
+</div>
+<div id="outline-container-org06babb6" class="outline-3">
+<h3 id="org06babb6"><span class="section-number-3">1.1.</span> Les données auxquelles nous disposons sont donc</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Un entier représentant le nombre de lettres dans la pile</li>
+<li>Un entier représentant le nombre de mots formables possibles</li>
+<li>Une chaîne de caractères représentant un mot possible, suivie de son score, un entier</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orge78ac4d" class="outline-3">
+<h3 id="orge78ac4d"><span class="section-number-3">1.2.</span> Les données à renvoyer sont donc</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>La lettre à prendre entre la première et le deuxième dans la pile, un caractère</li>
+<li>Le score final si le joueur prend la lettre conseillée, une chaîne de caractères</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org16d2e73" class="outline-2">
+<h2 id="org16d2e73"><span class="section-number-2">2.</span> Résolution du puzzle</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org336f899" class="outline-3">
+<h3 id="org336f899"><span class="section-number-3">2.1.</span> Introduction à la solution</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Pour créer cet algorithme, nous nous aiderons de l&rsquo;algorithme minimax ou MinMax, un algorithme permettant de comparer facilement et récursivement les solutions finales afin d&rsquo;obtenir la meilleure.
+</p>
+
+<p>
+Cela nous est permis car le jeu ne possède pas un nombre de situations finales élevées.
+</p>
+
+<p>
+Pour comprendre cet algorithme, nous pouvons visualiser une partie comme un arbre :
+</p>
+
+<p>
+Un arbre est une structure de données composée de 2 éléments :
+</p>
+<ul class="org-ul">
+<li>Des noeuds, contenant des valeurs</li>
+<li>Des branches, qui relient un noeud à un ou plusieurs autres noeud</li>
+</ul>
+
+<p>
+Cette structure possède aussi une hiérarchie, c&rsquo;est-à-dire qu&rsquo;il existe un noeud central (placé souvent en haut de l&rsquo;arbre), qui n&rsquo;est relié qu&rsquo;à des noeuds secondaires, eux-mêmes reliés à d&rsquo;autres noeuds, etc&#x2026;
+</p>
+
+<p>
+Ainsi, les noeuds les plus bas dans la hiérarchie (souvent en bas), sont appelées des feuilles.
+</p>
+
+<p>
+Dans la résolution, l&rsquo;arbre que nous étudierons sera un arbre binaire, c&rsquo;est-à-dire, que chaque noeud possède 2 branches qui le relie aux noeuds inférieurs.
+</p>
+
+<p>
+Nous pouvons donc ici visualiser un tour comme un noeud.
+</p>
+
+<p>
+Voici donc le premier tour par exemple :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="Tour 1"]
+    a
+
+    }
+
+</pre>
+</div>
+
+
+<div id="org4f79b81" class="figure">
+<p><img src="gr1.png" alt="gr1.png" />
+</p>
+</div>
+
+<p>
+De ce premier tour deux tours suivants sont possibles, si le joueur prend la première, ou la deuxième lettre de la pile (1 ou 2 dans ce cas):
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="Tour 1"]b[label="Tour 2"]c[label="Tour 2"]
+    a-&gt;b[label="1"]
+
+    a-&gt;c[label="2"]
+
+    }
+
+</pre>
+</div>
+
+
+<div id="org01e4bcb" class="figure">
+<p><img src="gr2.png" alt="gr2.png" />
+</p>
+</div>
+
+<p>
+Les derniers tours possibles sont représentés par des feuilles.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="Tour 1"]b,c[label="Tour 2"]d,e,f,g[label= "Tour 3"]h,i,j,k,l,m,n,o[label= "Tour 4"]
+    a-&gt;b
+    a-&gt;c
+
+    b-&gt;{d,e}
+    c-&gt;{f,g}
+
+    d-&gt;{h,i}
+    e-&gt;{j,k}
+    f-&gt;{l,m}
+    g-&gt;{n,o}
+
+    }
+
+</pre>
+</div>
+
+
+<div id="org1de0ab8" class="figure">
+<p><img src="gr3.png" alt="gr3.png" />
+</p>
+</div>
+
+<p>
+Une fois les feuilles atteintes, nous calculons la valeur de ces feuilles, ici, nous calculons le score de chaque joueur et renvoyons la différence entre le score du joueur 1 et du joueur 2.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="Tour 1"]b,c[label="Tour 2"]d,e,f,g[label= "Tour 3"]h[label= "1"]i[label= "-2"]j[label= "8"]k[label= "2"]l[label= "-5"]m[label= "6"]n[label= "7"]o[label= "5"]
+    a-&gt;b
+    a-&gt;c
+
+    b-&gt;{d,e}
+    c-&gt;{f,g}
+
+    d-&gt;{h,i}
+    e-&gt;{j,k}
+    f-&gt;{l,m}
+    g-&gt;{n,o}
+
+    }
+
+</pre>
+</div>
+
+
+<div id="orgb1e0ba8" class="figure">
+<p><img src="gr4.png" alt="gr4.png" />
+</p>
+</div>
+
+<p>
+Les noeuds plus haut prendront soit la valeur la plus haute parmi les neouds inférieurs, soit la valeur la plus basse, selon le joueur qui doit jouer pendant le tour représenté par le noeud.
+</p>
+
+<p>
+Si le noeud représente le tour du joueur 1 (celui qui doit maximiser l&rsquo;écart), la valeur choisie sera, de manière triviale, la plus haute, l&rsquo;inverse serait en effet contre-productif
+</p>
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="Tour 1"]b,c[label="Tour 2"]d[label= "1"]e[label= "8"]f[label= "6"]g[label="7"]h[label= "1"]i[label= "-2"color= "white"]j[label= "8"]k[label= "2"color= "white"]l[label= "-5"color= "white"]m[label= "6"]n[label= "7"]o[label= "5"color= "white"]
+    a-&gt;b
+    a-&gt;c
+
+    b-&gt;{d,e}
+    c-&gt;{f,g}
+
+    d-&gt;{h,i}
+    e-&gt;{j,k}
+    f-&gt;{l,m}
+    g-&gt;{n,o}
+
+    }
+
+</pre>
+</div>
+
+
+<div id="org7638419" class="figure">
+<p><img src="gr5.png" alt="gr5.png" />
+</p>
+</div>
+
+<p>
+Si le noeud représente le tour du joueur 2 (celui qui doit minimiser l&rsquo;écart, voire le rendre négatif), la valeur choisie sera donc la plus basse, pour &ldquo;simuler un coup intelligent face au joueur 1&rdquo;.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="Tour 1"]b[label= "1"]c[label="6"]d[label= "1"]e[label= "8"color= "white"]f[label= "6"]g[label="7"color= "white"]h[label= "1"]i[label= "-2"color= "white"]j[label= "8"color= "white"]k[label= "2"color= "white"]l[label= "-5"color= "white"]m[label= "6"]n[label= "7"color= "white"]o[label= "5"color= "white"]
+    a-&gt;b
+    a-&gt;c
+
+    b-&gt;{d,e}
+    c-&gt;{f,g}
+
+    d-&gt;{h,i}
+    e-&gt;{j,k}
+    f-&gt;{l,m}
+    g-&gt;{n,o}
+
+    }
+
+</pre>
+</div>
+
+
+<div id="orgb2c4610" class="figure">
+<p><img src="gr6.png" alt="gr6.png" />
+</p>
+</div>
+
+<p>
+Le coup à jouer pour le joueur 1 sera donc celui qui aura la plus grande valeur entre deux coups que le joueur 2 aura choisi parmi les plus petites valeurs données par le joueur 1 et ainsi de suite.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label="6"]b[label= "1"color= "white"]c[label="6"]d[label= "1"color= "white"]e[label= "8"color= "white"]f[label= "6"]g[label="7"color= "white"]h[label= "1"color= "white"]i[label= "-2"color= "white"]j[label= "8"color= "white"]k[label= "2"color= "white"]l[label= "-5"color= "white"]m[label= "6"]n[label= "7"color= "white"]o[label= "5"color= "white"]
+    a-&gt;b
+    a-&gt;c
+
+    b-&gt;{d,e}
+    c-&gt;{f,g}
+
+    d-&gt;{h,i}
+    e-&gt;{j,k}
+    f-&gt;{l,m}
+    g-&gt;{n,o}
+
+    }
+
+</pre>
+</div>
+
+
+<div id="org5b46ee8" class="figure">
+<p><img src="gr7.png" alt="gr7.png" />
+</p>
+</div>
+
+<p>
+Ici par exemple, le joueur 1 doit commencer par prendre la deuxième lettre de la pile afin de lui garantir un écart de score de 6 avec le joueur 2.
+</p>
+</div>
+<div id="outline-container-orgf4c8838" class="outline-4">
+<h4 id="orgf4c8838"><span class="section-number-4">2.1.1.</span> Amélioration avec les paramètres alpha et beta</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+Pour des parties où le nombre de tours est faible, cet algorithme seul peut suffir, mais lorsqu&rsquo;une partie possède 20 tours ou plus (ici, la pile peut faire jusqu&rsquo;à 26 lettres), cela peut prendre du temps de devoir calculer tous les scores et les comparer, avec 2 options pour chaque noeud, 2<sup>n</sup>-1 comparaisons doivent être faites, ce qui peut devenir très vite très grand.
+</p>
+
+<p>
+Pour pouvoir réduire le nombre de comparaisons, certaines comparaisons peuvent être ignorées
+</p>
+
+
+<p>
+Prenons une autre partie :
+</p>
+
+<p>
+Considérons la première partie de l&rsquo;arbre explorée, 4 est le score maximum que le joueur 1 a pu choisir à l&rsquo;aide de l&rsquo;algorithme
+</p>
+
+<div class="org-src-container">
+<pre class="src src-dot">
+    Digraph{a[label=""]b[label= "4"]c[label=""]d[label= "4"]e[label= "8"color= "white"]f[label= "2"]g[label=""]h[label= "4"]i[label= "-2"color= "white"]j[label= "8"color= "white"]k[label= "2"color= "white"]l[label= "1"color= "white"]m[label= 2]n[label= ""]o[label= ""]
+    a-&gt;b
+    a-&gt;c
+
+    b-&gt;{d,e}
+    c-&gt;{f,g}
+
+    d-&gt;{h,i}
+    e-&gt;{j,k}
+    f-&gt;{l,m}
+    g-&gt;{n,o}
+
+    }
+
+</pre>
+</div>
+
+
+<div id="orgf0c0bbb" class="figure">
+<p><img src="gr8.png" alt="gr8.png" />
+</p>
+</div>
+
+<p>
+Ici, 2 a été choisi par le joueur 1 car il est plus grand que 1.
+</p>
+
+<p>
+Le joueur 2 devra donc choisir la valeur la mois élevée entre 2 et un autre nombre
+</p>
+
+<p>
+Ainsi, le nombre choisi sera inférieur ou égal à 2, ce qui restera strictement inférieur à 4, qui a été trouvé précedemment.
+</p>
+
+<p>
+Il n&rsquo;est donc pas nécéssaire de trouver et comparer des valeurs si elles ne seront finalement pas prises.
+</p>
+
+<p>
+2 sera donc automatiquement choisi par le joueur 2, ce qui laissera le joueur 1 choisir la valeur 4.
+</p>
+
+<p>
+Cette situation peut bien évidemment se produire pour le joueur adverse.
+</p>
+
+
+<p>
+Il suffit donc de sauvegarder les meilleurs scores de chacun des deux joueurs dans l&rsquo;arbre afin de pouvoir comparer chaque valeur des noeuds afin de vérifier s&rsquo;il est nécéssaire de continuer la recherche
+</p>
+
+
+<ul class="org-ul">
+<li>Pour le joueur 1, le meilleur score est la plus grande valeur (elle commence à moins l&rsquo;infini)</li>
+
+<li>Pour le joueur 2, le meilleur score est la moins grande valeur (elle commence à plus l&rsquo;infini)</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb41fa85" class="outline-3">
+<h3 id="orgb41fa85"><span class="section-number-3">2.2.</span> Résumé de la méthode</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Ici, nous allons utiliser l&rsquo;algorithme MinMax étudié
+</p>
+
+<p>
+Pour chaque tour, deux options nous seront données et la valeur à optimiser pour les deux joueurs est l&rsquo;écart de score
+</p>
+</div>
+</div>
+<div id="outline-container-orgd1eaa4e" class="outline-3">
+<h3 id="orgd1eaa4e"><span class="section-number-3">2.3.</span> Transposition en langage C</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Nous commençons par créer une chaîne de caractères qui contiendra toutes les lettres de la pile
+</p>
+
+<p>
+Ainsi, la première lettre de la chaîne sera la lettre au-dessus de la pile et les lettres suivantes dans la chaîne de caractère sont les lettres qui se trouvent en-dessous.
+</p>
+
+<p>
+Nous créons aussi une sorte de dictionnaire qui associe à chaque mot de la liste de mots un score (qui lui a été donné)
+</p>
+
+<p>
+Nous appelons ensuite une fonction qui se charge de trouver récursivement par l&rsquo;algorithme minimax la bonne solution.
+</p>
+
+<p>
+Nous donnons à cette fonction les valeurs de bêta et alpha, donc plus et moins l&rsquo;infini, la pile pleine, 
+les ensembles(vides) de lettres des deux joueurs, le dictionnaire mot-score ainsi que le nombre dans le dictionnaire et enfin la profondeur de l&rsquo;arbre de recherche (ici fixé à 0, car c&rsquo;est le premier tour)
+</p>
+
+
+<p>
+Nous entrons ainsi dans une fonction récursive:
+</p>
+<ul class="org-ul">
+<li>Si la pile de lettres est vide, nous calculons le score des deux joueurs et l&rsquo;enregistrerons dans une valeur. Nous renvoyons ensuite cette structure.</li>
+
+<li><p>
+Si c&rsquo;est au tour du joueur 1 (celui que nous devons faire gagner):
+</p>
+<ul class="org-ul">
+<li>Nous prenons une valeur de moins l&rsquo;infini, cela nous servira de &ldquo;score à battre&rdquo; pour chaque sous-noeud</li>
+<li>Nous copions la pile de lettres ainsi que l&rsquo;ensemble de lettres du joueur 1.</li>
+<li>Nous retirons ensuite la lettre au-dessus de la copie de la pile de lettres pour la mettre dans la copie de l&rsquo;ensemble de lettres du joueur 1</li>
+<li>Nous appelons ensuite récursivement la fonction minmax avec la pile et l&rsquo;ensemble de lettres modifiés, afin de récupérer le noeud avec le score maximum récupéré dans les feuilles.</li>
+<li>Le &ldquo;score à battre&rdquo; prend le meilleur score entre le &ldquo;score à battre&rdquo; actuel et le score récupéré à la suite de l&rsquo;appel de la fonction minmax</li>
+
+<li>Nous recommençons ensuite une deuxième fois ces instructions en réinitialisant les copies de la pile et de l&rsquo;ensemble de lettre, puis en prenant cette fois la deuxième lettre de la pile</li>
+<li>Avant de recommencer, nous regardons si le différence du &ldquo;score à battre&rdquo; est plus grande que alpha.</li>
+<li>Si tel est le cas, alpha devient la différence du score des deux joueurs du &ldquo;score à battre&rdquo;.</li>
+<li>Enfin, si alpha est inférieur à beta, nous ne recommençons pas avec la deuxième lettre de la pile, cela évite donc de faire des appels inutils</li>
+</ul>
+
+<p>
+Si nous sommes en haut de l&rsquo;arbre de recherche, nous affichons la lettre à prendre, ainsi que le score garanti en prenant cette lettre
+</p></li>
+
+<li>Si c&rsquo;est au tour du deuxième joueur, l&rsquo;algorithme est similaire à celui du premier joueur en changeant plusieurs détails:
+<ul class="org-ul">
+<li>Le &ldquo;score à battre&rdquo; est de plus l&rsquo;infini, et prend la valeur du score le plus bas</li>
+<li>L&rsquo;ensemble de lettres copié est celui du joueur 2</li>
+<li>Beta prend la valeur du score le plus bas, et alpha reste inchangé, le test et ses conséquences restent les mêmes.</li>
+</ul></li>
+</ul>
+
+<p>
+La fonction finit donc par afficher la lettre recommendée ainsi que le score garanti, la fonction principale s&rsquo;arrête donc après le premier appel.
+</p>
+</div>
+</div>
+<div id="outline-container-orga35a3c1" class="outline-3">
+<h3 id="orga35a3c1"><span class="section-number-3">2.4.</span> Code en langage C de la résolution</h3>
+<div class="outline-text-3" id="text-2-4">
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">bd</span>[<span style="color: #da8548; font-weight: bold;">100</span>] = <span style="color: #98be65;">""</span>;
+    <span style="color: #ECBE7B;">wscore_t</span> <span style="color: #dcaeea;">dict</span>[<span style="color: #da8548; font-weight: bold;">100</span>];
+</pre>
+</div>
+<p>
+Nous initialisons la pile et le dictionnaire
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">word_score</span> {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score</span>;
+        <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">word</span>[<span style="color: #da8548; font-weight: bold;">27</span>];
+    };
+</pre>
+</div>
+
+<p>
+Une entrée du dictionnaire
+</p>
+
+
+
+<p>
+Nous appelons maintenant la fonction principale minmax
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #c678dd;">minmax</span>(bd, -<span style="color: #da8548; font-weight: bold;">65535</span>, <span style="color: #da8548; font-weight: bold;">65535</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #98be65;">""</span>, <span style="color: #98be65;">""</span>, dict,  q, <span style="color: #da8548; font-weight: bold;">0</span>);
+</pre>
+</div>
+
+<p>
+Ici 65535 représente l&rsquo;infini, un tel score ne sera jamais atteint
+</p>
+
+<p>
+Nous appelons la fonctions minmax
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">pscore_t</span> <span style="color: #c678dd;">minmax</span>(<span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">letters</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">play</span>, <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">p1</span>[], <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">p2</span>[], <span style="color: #ECBE7B;">wscore_t</span> <span style="color: #dcaeea;">dict</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">d</span>) {
+</pre>
+</div>
+
+
+<p>
+Prototype de la fonction minmax, letters est la pile, a et b sont alpha et beta, play détermine le joueur qui doit jouer (1 si vrai, 2 sinon), 
+p1 et p2 sont les ensembles de lettres des joueurs 1 et 2,
+dict est le tableau d&rsquo;entrées de dictionnaire, n est le nombre de mots possible et d la profondeur, 0 étant le premier tour, donc en haut de l&rsquo;arbre.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(strlen(letters) == <span style="color: #da8548; font-weight: bold;">0</span>) {
+        <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">output</span> = {score(p1, dict, n),score(p2, dict, n)};
+        <span style="color: #51afef;">return</span> output;
+    }
+</pre>
+</div>
+
+<p>
+Cas d&rsquo;arrêt, nous calculons le score des deux joueurs en renvoyant les deux scores, cela permettra de plus facilement afficher le score final, 7
+les valeurs qui serviront de test seront la différence entre le score du premier joueur et du deuxième
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">player_score</span> {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score1</span>;
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score2</span>;
+    };
+</pre>
+</div>
+
+
+<p>
+La structure score:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">score</span>(<span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">result</span>[], <span style="color: #ECBE7B;">wscore_t</span> <span style="color: #dcaeea;">dict</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>){
+</pre>
+</div>
+
+
+<p>
+Prototype de la fonction de calcul de score d&rsquo;un joueur
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">points</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+</pre>
+</div>
+
+
+<p>
+Nous initialisons les points à 0
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; n; i++) {
+</pre>
+</div>
+
+
+<p>
+Pour chaque entrée du dictionnaire
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = <span style="color: #da8548; font-weight: bold;">0</span>; j &lt; strlen(dict[i].word); j++) {
+</pre>
+</div>
+
+
+<p>
+Pour chaque lettre d&rsquo;un mot du dictionnaire
+</p>
+
+<p>
+Si la lettre ne se trouve pas dans l&rsquo;ensemble de lettres du joueur, nous passons au mot suivant
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(strchr(result, dict[i].word[j]) == <span style="color: #a9a1e1;">NULL</span>) {
+        <span style="color: #51afef;">break</span>;
+    }
+</pre>
+</div>
+
+<p>
+Sinon, si nous arrivons à la fin du mot, nous ajoutons au score du joueur le nombre de points que donne le mot
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">else</span> <span style="color: #51afef;">if</span>(j == strlen(dict[i].word)-<span style="color: #da8548; font-weight: bold;">1</span>){
+        points += dict[i].score;
+    }
+<span style="color: #51afef;">return</span> points;
+</pre>
+</div>
+
+<p>
+Nous renvoyons le score du joueur
+</p>
+
+
+
+
+<p>
+Revenons au premier cas récursif de la fonction minmax
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>(play)
+</pre>
+</div>
+
+
+<p>
+Si le joueur 1 joue :
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">answer</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">value</span> = {<span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #da8548; font-weight: bold;">65535</span>};
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">l</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = <span style="color: #98be65;">""</span>, <span style="color: #dcaeea;">x</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = <span style="color: #98be65;">""</span>;
+    <span style="color: #c678dd;">strcpy</span>(l, letters);
+</pre>
+</div>
+
+<p>
+Nous initialisons les variables : answer est le numéro de la lettre à prendre dans la pile
+</p>
+
+<p>
+Ici 65535 représente l&rsquo;infini, un tel score ne sera jamais atteint
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; <span style="color: #da8548; font-weight: bold;">2</span>; i++) {
+</pre>
+</div>
+<p>
+Nous entrons dans une boucle qui se réalise deux fois, pour prendre les deux premières lettres seulement
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #c678dd;">sprintf</span>(x, <span style="color: #98be65;">"%s%c"</span>, p1, <span style="color: #ECBE7B;">l</span>[i]);
+    <span style="color: #c678dd;">strremove</span>(l, i)
+</pre>
+</div>
+
+<p>
+Nous retirons la i-ème lettre de la pile et l&rsquo;ajoutons à l&rsquo;inventaire du joueur 1 
+</p>
+
+
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">strremove</span>(<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">str</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>){
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">out</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = <span style="color: #98be65;">""</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; strlen(str);i++){
+        <span style="color: #51afef;">if</span>(i != n){
+            out[j] = str[i];
+            j++;
+        }
+    }
+    strcpy(str, out);
+}
+</pre>
+</div>
+
+
+<p>
+Fonction strremove qui retire un caractère de la pile
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">test</span> = minmax(l, a, b, <span style="color: #da8548; font-weight: bold;">0</span>, x, p2, dict, n, d+<span style="color: #da8548; font-weight: bold;">1</span>);
+</pre>
+</div>
+
+
+<p>
+Nous appelons la fonction minmax, avec la pile sans la i-ème lettre, qui se trouve maintenant dans l&rsquo;inventaire du joueur 1. Nous indiquons aussi que c&rsquo;est au joueur 2 de jouer
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">x</span>[strlen(<span style="color: #ECBE7B;">x</span>)-<span style="color: #da8548; font-weight: bold;">1</span>] = <span style="color: #98be65;">'\0'</span>;
+    <span style="color: #c678dd;">strcpy</span>(l, letters);     
+</pre>
+</div>
+
+
+<p>
+Nous retirons à la copie de l&rsquo;inventaire du joueur 1 la i-ème lettre et la remettons dans la pile (ici, nous recopions la pile donnée en argument de la fonction pour la mettre dans la copie de la pile)
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">if</span>((test.score1-test.score2)&gt;(value.score1-value.score2)){
+        value=test;
+        answer = i;
+    }
+</pre>
+</div>
+
+
+<p>
+Si la différence de score est plus grande que le score à battre, le score à battre prend la valeur du score obetenu avec la fonction et answer prend la valeur de i, ce qui veut dire qu&rsquo;il faut prendre la i-ème lettre
+</p>
+
+<p>
+    a = (value.score1-value.score2)&gt;a?(value.score1-value.score2):a;
+    if(b&lt;=a)break;
+Alpha prend la valeur maximum entre la différence du score à battre et alphe lui-même, et si alpha est plus petit que beta, nous sortons immédiatement de la boucle et arrêtons la recherche
+</p>
+
+<p>
+À la fin de la boucle (recherche), le score à battre est renvoyé en étant le plus grand possible
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">return</span> value;
+</pre>
+</div>
+
+
+
+
+<p>
+Les différences avec le joueur 2 sont celles-ci: La différence du score à battre est de plus l&rsquo;infini, l&rsquo;inventaire du joueur 2 est copié et la fonction est appelée avec la pile et l&rsquo;inventaire du joueur 2 changés et en faisant jouer le joueur 1
+</p>
+
+<p>
+Avant la recherche :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">value</span> = {<span style="color: #da8548; font-weight: bold;">65535</span>, <span style="color: #da8548; font-weight: bold;">0</span>};         
+    <span style="color: #c678dd;">sprintf</span>(y, <span style="color: #98be65;">"%s%c"</span>, p2, <span style="color: #ECBE7B;">l</span>[i]);   
+    <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">test</span> = minmax(l, a, b, <span style="color: #da8548; font-weight: bold;">1</span>, p1, y, dict, n, d+<span style="color: #da8548; font-weight: bold;">1</span>);
+</pre>
+</div>
+
+<p>
+Et pour chacune des deux premières lettres de la pile restante
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">    value = (test.score1-test.score2)&lt;(value.score1-value.score2)?test:value;
+    b = (test.score1-test.score2)&lt;b?(test.score1-test.score2):b;
+    <span style="color: #51afef;">if</span>(b&lt;=a)<span style="color: #51afef;">break</span>;
+</pre>
+</div>
+
+<p>
+Le score à battre cherche donc à être le plus faible possible, de même que pour beta.
+</p>
+
+<p>
+Le même test est fait que pour le joueur 1.
+</p>
+
+<p>
+Lorsque la meilleure possibilité remonte à la racine (tour 1), nous vérifions si la profondeur(le tour) est le premier, dans ce cas, après avoir selectionné la meilleure possibilité, nous renvoyons la lettre recommandée, qui est celle assurant le meilleur coup ainsi que les scores des deux joueurs à la fin de la partie :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(<span style="color: #51afef; font-weight: bold;">!</span>d) printf(<span style="color: #98be65;">"%c %d-%d\n"</span>, letters[answer], value.score1, value.score2);
+</pre>
+</div>
+
+
+<p>
+Cette instruction se situe juste avant le renvoi du score à battre (dans le cas où nous ne somme pas à la racine)
+</p>
+
+<p>
+Voici le code sans commentaire :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdlib.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdio.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;string.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdbool.h&gt;</span>
+
+<span style="color: #51afef;">typedef</span> <span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">word_score</span> <span style="color: #ECBE7B;">wscore_t</span>;
+<span style="color: #51afef;">typedef</span> <span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">player_score</span> <span style="color: #ECBE7B;">pscore_t</span>;
+<span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">word_score</span> {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score</span>;
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">word</span>[<span style="color: #da8548; font-weight: bold;">27</span>];
+};
+<span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">player_score</span> {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score1</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score2</span>;
+};
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">score</span>(<span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">result</span>[], <span style="color: #ECBE7B;">wscore_t</span> <span style="color: #dcaeea;">dict</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>){
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">points</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; n; i++) {
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = <span style="color: #da8548; font-weight: bold;">0</span>; j &lt; strlen(dict[i].word); j++) {
+            <span style="color: #51afef;">if</span>(strchr(result, dict[i].word[j]) == <span style="color: #a9a1e1;">NULL</span>) {
+                <span style="color: #51afef;">break</span>;
+            }
+            <span style="color: #51afef;">else</span> <span style="color: #51afef;">if</span>(j == strlen(dict[i].word)-<span style="color: #da8548; font-weight: bold;">1</span>){
+                points += dict[i].score;
+            }
+        }
+    }
+    <span style="color: #51afef;">return</span> points;
+}
+
+<span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">strremove</span>(<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">str</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>){
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">out</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = <span style="color: #98be65;">""</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; strlen(str);i++){
+        <span style="color: #51afef;">if</span>(i != n){
+            out[j] = str[i];
+            j++;
+        }
+    }
+    strcpy(str, out);
+}
+
+<span style="color: #ECBE7B;">pscore_t</span> <span style="color: #c678dd;">minmax</span>(<span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">letters</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">a</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">b</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">play</span>, <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">p1</span>[], <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">p2</span>[], <span style="color: #ECBE7B;">wscore_t</span> <span style="color: #dcaeea;">dict</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">d</span>) {
+    <span style="color: #51afef;">if</span>(strlen(letters) == <span style="color: #da8548; font-weight: bold;">0</span>) {
+        <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">output</span> = {score(p1, dict, n),score(p2, dict, n)};
+        <span style="color: #51afef;">return</span> output;
+    }
+    <span style="color: #51afef;">if</span>(play) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">answer</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+        <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">value</span> = {<span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #da8548; font-weight: bold;">65535</span>};
+        <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">l</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = <span style="color: #98be65;">""</span>, <span style="color: #dcaeea;">x</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = <span style="color: #98be65;">""</span>;
+        strcpy(l, letters);
+        
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; <span style="color: #da8548; font-weight: bold;">2</span>; i++) {
+            sprintf(x, <span style="color: #98be65;">"%s%c"</span>, p1, l[i]);
+            strremove(l, i);
+            
+            <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">test</span> = minmax(l, a, b, <span style="color: #da8548; font-weight: bold;">0</span>, x, p2, dict, n, d+<span style="color: #da8548; font-weight: bold;">1</span>);
+ 
+            x[strlen(x)-<span style="color: #da8548; font-weight: bold;">1</span>] = <span style="color: #98be65;">'\0'</span>;
+            strcpy(l, letters);            
+
+            <span style="color: #51afef;">if</span>((test.score1-test.score2)&gt;(value.score1-value.score2)){
+                value=test;
+                answer = i;
+            }
+            a = (value.score1-value.score2)&gt;a?(value.score1-value.score2):a;
+            <span style="color: #51afef;">if</span>(b&lt;=a)<span style="color: #51afef;">break</span>;
+        }
+        <span style="color: #51afef;">if</span>(<span style="color: #51afef; font-weight: bold;">!</span>d) printf(<span style="color: #98be65;">"%c %d-%d\n"</span>, letters[answer], value.score1, value.score2);
+        <span style="color: #51afef;">return</span> value;
+    }
+    <span style="color: #51afef;">else</span> {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">answer</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+        <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">value</span> = {<span style="color: #da8548; font-weight: bold;">65535</span>, <span style="color: #da8548; font-weight: bold;">0</span>};
+        <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">l</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = {<span style="color: #98be65;">'\0'</span>}, <span style="color: #dcaeea;">y</span>[<span style="color: #da8548; font-weight: bold;">27</span>] = {<span style="color: #98be65;">'\0'</span>};
+        strcpy(l, letters);
+
+        <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; <span style="color: #da8548; font-weight: bold;">2</span> ; i++) {
+            sprintf(y, <span style="color: #98be65;">"%s%c"</span>, p2, l[i]);
+            strremove(l, i);
+            <span style="color: #ECBE7B;">pscore_t</span> <span style="color: #dcaeea;">test</span> = minmax(l, a, b, <span style="color: #da8548; font-weight: bold;">1</span>, p1, y, dict, n, d+<span style="color: #da8548; font-weight: bold;">1</span>);
+            y[strlen(y)-<span style="color: #da8548; font-weight: bold;">1</span>] = <span style="color: #98be65;">'\0'</span>;
+            strcpy(l, letters);
+            value = (test.score1-test.score2)&lt;(value.score1-value.score2)?test:value;
+            b = (value.score1-value.score2)&lt;b?(value.score1-value.score2):b;
+            <span style="color: #51afef;">if</span>(b&lt;=a)<span style="color: #51afef;">break</span>;
+        }
+        <span style="color: #51afef;">if</span>(<span style="color: #51afef; font-weight: bold;">!</span>d) printf(<span style="color: #98be65;">"%c %d-%d\n"</span>, letters[answer], value.score1, value.score2);
+        <span style="color: #51afef;">return</span> value;
+    }
+
+}
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">main</span>()
+{
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">q</span>;
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">bd</span>[<span style="color: #da8548; font-weight: bold;">100</span>] = <span style="color: #98be65;">""</span>;
+    scanf(<span style="color: #98be65;">"%d%d"</span>, &amp;n, &amp;q);
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; n; i++) {
+        <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">letter</span>[<span style="color: #da8548; font-weight: bold;">2</span>];
+        scanf(<span style="color: #98be65;">"%s"</span>, letter);
+        sprintf(bd, <span style="color: #98be65;">"%s%c"</span>, bd, letter[<span style="color: #da8548; font-weight: bold;">0</span>]);
+    }
+    
+    <span style="color: #ECBE7B;">wscore_t</span> <span style="color: #dcaeea;">dict</span>[<span style="color: #da8548; font-weight: bold;">100</span>];
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; q; i++) {
+        <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">word</span>[<span style="color: #da8548; font-weight: bold;">11</span>];
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">score</span>;
+        scanf(<span style="color: #98be65;">"%s%d"</span>, word, &amp;score);
+        dict[i].score = score;
+        sprintf(dict[i].word,<span style="color: #98be65;">"%s"</span>, word);
+    }
+    minmax(bd, -<span style="color: #da8548; font-weight: bold;">65535</span>, <span style="color: #da8548; font-weight: bold;">65535</span>, <span style="color: #da8548; font-weight: bold;">1</span>, <span style="color: #98be65;">""</span>, <span style="color: #98be65;">""</span>, dict,  q, <span style="color: #da8548; font-weight: bold;">0</span>);
+    <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+}
+</pre>
+</div>
+<p>
+Ainsi, le code en entier, sans commentaire est le suivant :
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbfe3f05" class="outline-2">
+<h2 id="orgbfe3f05"><span class="section-number-2">3.</span> Solution d&rsquo;un autre CodinGamer</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Une autre solution de l&rsquo;utilisateur <a href="https://www.codingame.com/profile/907c9ccd81091cee022baa60234db551987988">Alain-Delpuch</a> sur CodinGame propose deux fonctions mini et maxi séparées, au lieu d&rsquo;une seule fonction dont les cas varient.
+</p>
+
+<p>
+Aussi, les fonction sont de type int car la structure de score est stockée dans un tableau et est modifiée lors calcul du score
+</p>
+
+
+<p>
+Voici la fonction mini (similaire à maxi) :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">mini</span>(<span style="color: #ECBE7B;">game</span> *<span style="color: #dcaeea;">g</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> , <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">alpha</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">beta</span>){
+
+    <span style="color: #51afef;">if</span> (i == n) {
+        <span style="color: #51afef;">return</span> eval(g);
+    }
+    
+    <span style="color: #ECBE7B;">game</span> <span style="color: #dcaeea;">ga</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">hsave</span> = h2;
+    
+    hash( h2, letters[i]) ;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">va</span> = maxi(&amp;ga, j, j+<span style="color: #da8548; font-weight: bold;">1</span>, alpha, beta);
+    h2 = hsave;
+    
+    <span style="color: #51afef;">if</span> ( va &lt; beta ) beta = va ;
+    
+    <span style="color: #51afef;">if</span> ( beta  &lt; alpha ) { <span style="color: #5B6268;">// </span><span style="color: #5B6268;">cutoff</span>
+        *g = ga;
+        <span style="color: #51afef;">return</span> va;
+    }
+    
+    <span style="color: #51afef;">if</span> (j == n) {
+        *g = ga;
+        <span style="color: #51afef;">return</span> va;
+    }
+    
+    <span style="color: #ECBE7B;">game</span> <span style="color: #dcaeea;">gb</span>;
+
+    hash( h2, letters[j]) ;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">vb</span> = maxi(&amp;gb,i,j+<span style="color: #da8548; font-weight: bold;">1</span>, alpha, beta);
+    h2 = hsave;
+
+    <span style="color: #51afef;">if</span> (va &lt; vb){
+        *g = ga;
+        <span style="color: #51afef;">return</span> va;
+    } 
+    
+    *g = gb;
+    <span style="color: #51afef;">return</span> vb ;
+}
+</pre>
+</div>
+
+<p>
+La fonction de calcul de score, eval :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">eval</span>(<span style="color: #ECBE7B;">game</span> * <span style="color: #dcaeea;">g</span>){
+    g-&gt;score1 = <span style="color: #da8548; font-weight: bold;">0</span>;
+    g-&gt;score2 = <span style="color: #da8548; font-weight: bold;">0</span>;
+    
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span>= <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; q; i++) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">h</span> = hwords[i];
+        <span style="color: #51afef;">if</span> ( (h &amp; h1) == h) g-&gt;score1 += scores[i];
+        <span style="color: #51afef;">if</span> ( (h &amp; h2) == h) g-&gt;score2 += scores[i];
+    }
+    
+    <span style="color: #51afef;">return</span> g-&gt;score1 - g-&gt;score2;
+}
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org45e4a10" class="outline-2">
+<h2 id="org45e4a10"><span class="section-number-2">4.</span> Bilan</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Ce puzzle permet de se familiariser avec l&rsquo;algorithme MinMax, un algorithme puissant qui permit à l&rsquo;informatique une avancée majeure en permettant à l&rsquo;ordinateur de battre l&rsquo;Homme aux échecs avec la défaite de Garry Kasparov en 1997. Il permet ainsi de développer la réflexion sur la création d&rsquo;algorithmes sur certains jeux
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guillaume BEUVOT - Prep&rsquo;ISIMA</p>
+<p class="date">Created: 2025-05-04 Sun 22:06</p>
+</div>
+</body>
+</html>

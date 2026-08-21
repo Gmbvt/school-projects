@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-04 Sun 22:02 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What The Brainfuck !</title>
+<meta name="author" content="Guillaume BEUVOT - Prep'ISIMA" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/search.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/search.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">What The Brainfuck !</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org110dab9">1. Introduction au puzzle</a>
+<ul>
+<li><a href="#org2433bb5">1.1. Les données auxquelles nous disposons sont donc :</a></li>
+<li><a href="#org2d9bab8">1.2. Les données à renvoyer sont donc :</a></li>
+</ul>
+</li>
+<li><a href="#org35049d8">2. Résolution du puzzle</a>
+<ul>
+<li><a href="#orgb3bff09">2.1. Résumé de la méthode</a></li>
+<li><a href="#org6d3737c">2.2. Transposition en langage C</a></li>
+<li><a href="#org41c6e72">2.3. Code en langage C de la résolution</a></li>
+</ul>
+</li>
+<li><a href="#orgaa72a19">3. Solution d&rsquo;un autre CodinGamer</a></li>
+<li><a href="#org738fa3c">4. Un exemple de programme en Brainfuck</a></li>
+<li><a href="#org4b27cf1">5. Bilan</a></li>
+</ul>
+</div>
+</div>
+
+<div id="org92faf73" class="figure">
+<p><img src="images/uca.jpg" alt="uca.jpg" />
+</p>
+</div>
+
+
+
+<div id="org0c041c3" class="figure">
+<p><img src="images/Image.png" alt="Image.png" />
+</p>
+</div>
+
+
+<p>
+<a href="brainfuck.txt">Lien vers le document .org</a>
+</p>
+<div id="outline-container-org110dab9" class="outline-2">
+<h2 id="org110dab9"><span class="section-number-2">1.</span> Introduction au puzzle</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Programmer est quelque chose de facilement maîtrisable, il suffit souvent d&rsquo;un cours de moins d&rsquo;une centaine de pages pour apprendre plus ou moins n&rsquo;importe quel langage.
+Bien sûr, l&rsquo;apprentissage met plus ou moins de temps selon la &ldquo;<i>difficulté</i>&rdquo; du langage en question.
+Pour un programmeur, un langage de programmation facile set traduit notamment par un nombre de &ldquo;mots-clés&rdquo; limités.
+En effet, si un langage dispose d&rsquo;un nombre réduit de termes, il sera plus rapide et facile de tous les maîtriser.
+Ces mots clés, ou instructions doivent aussi avoir un rôle clair, pour faciliter la compréhension d&rsquo;un code.
+</p>
+
+<p>
+Nous allons donc ici étudier un langage &ldquo;facile&rdquo;, ne comportant que <b>8</b> instructions, avec pour chacune un rôle bien défini et facile à comprendre.
+<b><i>Le piège ?</i></b>
+Ces instructions ne sont représentées que par un seul caractère, constituant une pratique peu intuitive.
+Avant de présenter chaque instruction, présentons le langage en lui-même.
+Ce langage, le brainfuck, est le fruit de l&rsquo;informaticien Suisse Urban Müller est un langage dit <i>minimaliste</i>.
+Il ne présente, en dehors d&rsquo;un challenge d&rsquo;algorithmique et de programmation, aucune utilité de par ses capacités limités.
+</p>
+
+<p>
+Pour comprendre ces dites capacités, il faut comprendre que ce langage agit sur un tableau linéaire, où chaque case est initialisée à 0.
+</p>
+
+
+
+<div id="org8cb4d28" class="figure">
+<p><img src="images/gr1.png" alt="gr1.png" />
+</p>
+<p><span class="figure-number">Figure 1: </span>Visualisation du tableau sur lequel le Brainfuck agit</p>
+</div>
+
+
+<p>
+Pour chaque case du tableau, 8 actions sont donc possibles (les 8 instructions du Brainfuck) :
+</p>
+<ul class="org-ul">
+<li><code>&gt;</code>, pour aller à la case suivante, on parle aussi d&rsquo;<i>incrémentation du pointeur</i>, car en imaginant un pointeur qui pointe sur la case sur laquelle agir, cette action fait avancer le pointeur d&rsquo;une case,</li>
+<li><code>&lt;</code>, pour aller à la case précédente, ou <i>décrémentation du pointeur</i>,</li>
+<li><code>+</code>, pour ajouter <i>1</i> à la valeur de la case pontée,</li>
+<li><code>-</code>, pour soustraire <i>1</i> à la valeur de la case pointée,</li>
+<li><code>.</code>, pour afficher le code <a href="https://fr.wikipedia.org/wiki/ASCII">ASCII</a> de la valeur de la case pointée,</li>
+<li><code>,</code>, pour mettre la valeur de la case pointée à une valeur saisie par l&rsquo;utilisateur,</li>
+<li><code>[</code>, pour ignorer le code jusqu&rsquo;au <code>]</code> correspondant si la valeur de la case pointée est égale à 0,</li>
+<li><code>]</code>, pour revenir jusqu&rsquo;au <code>[</code> correspondant si la valeur de la case pointée est différente de 0,</li>
+</ul>
+
+<p>
+Le problème à traiter en langage C est donc de créer un compilateur qui lit et éxécute le code rentré par un utilisateur, et de gentiment lui renvoyer une erreur s&rsquo;il détecte un dysfonctionnement.
+</p>
+</div>
+<div id="outline-container-org2433bb5" class="outline-3">
+<h3 id="org2433bb5"><span class="section-number-3">1.1.</span> Les données auxquelles nous disposons sont donc :</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Le nombre de lignes de notre programme, un entier</li>
+<li>Le nombre de valeurs saisies par l&rsquo;utilisateur au cours du programme, un entier</li>
+<li>La taille du tableau sur lequel le programme va agir, un entier</li>
+<li>Le code en brainfuck du programme, répartit en plusieures lignes dont le nombre a été donné plus haut, les caractères autres que ceux pris en compte par le langage est considéré comme un commentaire, c&rsquo;est une chaîne de caractères</li>
+<li>Les arguments saisis par l&rsquo;utilisateur (Ici, les arguments sont donnés avant l&rsquo;exécution du programme, donc l&rsquo;instruction <code>,</code> récupèrera la valeur depuis un tableau par exemple, ce sont des entier</li>
+</ul>
+
+<p>
+Tous les entiers sont inférieurs ou égaux à 100.
+</p>
+</div>
+</div>
+<div id="outline-container-org2d9bab8" class="outline-3">
+<h3 id="org2d9bab8"><span class="section-number-3">1.2.</span> Les données à renvoyer sont donc :</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Si le programme s&rsquo;est bien passé, il faut afficher les valeurs dont les cases ont reçu l&rsquo;instruction <code>.</code></li>
+<li>Dans le cas contraire une des trois erreurs suivantes :
+<ul class="org-ul">
+<li>&ldquo;<code>SYNTAX ERROR</code>&rdquo;, s&rsquo;il n&rsquo;y a pas autant de <code>[</code> que de <code>]</code>, cette erreur doit être annoncée avant l&rsquo;exécution du programme, pour éviter les erreurs</li>
+<li>&ldquo;<code>POINTER OUT OF BOUNDS</code>&rdquo;, si la case pointée n&rsquo;existe pas (donc le pointeur est <i>en dehors du tableau</i>)</li>
+<li>&ldquo;<code>INCORRECT VALUE</code>&rdquo;, si la valeur d&rsquo;une case est en dehors de l&rsquo;intervalle [0;255]</li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org35049d8" class="outline-2">
+<h2 id="org35049d8"><span class="section-number-2">2.</span> Résolution du puzzle</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-orgb3bff09" class="outline-3">
+<h3 id="orgb3bff09"><span class="section-number-3">2.1.</span> Résumé de la méthode</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Nous récupérons le programme (en ignorant ce qui n&rsquo;est pas un caractère brainfuck, pour éviter les commentaires) et vérifions s&rsquo;il y a une éventuelle erreur de syntaxe.
+Sinon, nous initialisons le tableau sur lequel le programme va agir, puis nous parcourons le code caractère par caractère, en réalisant l&rsquo;action indiquée par chaque caractère, tout en faisant attention qu&rsquo;il n&rsquo;y ait aucune erreur, sinon quoi nous stoppons l&rsquo;exécution et renvoyons le message adapté.
+Si l&rsquo;exécution s&rsquo;est bien passée, nous affichons le texte final.
+</p>
+</div>
+</div>
+<div id="outline-container-org6d3737c" class="outline-3">
+<h3 id="org6d3737c"><span class="section-number-3">2.2.</span> Transposition en langage C</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Lorsque le programme est rentré, nous regardons et sauvegardons chaque caractère brainfuck dans une chaîne de caractères, qui sera parcourue dans la boucle principale du programme.
+Pour chaque <code>[</code>, nous incrémentons la valeur des crochets de 1 de la décrémentons de 1 pour chaque <code>]</code>, si cette valeur est non-nulle, nous renvoyons <code>SYNTAX ERROR</code> et arrêtons le programme.
+Sinon, nous créons le tableau sur lequel le programme va agir, en lui assignant dynamiquement le nombre de cases voulues, où chaque case est initialisée à 0, puis sauvegardons les valeurs &ldquo;saisies par l&rsquo;utilisateur&rdquo;.
+</p>
+
+<p>
+Nous entrons dans la boucle principale, qui va parcourir chaque valeur de la chaîne de caractères contenant le programme brainfuck non commentée. Elle peut aussi s&rsquo;arrêter à la rencontre d&rsquo;une erreur.
+</p>
+
+<p>
+Cette boucle teste chaque caractère :
+</p>
+<ul class="org-ul">
+<li><code>&gt;</code>, nous passons à la case suivante du tableau, en incrémentant une variable qui sert de pointeur. Si nous sommes déjà sur la dernière case, nous renvoyons l&rsquo;erreur <code>POINTER OUT OF BOUNDS</code></li>
+<li><code>&lt;</code>, nous passons à la case précédente du tableau, en décrémentant la variable. Si elle est déjà à 0, nous renvoyons l&rsquo;erreur <code>POINTER OUT OF BOUNDS</code></li>
+<li><code>+</code>, dans la case numéro <i>pointeur</i> de notre tableau, nous ajoutons 1 à la valeur. Si elle est déjà à 255, nous renvoyons l&rsquo;erreur <code>INCORRECT VALUE</code></li>
+<li><code>-</code>, dans la case numéro <i>pointeur</i> de notre tableau, nous retirons 1 à la valeur. Si elle est déjà à 0, nous renvoyons l&rsquo;erreur <code>INCORRECT VALUE</code></li>
+<li><code>.</code>, nous ajoutons à la chaine de caractères réponse la valeur ASCII de la case pointée.</li>
+<li><code>,</code>, nous prenons la valeur correspondante dans le tableau des arguments pour changer la valeur de la case pointée. Il n&rsquo;y a pas de risque de dépassement car la valeur est inférieure à 100 (précisé plus tôt)</li>
+<li><code>[</code>, si la valeur de la case pointée est nulle, nous sautons le code jusqu&rsquo;au <code>]</code> correspondant, en modifiant le compteur de la boucle principal</li>
+<li><code>]</code>, si la valeur de la case pointée est non-nulle, nous revenons jusqu&rsquo;au <code>[</code> correspondant, en modifiant le compteur de la boucle principal</li>
+</ul>
+<p>
+Pour les deux derniers cas, nous parcourons le code en augmentant le nombre de crochets pour chaque crochet ouvrant ou fermant (selon le crochet de départ), et en réduisant le nombre de crochets pour chaque crochet fermant ou ouvrant (selon le crochet de départ). Le crochet correspondant est le crochet fermant ou ouvrant (selon le crochet de départ) avec un nombre de crochet nul.
+</p>
+
+<p>
+S&rsquo;il y a eu une erreur nous l&rsquo;affichons
+</p>
+
+<p>
+Sinon, nous affichons la chaîne de caractère réponse.
+</p>
+</div>
+</div>
+<div id="outline-container-org41c6e72" class="outline-3">
+<h3 id="org41c6e72"><span class="section-number-3">2.3.</span> Code en langage C de la résolution</h3>
+<div class="outline-text-3" id="text-2-3">
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">output</span>[<span style="color: #da8548; font-weight: bold;">1025</span>] = {};
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">prog</span>[<span style="color: #da8548; font-weight: bold;">1025</span>] = {};
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">argv</span>[<span style="color: #da8548; font-weight: bold;">100</span>] = {};
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">brackets</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">pointer</span> = <span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #dcaeea;">line</span> = <span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #dcaeea;">argp</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">error</span>[<span style="color: #da8548; font-weight: bold;">64</span>] = {<span style="color: #98be65;">'\0'</span>};
+</pre>
+</div>
+
+<p>
+Nous commençons par initiliser nos variables :
+</p>
+<ul class="org-ul">
+<li><code>char output[1025]</code> est notre chaîne de caractères réponse, avec une taille élargie pour prévoir les cas extrêmes (un programme affichant en boucle la prmière valeur)</li>
+<li><code>char prog[1025]</code> est la chaîne de caractères qui contiendra le programme sans commentaire</li>
+<li><code>int argv[100]</code> est le tableau d&rsquo;entier qui contiendra toutes les &ldquo;saisie de l&rsquo;utilisateur&rdquo;, autrement dit les arguments du programme. Le nom est une référence au langage C, la fonction <code>main</code> elle-même ne contient pas cet argument, nous permettant de l&rsquo;utiliser sans risques</li>
+<li><code>int brackets</code> est notre compteur de crochets</li>
+<li><code>int pointer</code> est la variable qui donne le numéro de la case pointée</li>
+<li><code>int line</code> nous servira à écrire dans la chaîne de caractères <code>prog</code></li>
+<li><code>int argp</code> permettra de prendre le bon argument dans le tableau <code>argv</code>.</li>
+<li><code>char error[64]</code> sera la chaîne de caractères qui renverra les potentielles erreurs</li>
+</ul>
+
+
+<div class="org-src-container">
+<pre class="src src-c">    scanf(<span style="color: #98be65;">"%[^\n]"</span>, r); <span style="color: #c678dd;">fgetc</span>(stdin);
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = <span style="color: #da8548; font-weight: bold;">0</span>; <span style="color: #ECBE7B;">r</span>[j] != <span style="color: #98be65;">'\0'</span>; j++) {
+</pre>
+</div>
+<p>
+Pour chaque ligne de code nous entrons dans une boucle qui s&rsquo;arrête lorsque la fin est atteinte:
+</p>
+
+
+<p>
+Cette boucle est constituée de 3 bloc conditionnels:
+</p>
+<div class="org-src-container">
+<pre class="src src-c">        <span style="color: #51afef;">if</span>(r[j] == <span style="color: #98be65;">'&gt;'</span> || r[j] == <span style="color: #98be65;">'&lt;'</span> || r[j] == <span style="color: #98be65;">'+'</span> || r[j] == <span style="color: #98be65;">'-'</span> || r[j] == <span style="color: #98be65;">'.'</span> || r[j] == <span style="color: #98be65;">','</span>){
+            prog[line] = r[j];
+            line++;     
+        }
+        <span style="color: #51afef;">if</span>(r[j] == <span style="color: #98be65;">'['</span>){
+            prog[line] = r[j];
+            brackets++;
+            line++;
+        }
+        <span style="color: #51afef;">if</span>(r[j] == <span style="color: #98be65;">']'</span>) {
+            prog[line] = r[j];
+            brackets--;
+            line++;
+        }
+    }
+</pre>
+</div>
+
+<p>
+Dans un premier cas, si les caractères <code>&gt;</code>, <code>&lt;</code>, <code>+</code>, <code>-</code>, <code>.</code> ou <code>,</code> sont rencontrés, nous les ajoutons dans la chaine de caractères <code>prog</code>, à la <code>line</code> ème place, en augmentant <code>line</code> ensuite
+Pour les cas où <code>[</code> et <code>]</code> sont rencontrés, le principe est le même, mais nous incrémentons dans le premier cas la variable <code>brackets</code> et la décrémentons dans le deuxième cas.
+</p>
+
+<p>
+Ce qui permet à la sortie de la boucle le test suivant pour détecter une erreur de syntaxe:
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(brackets) {
+    printf(<span style="color: #98be65;">"SYNTAX ERROR"</span>);
+}
+</pre>
+</div>
+<p>
+Nous renvoyons l&rsquo;erreur <code>SYNTAX ERROR</code> si la variable <code>brackets</code> est non-nulle, signifiant qu&rsquo;il n&rsquo;y a pas autant de <code>[</code> que de <code>]</code>
+</p>
+
+
+<p>
+Sinon, nous continuons le programme :
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; N; i++) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">c</span>;
+        scanf(<span style="color: #98be65;">"%d"</span>, &amp;c);
+        argv[i] = c;
+    }
+</pre>
+</div>
+<p>
+Dans cette boucle, nous sauvegardons chaque saisie de l&rsquo;utilisateur dans le tableau <code>argv</code>.
+</p>
+
+<p>
+Nous créons ensuite le tableau sur lequel le brainfuck va agir :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span>* <span style="color: #dcaeea;">array</span> = <span style="color: #a9a1e1;">NULL</span>;
+array = malloc(S*<span style="color: #51afef;">sizeof</span>(<span style="color: #ECBE7B;">int</span>));
+<span style="color: #51afef;">if</span>(array == <span style="color: #a9a1e1;">NULL</span>) {
+    exit(<span style="color: #da8548; font-weight: bold;">0</span>);
+}
+</pre>
+</div>
+<p>
+La variable <code>S</code> est celle qui correspond à la taille voulue du tableau.
+Nous utilisons ici la fonction <code>malloc</code>, qui demande une place en mémoire de <code>S</code> fois la taille d&rsquo;un entier, car le tableau que nous voulons créer est un tableau d&rsquo;entiers.
+Nous n&rsquo;oublions pas de tester si l&rsquo;allocation a fonctionné, dans le cas où 128 Go de mémoire aurait été demandé et la demande d&rsquo;allocation refusée, il est préférable de stopper le programme avec l&rsquo;instruction <code>exit(0)</code> (qui agit comme return dans la fonction <code>main()</code>) qui évite au programme d&rsquo;agir sur une mémoire qui ne lui a pas été allouée et de provoquer des conséquences imprévues.
+</p>
+
+
+<p>
+Sinon, nous continuons le programme, en entrant dans la boucle principale :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; <span style="color: #ECBE7B;">prog</span>[i] != <span style="color: #98be65;">'\0'</span> &amp;&amp; error[<span style="color: #da8548; font-weight: bold;">0</span>] == <span style="color: #98be65;">'\0'</span>; i++) {
+</pre>
+</div>
+<p>
+Ici, la boucle s&rsquo;arrête si le compteur pointe à la fin de notre chaîne de caractères du programme, car il arrivera que le compteur soit modifié à l&rsquo;intérieur de la boucle.
+Notre boucle s&rsquo;arrête aussi si la chaîne de caractères erreur est non-vide, signifiant qu&rsquo;il y a une erreur qu&rsquo;il faut renvoyer avant que cela ne créé d&rsquo;autres erreurs.
+Cette boucle est constituée d&rsquo;un unique test, sous la forme d&rsquo;un <code>switch</code>, qui vérifie le caractère actuel dans le programme:
+</p>
+<div class="org-src-container">
+<pre class="src src-c">    <span style="color: #51afef;">switch</span>(prog[i]) {
+</pre>
+</div>
+
+
+<p>
+Nous allons étudier chacun des 8 cas:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">case</span> <span style="color: #98be65;">'&gt;'</span>:
+    pointer++;
+    <span style="color: #51afef;">if</span>(pointer &gt;= S) <span style="color: #c678dd;">sprintf</span>(error, <span style="color: #98be65;">"POINTER OUT OF BOUNDS"</span>);
+    <span style="color: #51afef;">break</span>;
+
+<span style="color: #51afef;">case</span> <span style="color: #98be65;">'&lt;'</span>:
+    pointer--;
+    <span style="color: #51afef;">if</span>(pointer &lt; <span style="color: #da8548; font-weight: bold;">0</span>) <span style="color: #c678dd;">sprintf</span>(error, <span style="color: #98be65;">"POINTER OUT OF BOUNDS"</span>);
+    <span style="color: #51afef;">break</span>;
+</pre>
+</div>
+
+<p>
+Dans ces deux cas, nous incrémentons (<code>&gt;</code>) ou décrémentons (<code>&lt;</code>) le pointeur, ce qui change la case pointée (Pour passer à la case suivante, il suffit d&rsquo;incrémenter la variable <code>pointer</code>, et inversement pour passer à la case précédente)
+Si la case pointée n&rsquo;est pas présente dans le tableau, nous changeons la chaîne de caractères erreur à <code>POINTER OUT OF BOUNDS</code>, ce qui nous fait donc sortir de la boucle.
+</p>
+
+
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">case</span> <span style="color: #98be65;">'+'</span>:
+    <span style="color: #ECBE7B;">array</span>[pointer]++;
+    <span style="color: #51afef;">if</span>(array[pointer] &gt; <span style="color: #da8548; font-weight: bold;">255</span>) <span style="color: #c678dd;">sprintf</span>(error, <span style="color: #98be65;">"INCORRECT VALUE"</span>);
+    <span style="color: #51afef;">break</span>;
+<span style="color: #51afef;">case</span> <span style="color: #98be65;">'-'</span>:
+    <span style="color: #ECBE7B;">array</span>[pointer]--;
+    <span style="color: #51afef;">if</span>(array[pointer] &lt; <span style="color: #da8548; font-weight: bold;">0</span>) <span style="color: #c678dd;">sprintf</span>(error, <span style="color: #98be65;">"INCORRECT VALUE"</span>);
+    <span style="color: #51afef;">break</span>;
+</pre>
+</div>
+
+<p>
+Dans ces deux cas, nous augmentons (<code>+</code>) ou réduisons (<code>-</code>) la valeur de la case pointée, soit la <code>pointer</code> ème case du tableau.
+Si la valeur de la case pointée n&rsquo;est plus dans l&rsquo;intervalle [0,255], nous changeons la chaîne de caractères erreur à <code>INCORRECT VALUE</code>, nous faisant sortir ainsi de la boucle.
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">case</span> <span style="color: #98be65;">'.'</span>:
+    <span style="color: #c678dd;">sprintf</span>(output,<span style="color: #98be65;">"%s%c"</span>, output, <span style="color: #ECBE7B;">array</span>[pointer]);
+    <span style="color: #51afef;">break</span>;
+</pre>
+</div>
+
+<p>
+Pour le cas <code>.</code>, nous ajoutons à la chaîne de caractères réponse la valeur de la case pointée en ASCII.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">case</span> <span style="color: #98be65;">','</span>:
+    <span style="color: #ECBE7B;">array</span>[pointer] = argv[argp];
+    argp++;
+    <span style="color: #51afef;">break</span>;
+</pre>
+</div>
+
+<p>
+Pour le cas <code>,</code>, nous changeons la valeur de la case pointée à la valeur correspondante du tableau des arguments, puis nous passons à la case suivante dans ce dernier tableau pour préparer la prochaine valeur à être utilisée.
+</p>
+
+<p>
+(argp pour <i>argument pointer</i>)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">case</span> <span style="color: #98be65;">'['</span>:
+    <span style="color: #51afef;">if</span>(<span style="color: #51afef; font-weight: bold;">!</span>array[pointer]) {
+        brackets = <span style="color: #da8548; font-weight: bold;">0</span>;
+        <span style="color: #51afef;">do</span> {
+            <span style="color: #51afef;">if</span>(prog[i]== <span style="color: #98be65;">']'</span>)brackets++;
+            <span style="color: #51afef;">if</span>(prog[i]== <span style="color: #98be65;">'['</span>)brackets--;
+            i++;
+        }<span style="color: #51afef;">while</span>(brackets);
+    }
+    <span style="color: #51afef;">break</span>;
+<span style="color: #51afef;">case</span> <span style="color: #98be65;">']'</span>:
+    <span style="color: #51afef;">if</span>(array[pointer]) {
+        brackets = <span style="color: #da8548; font-weight: bold;">0</span>;
+        <span style="color: #51afef;">do</span> {
+            <span style="color: #51afef;">if</span>(prog[i]== <span style="color: #98be65;">']'</span>)brackets++;
+            <span style="color: #51afef;">if</span>(prog[i]== <span style="color: #98be65;">'['</span>)brackets--;
+            i--;
+        }<span style="color: #51afef;">while</span>(brackets);
+    }
+    <span style="color: #51afef;">break</span>;
+</pre>
+</div>
+
+<p>
+Dans ces deux dernier cas, nous vérifions si la valeur de la case pointée correspond au critère demandé (Valeur nulle pour <code>[</code>, et non-nulle pour <code>]</code>).
+Si la condition est remplie, alors nous modifions le compteur principal (<code>i</code>) pour arriver au crochet correspondant.
+Pour éviter de mélanger les crochets, nous modifions la variable <code>brackets</code> pour trouver le crochet correspondant (qui est le crochet inverse au crochet de départ pour lequel la variable vaut 0)
+</p>
+
+
+<p>
+Après la boucle, si nous avons détecté une erreur, nous la renvoyons, sinon nous renvoyons la chaîne de caractères réponse.
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span>(error[<span style="color: #da8548; font-weight: bold;">0</span>]!=<span style="color: #98be65;">'\0'</span>) {
+    printf(<span style="color: #98be65;">"%s"</span>, error);
+}
+<span style="color: #51afef;">else</span>{
+    printf(<span style="color: #98be65;">"%s"</span>, output);
+}
+</pre>
+</div>
+
+
+
+<p>
+Si vous vous demandiez, évidemment que la variable <code>array</code> a été libérée après l&rsquo;allocation dynamique :
+</p>
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #c678dd;">free</span>(array);
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgaa72a19" class="outline-2">
+<h2 id="orgaa72a19"><span class="section-number-2">3.</span> Solution d&rsquo;un autre CodinGamer</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Il peut paraître compliqué de trouver des solutions différentes lorsqu&rsquo;il s&rsquo;agit de créer des compilateurs de brainfuck.
+Cependant l&rsquo;utilisateur <a href="https://www.codingame.com/profile/946069e389cac56622e9b29fb30591789503773">Alyovano</a> a utilisé une solution différente de celle étudiée, sur deux points :
+</p>
+
+<p>
+Premièrement dans les cas d&rsquo;erreur, il n&rsquo;utilise pas de chaîne de caractères erreurs.
+Il renvoie directement l&rsquo;erreur avec <code>return(printf("ERROR"))</code>, ce qui permet de ne pas utiliser de la mémoire e créant une chaîne de caractères
+</p>
+
+<p>
+Voici les erreurs qui sont renvoyées :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">if</span> (r[j] == <span style="color: #98be65;">'+'</span>) {
+    out[k] += <span style="color: #da8548; font-weight: bold;">1</span>;
+    <span style="color: #51afef;">if</span> (out[k] &gt; <span style="color: #da8548; font-weight: bold;">126</span> || out[k] &lt; <span style="color: #da8548; font-weight: bold;">0</span>)
+        <span style="color: #51afef;">return</span> (printf(<span style="color: #98be65;">"INCORRECT VALUE"</span>));
+}
+<span style="color: #51afef;">else</span> <span style="color: #51afef;">if</span> (r[j] == <span style="color: #98be65;">'-'</span>) {
+    out[k] -= <span style="color: #da8548; font-weight: bold;">1</span>;
+    <span style="color: #51afef;">if</span> (out[k] &gt; <span style="color: #da8548; font-weight: bold;">126</span> || out[k] &lt; <span style="color: #da8548; font-weight: bold;">0</span>)
+        <span style="color: #51afef;">return</span> (printf(<span style="color: #98be65;">"INCORRECT VALUE"</span>));
+}
+<span style="color: #51afef;">else</span> <span style="color: #51afef;">if</span> (r[j] == <span style="color: #98be65;">'&gt;'</span>) {
+    k++;
+    <span style="color: #51afef;">if</span> (k &gt; S - <span style="color: #da8548; font-weight: bold;">1</span>)
+        <span style="color: #51afef;">return</span> (printf(<span style="color: #98be65;">"POINTER OUT OF BOUNDS\n"</span>));
+}
+<span style="color: #51afef;">else</span> <span style="color: #51afef;">if</span> (r[j] == <span style="color: #98be65;">'&lt;'</span>) {
+    k--;
+    <span style="color: #51afef;">if</span> (k == -<span style="color: #da8548; font-weight: bold;">1</span>)
+        <span style="color: #51afef;">return</span> (printf(<span style="color: #98be65;">"POINTER OUT OF BOUNDS\n"</span>));
+}
+</pre>
+</div>
+
+<p>
+Deuxièmement, la chaîne de caractère réponse a aussi disparu, pour laisser place à un affichage progressif, ce qui fait économiser, là aussi, de la mémoire
+</p>
+
+<p>
+Voici le cas <code>.</code> pour l&rsquo;affichage :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">else</span> <span style="color: #51afef;">if</span> (r[j] == <span style="color: #98be65;">'.'</span>) {
+    printf(<span style="color: #98be65;">"%c"</span>, out[k]);
+}
+</pre>
+</div>
+
+<p>
+Cette solution est donc efficace en terme d&rsquo;économie de mémoire.
+</p>
+</div>
+</div>
+<div id="outline-container-org738fa3c" class="outline-2">
+<h2 id="org738fa3c"><span class="section-number-2">4.</span> Un exemple de programme en Brainfuck</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Voici un programme simple affichant &ldquo;Hello World&rdquo;, issu d&rsquo;un des tests du puzzle :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nil">++++++++++[&gt;+++++++&gt;++++++++++&gt;+++&lt;&lt;&lt;-]&gt;++.&gt;+.+++++++..+++.&gt;++.&lt;&lt;+++++++++++++++.&gt;.+++.------.--------.&gt;+.
+</pre>
+</div>
+
+<p>
+Sortie :
+</p>
+
+<p>
+<code>Hello World!</code>
+</p>
+
+
+<p>
+Voici un autre programme, s&rsquo;utilisant dans le terminal linux permettant d&rsquo;écrire une lettre passée en argument en couleur (ici en rouge):
+</p>
+
+<p>
+\[e0;31m
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nil">++++++++++[&gt;+++++++++&gt;+++++&lt;&lt;-]&gt;
+++
+.
+-
+.
+++++++++++
+.
+&gt;--
+.
++++++++++++
+.
+--------
+.
+--
+.
+&lt;
+++++++++
+.
+&gt;,.
+
+</pre>
+</div>
+
+
+<p>
+Voici un dernier programme qui affiche un programme brainfuck qui affiche &ldquo;Hello World!&rdquo;, (basé sur l&rsquo;exemple précédent)
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nil">+++++++++[&gt;+++++&gt;+++++++&gt;++++++++++&lt;&lt;&lt;-]
+&gt;--..........
+&gt;&gt;+.
+&lt;-.
+&lt;.......
+&gt;.
+&lt;..........
+&gt;.
+&lt;...
+&gt;--...
+&lt;++.
+&gt;&gt;++.
+
+
+&lt;++.
+&lt;--..         
++++.
+&gt;.
+&lt;---.
++++.
+---.......
++++..
+---...
++++.
+&gt;.
+&lt;---..
++++.
+
+&gt;--..
+&lt;---...............
++++.
+&gt;++.
+&lt;.
+---...
++++.
+-......
++.
+-........
++.
+&gt;.
+&lt;---.
++++.
+</pre>
+</div>
+
+<p>
+Sortie :
+<code>++++++++++[&gt;+++++++&gt;++++++++++&gt;+++&lt;&lt;&lt;-]&gt;++.&gt;+.+++++++..+++.&gt;++.&lt;&lt;+++++++++++++++.&gt;.+++.------.--------.&gt;+.</code>
+</p>
+</div>
+</div>
+<div id="outline-container-org4b27cf1" class="outline-2">
+<h2 id="org4b27cf1"><span class="section-number-2">5.</span> Bilan</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Ce puzzle permet de découvrir et de comprendre le brainfuck, qui est un langage très intéressant, au-delà du puzzle.
+Ce qui n&rsquo;a pas été précisé dans la présentation du langage, c&rsquo;est qu&rsquo;il est <i>turing complete</i>, c&rsquo;est-à dire qu&rsquo;il est possible de recréer un ordinateur à partir de ce langage, et de pouvoir créer n&rsquo;importe quel programme.
+</p>
+
+<p>
+D&rsquo;autres langages découlent du brainfuck et utilisent les mêmes instructions, comme le f**kf**k, avec des instructions aux noms discutables, le Ook, qui découle d&rsquo;une blague issu d&rsquo;un roman de Terry Pratchett, ou encore le Spoon, qui utilise un codage de Huffman, rendant le code semblable à du binaire.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guillaume BEUVOT - Prep&rsquo;ISIMA</p>
+<p class="date">Created: 2025-05-04 Sun 22:02</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+Nous commençons par créer une chaîne de caractères qui contiendra toutes les lettres de la pile
+Ainsi, la première lettre de la chaîne sera la lettre au-dessus de la pile et les lettres suivantes dans la chaîne de caractère sont les lettres qui se trouvent en-dessous.
+Nous créons aussi une sorte de dictionnaire qui associe à chaque mot de la liste de mots un score (qui lui a été donné)
+Nous appelons ensuite une fonction qui se charge de trouver récursivement par l'algorithme minimax la bonne solution.
+
+Nous donnons à cette fonction les valeurs de bêta et alpha, donc plus et moins l'infini, la pile pleine, 
+les ensembles(vides) de lettres des deux joueurs, le dictionnaire mot-score ainsi que le nombre dans le dictionnaire et enfin la profondeur de l'arbre de recherche (ici fixé à 0, car c'est le premier tour)
+
+
+Nous entrons ainsi dans une fonction récursive:
+    -Si la pile de lettre est vide, nous calculons le score des deux joueurs et l'enregistrerons dans une valeur.
+    Nous renvoyons ensuite cette structure.
+
+    -Si c'est au tour du joueur 1 (celui que nous devons faire gagner):
+        Nous prenons une valeur de moins l'infini, cela nous servira de "score à battre" pour chaque sous-noeud
+        Nous copions la pile de lettres ainsi que l'ensemble de lettres du joueur 1.
+        Nous retirons ensuite la lettre au-dessus de la copie de la pile de lettres pour la mettre dans la copie de l'ensemble de lettres du joueur 1
+        Nous appelons ensuite récursivement la fonction minmax avec la pile et l'ensemble de lettres modifiés, afin de récupérer le noeud avec le score maximum récupéré dans les feuilles.
+        Le "score à battre" prend le meilleur score entre le "score à battre" actuel et le score récupéré à la suite de l'appel de la fonction minmax
+
+        Nous recommençons ensuite une deuxième fois ces instructions en réinitialisant les copies de la pile et de l'ensemble de lettre, puis en prenant cette fois la deuxième lettre de la pile
+        Avant de recommencer, nous regardons si le différence du "score à battre" est plus grande que alpha.
+        Si tel est le cas, alpha devient la différence du score des deux joueurs du "score à battre".
+        Enfin, si alpha est inférieur à beta, nous ne recommençons pas avec la deuxième lettre de la pile, cela évite donc de faire des appels inutils
+
+        Si nous sommes en haut de l'arbre de recherche, nous affichons la lettre à prendre, ainsi que le score garanti en prenant cette lettre
+
+    Si c'est au tour du deuxième joueur, l'algorithme est similaire à celui du premier joueur en changeant plusieurs détails:
+        Le "score à battre" est de plus l'infini, et prend la valeur du score le plus bas
+        L'ensemble de lettres copié est celui du joueur 2
+        Beta prend la valeur du score le plus bas, et alpha reste inchangé, le test et ses conséquences restent les mêmes.
+
+La fonction finit donc par afficher la lettre recommendée ainsi que le score garanti, la fonction principale s'arrête donc après le premier appel.
+
+
+
+Code ():
+
+
+    char bd[100] = "";
+    wscore_t dict[100];
+
+#Nous initialisons la pile et le dictionnaire
+    
+    struct word_score {
+        int score;
+        char word[27];
+    };
+
+#Une entrée du dictionnaire
+
+#Nous appelons maintenant la fonction principale minmax
+
+    minmax(bd, -65535, 65535, 1, "", "", dict,  q, 0);
+
+#Ici 65535 représente l'infini, un tel score ne sera jamais atteint
+
+#Nous appelons la fonctions minmax
+
+pscore_t minmax(char letters[], int a, int b, int play, char p1[], char p2[], wscore_t dict[], int n, int d) {
+
+#Prototype de la fonction minmax, letters est la pile, a et b sont alpha et beta, play détermine le joueur qui doit jouer (1 si vrai, 2 sinon), 
+#p1 et p2 sont les ensembles de lettres des joueurs 1 et 2,
+#dict est le tableau d'entrées de dictionnaire, n est le nombre de mots possible et d la profondeur, 0 étant le premier tour, donc en haut de l'arbre.
+
+    if(strlen(letters) == 0) {
+        pscore_t output = {score(p1, dict, n),score(p2, dict, n)};
+        return output;
+    }
+
+#Cas d'arrêt, nous calculons le score des deux joueurs en renvoyant les deux scores, cela permettra de plus facilement afficher le score final, 7
+#les valeurs qui serviront de test seront la différence entre le score du premier joueur et du deuxième
+
+
+struct player_score {
+    int score1;
+    int score2;
+};
+
+#La structure score
+
+int score(char result[], wscore_t dict[], int n){
+#Prototype de la fonction de calcul de score d'un joueur
+
+
+int points = 0;
+
+#Nous initialisons les points à 0
+for(int i = 0; i < n; i++) {
+
+#Pour chaque entrée du dictionnaire
+    for(int j = 0; j < strlen(dict[i].word); j++) {
+#Pour chaque lettre d'un mot du dictionnaire
+        #Si la lettre ne se trouve pas dans l'ensemble de lettres du joueur, nous passons au mot suivant
+        if(strchr(result, dict[i].word[j]) == NULL) {
+            break;
+        }
+
+#Sinon, si nous arrivons à la fin du mot, nous ajoutons au score du joueur le nombre de points que donne le mot
+        else if(j == strlen(dict[i].word)-1){
+            points += dict[i].score;
+        }
+
+return points;
+
+#Nous renvoyons le score du joueur
+    }
+}
+
+
+
+}
+
+
+    if(play)
+#Si le joueur 1 joue
+
+        int answer = 0;
+        pscore_t value = {0, 65535};
+        char l[27] = "", x[27] = "";
+        strcpy(l, letters);
+#Nous initialisons les variables : answer est le numéro de la lettre à prendre dans la pile
+#Ici 65535 représente l'infini, un tel score ne sera jamais atteint
+
+
+        for(int i = 0; i < 2; i++) {
+#Nous entrons dans une boucle qui se réalise deux fois, pour prendre les deux premières lettres seulement
+
+            sprintf(x, "%s%c", p1, l[i]);
+            strremove(l, i)
+#Nous retirons la i-ème lettre de la pile et l'ajoutons à l'inventaire du joueur 1 
+
+void strremove(char *str, int n){
+    char out[27] = "";
+    int j = 0;
+    for(int i = 0; i < strlen(str);i++){
+        if(i != n){
+            out[j] = str[i];
+            j++;
+        }
+    }
+    strcpy(str, out);
+}
+#Fonction qui retire un caractère de la pile
+
+
+            pscore_t test = minmax(l, a, b, 0, x, p2, dict, n, d+1);
+#Nous appelons la fonction minmax, avec la pile sans la i-ème lettre, qui se trouve maintenant dans l'inventaire du joueur 1. Nous indiquons aussi que c'est au joueur 2 de jouer
+
+
+            x[strlen(x)-1] = '\0';
+            strcpy(l, letters);     
+
+#Nous retirons à la copie de l'inventaire du joueur 1 la i-ème lettre et la remettons dans la pile (ici, nous recopions la pile donnée en argument de la fonction pour la mettre dans la copie de la pile)
+
+            if((test.score1-test.score2)>(value.score1-value.score2)){
+                value=test;
+                answer = i;
+            }
+
+#Si la différendce de score est plus grande que le score à battre, le score à battre prend la valeur du score obetenu avec la fonction et answer prend la valeur de i, ce qui veut dire qu'il faut prendre la i-ème lettre
+
+            a = (value.score1-value.score2)>a?(value.score1-value.score2):a;
+
+            if(b<=a)break;
+#Alpha prend la valeur maximum entre la différence du score à battre et alphe lui-même, et si alpha est plus petit que beta, nous sortons immédiatement de la boucle
+#À la fin de la boucle (recherche), le score à battre est renvoyé en étant le plus grand possible
+    return value;
+
+
+
+
+
+#Les différences avec le joueur 2 sont celles-ci: La différence du score à battre est de plus l'infini, l'inventaire du joueur 2 est copié et la fonction est appelée avec la pile et l'inventaire du joueur 2 changés et en faisant jouer le joueur 1
+            pscore_t value = {65535, 0};         
+            sprintf(y, "%s%c", p2, l[i]);   
+            pscore_t test = minmax(l, a, b, 1, p1, y, dict, n, d+1);
+
+
+            value = (test.score1-test.score2)<(value.score1-value.score2)?test:value;
+            b = (test.score1-test.score2)<b?(test.score1-test.score2):b;
+            if(b<=a)break;
+
+
+#Le score à battre cherche donc à être le plus faible possible, de même que pour beta.
+#Le même test est fait que pour le joueur 1.
+
+#Lorsque la meilleure possibilité remonte à la racine (tour 1), nous vérifions si la profondeur(le tour) est le premier, dans ce cas, après avoir selectionné la meilleure possibilité, nous renvoyons la lettre recommandée, qui est celle assurant le meilleur coup ainsi que les scores des deux joueurs à la fin de la partie :
+
+if(!d) printf("%c %d-%d\n", letters[answer], value.score1, value.score2);
+
+#Cette instruction se situe juste avant le renvoi du score à battre (dans le cas où nous ne somme pas à la racine)
+
+

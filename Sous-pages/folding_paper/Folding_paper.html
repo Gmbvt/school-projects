@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <link href="styles/style.css" rel="stylesheet" type="text/css" />
+        <meta name = "viewport" content="width=device-width" />
+        <title>Rapport Folding Paper</title>
+        
+    </head>
+    <body>        
+        <div class="sidebar">
+            <a><strong>Table des Matières</strong></a>
+            <ul>
+                <li><a class="Chap" href="#Introduction">Introduction</a></li>
+                <ol>
+                    <li><a class="SousChap" href = "#Entrees">Données en entrée</a></li>
+                    <li><a class="SousChap" href = "#Sortie">Données en sortie</a></li>
+                </ol>
+                <li><a class="Chap" href="#Resolution">Résolution</a></li>           
+                <ol>
+                    <li><a class="SousChap" href = "#Resume">Résumé de la méthode</a></li>
+                    <li><a class="SousChap" href = "#Algo">Transposition en langage C</a></li>
+                    <li><a class="SousChap" href = "#Code">Code en langage C de la résolution</a></li>
+                    <li><a class="SousChap" href = "#Comparaison">Comparaison avec un autre Codingamer</a></li>
+                </ol> 
+                <li><a class="Chap" href="#Bilan">Bilan</a></li>
+            </ul>
+        </div>
+        <header>
+            <h1 class = "Title" >Folding Paper</h1>
+            <img id = "UCA" src="https://www.isima.fr/wp-content/uploads/2023/01/Logo_ISIMA_INP.jpg" alt="UCA">
+            <img id = "GhostLegPicture" src ="https://images.pexels.com/photos/975012/pexels-photo-975012.jpeg" alt="Lune(42)">
+            Besoin d'explications ? <a href="https://www.google.com/search?q=folding+a+paper+42+times+%28i+wish+i+knew+it+before%29&client=firefox-b-d&sca_esv=46569ed30a7cac77&ei=Fg-dZ_-FAdDYkdUPjeLQ-Qo&ved=0ahUKEwj_6Ma7xKCLAxVQbKQEHQ0xNK8Q4dUDCBE&uact=5&oq=folding+a+paper+42+times+%28i+wish+i+knew+it+before%29&gs_lp=Egxnd3Mtd2l6LXNlcnAiMmZvbGRpbmcgYSBwYXBlciA0MiB0aW1lcyAoaSB3aXNoIGkga25ldyBpdCBiZWZvcmUpMgUQABjvBTIFEAAY7wUyBRAAGO8FMgUQABjvBTIFEAAY7wVIpW9QsiZYi21wAngBkAEAmAF9oAGiDqoBBDI2LjG4AQPIAQD4AQGYAh2gAtoOwgIKEAAYsAMY1gQYR8ICBxAAGIAEGBPCAggQABgTGBYYHsICBhAAGBYYHsICBRAhGKABwgIHECEYoAEYCsICBRAhGJ8FwgIEECEYFZgDAIgGAZAGCJIHBDI4LjGgB-Rm&sclient=gws-wiz-serp" target="_blank">Je suis un lien cliquable qui donne du contexte</a> 
+            <subheader><h3>Par Guillaume BEUVOT, étudiant de prep'ISIMA 1, 2024/2025</h3></subheader>
+        </header>
+
+        <main>
+            <h2 id = "Introduction">Introduction au puzzle</h2>
+            <p>
+                Plier une feuille de papier est une activité à la portée de tous. Le premier constat après avoir plié une feuille de papier est que le nombre de couches de papier a doublé. Cependant, selon le côté sur lequel on se positionne, le nombre de couches peut être différent. En effet, en se plaçant du côté par lequel le pli a été réalisé, une seule couche sera visible. Les autres côtés afficheront deux fois plus de couches.
+            </p>
+            <p>
+                Un pli est donc comparable à une opération qui, du point de vue d'un côté donné, modifie le nombre de couches : 
+                <ul>
+                    <li>Soit double le nombre de couches, si le pli a été effectué latéralement</li>
+                    <li>Soit fixe à un le nombre, si le pli a été effectué vers le côté opposé</li>
+                    <li>Soit ajoute le nombre de couches du côté opposé, si le pli a été effectué à partir du côté opposé</li>
+                </ul>
+            </p>
+            <p>
+                Le problème en langage C à traiter est donc de déterminer, selon un côté et une séquence de plis donnés, combien de couches sont visibles après la séquence de pli en se plaçant du côté donnée.
+            </p>
+            <h3 id = "Entrees">Les données auxquelles nous disposons sont donc :</h3>
+                <ul>
+                    <li>Une séquence de plis sous forme de chaîne de caractères où chaque caractère représente une direction R(ight), L(eft), U(p), D(own)</li>
+                    <li>Un caractère R, L, U, D qui sera la direction par lequel la feuille sera observée</li>
+                </ul>
+            <p>
+                Dans un souci de réalisme, une feuille de papier ne sera pas pliée plus de 8 fois.
+            </p>
+            <h3 id = "Sortie">Les données à renvoyer sont donc :</h3>
+            <ul><li>Le nombre de couches de papier visibles depuis la position donnée</li></ul>
+            <h2 id = "Resolution">Résolution du puzzle</h2>
+
+            <h3 id = "Resume">Résumé de la méthode</h3>
+            <p>On va utiliser la même méthode qu'un humain pourrait utiliser. À chaque pli, selon le type de pli (vu plus haut), on modifie le nombre de couches visibles.</p>
+            <h3 id = "Algo">Transposition en langage C</h3>
+                <p>On commence par définir le côté par lequel la feuille sera observée après la séquence de plis en assignant un nombre à chaque direction</p>
+                <p>On créé un tableau qui contiendra la séquence de plis sous forme de nombres (le nombre désigne le côté à partir duquel le pli est réalisé).</p>
+                <p>Et on réalise une boucle qui va parcourir le tableau créé :</p>
+            <ol>
+                <li>Si le pli est latéral, le nombre de couches du côté assigné et de son côté opposé est doublé.</li>
+                <li>Si le pli est effectué vers le côté opposé, le nombre de couches du côté assigné est ajouté au nombre de couches du côté opposé, tandis que le nombre de couches du côté assigné revient à 1</li>
+                <li>Si le pli est effectué à partir du côté opposé, le nombre de couches du côté opposé est ajouté au nombre de couches du côté assigné, tandis que le nombre de couches du côté opposé revient à 1</li>
+            </ol>
+
+            <h3 id = "Code">Code en langage C de la résolution</h3>
+                <pre>
+                    <code>
+                        int folds = 1, dir = 0, length = 0, back_folds = 1;
+                        int folding_order[9];
+                    </code>
+                </pre>
+            <p>Les variables sont initialisées. <code>folds</code> est le nombre de plis visibles et <code>back_folds</code> est le nombre de plis du côté opposé</p>
+            <p><code>dir</code> est le côté assigné sous forme d'entier, <code>length</code> est le nombre de plis dans la séquence (car le nombre de plis peut varier, pas la taille du tableau tableau, c'est un tableau à taille fixe, bienvenue en C ^^) </p>
+            <p>Enfin, <code>folding_order</code> est le tableau d'entiers qui continedra la séquence de plis sous forme... d'entiers.</p>
+
+            <pre>
+                <code>
+                    char order[9];
+                    scanf("%[^\n]", order); fgetc(stdin);
+                    char side[6];
+                    scanf("%[^\n]", side);
+                </code>
+            </pre>
+            <p>Ici, <code>order</code> est la chaîne de caractères représentant la séquence de plis et <code>side</code> sera le côté assigné sous forme de caractère.</p>
+
+            <pre>
+                <code>
+                    switch(side[0]) {
+                        case 'R':
+                            dir = 0;
+                            break;
+                        case 'U':
+                            dir = 1;
+                            break;
+                        case 'L':
+                            dir = 2;
+                            break;
+                        case 'D':
+                            dir = 3;
+                            break;
+                    }
+                </code>
+            </pre>
+            <p>Ce bloc d'instruction permet d'assigner le côté assigné en entier. Remarquez que les côtés opposés sont à une distance de 2. Cela permettra de faciliter les calculs quand il s'agira de réaliser la séquence de plis.</p>
+            <p><code>switch</code> permet d'établir plusieurs cas en fonction des valeurs prises et <code>case</code> donne les instructions à réaliser en fonction du cas.</p>
+            <p>Nous pouvons maintenant faire de même pour la séquence de plis, grâce au bloc d'instructions suivant qui parcourt la chaîne de caractères donnée plus tôt :</p>
+            
+            <pre>
+                <code>
+                    for (int i = 0; i < 9; i++) {
+                        switch(order[i]) {
+                            case 'R':
+                                folding_order [i] = 0;
+                                length ++;
+                                break;
+                            case 'U':
+                                folding_order [i] = 1;
+                                length ++;
+                                break;
+                            case 'L':
+                                folding_order [i] = 2;
+                                length ++;
+                                break;
+                            case 'D':
+                                folding_order [i] = 3;
+                                length ++;
+                                break;
+                        }        
+                    }
+                </code>
+            </pre>
+            <p><code>length ++;</code> permet d'ajouter 1 à la longueur de la séquence, donnant une longueur dynamique à la séquence de plis.</p>
+            <p></p>
+            <p>La boucle principale est la suivante :</p>
+            <pre>
+                <code>
+                    for (int i = 0; i < length; i++) {
+                        if (folding_order[i] == dir) {
+                            back_folds += folds;
+                            folds = 1;
+                        }
+                        else if (folding_order[i] == dir+2 || folding_order[i] == dir-2) {
+                            folds += back_folds;
+                            back_folds = 1;
+                        }
+                        else {
+                            folds *= 2;
+                            back_folds *= 2;
+                        }
+                    }
+                </code>
+            </pre>
+
+            <p>3 cas se présentent ici :</p>
+            <ul>
+                <li>Si le pli part du côté assigné (donc que le nombre assigné au pli est celui assigné à la direction), alors, comme dit précédemment, le nombre de plis visibles revient à 1 et celui des plis opposés est augmenté</li>
+                <li>Sinon, si le pli part du côté opposé (donc que le nombre assigné au pli est à une distance de 2 du côté assigné), la situation inverse par rapport à la précédente se produit.</li>
+                <li>Sinon, le pli est latéral, et le nombre de plis visibles et opposés est doublé.
+            </ul>
+
+
+            <h3 id = "Comparaison">Comparaison avec un autre Codingamer</h3>
+
+            <p>Le code donné par l'utilisateur <a href="https://www.codingame.com/profile/5c0b21297a7174b6039d21ba193e08bf5221724" target="_blank">Hellfire91</a> sur Codingame suit une méthode qui diffère par l'ordre des actions réalisées notamment.</p>
+            <p>Là où, pour le code étudié plus haut le côté assigné était d'abord pris en compte, ce code traite la séquence de plis pour tous les côtés, puis donne en sortie le côté demandé.</p>
+            <p>Ainsi, tous les côtés auront un pli différent d'un autre en prenant en compte le pli réalisé dans la séquence.</p>
+            <p>Voici le code :</p>
+            <pre>
+                <code>
+                    int main()
+                    {
+                        char order[9];
+                        scanf("%[^\n]", order); fgetc(stdin);
+                        char side[6];
+                        scanf("%[^\n]", side);
+                    
+                        char sides[4] = { 'U', 'R', 'D', 'L' };
+                        int count[4] = { 1, 1, 1, 1 };
+                    
+                        int s = 0;
+                    
+                        for (int ind = 0; ind < 9 && order[ind] != 0; ind++)
+                        {
+                            for (s = 0; s < 4; s++)
+                            {
+                                if (sides[s] == order[ind])
+                                    break;
+                            }
+                    
+                            count[(s + 1) % 4] *= 2;
+                            count[(s + 2) % 4] += count[s];
+                            count[(s + 3) % 4] *= 2;
+                            count[s] = 1;
+                        }
+                    
+                        for (s = 0; s < 4; s++)
+                        {
+                            if (sides[s] == side[0])
+                                break;
+                        }
+                    
+                        printf("%d\n", count[s]);
+                    
+                        return 0;
+                    }
+                </code>
+            </pre>
+            <p>Cette stratégie reprend le fait d'espacer de 2 les côtés opposés pour faciliter les calculs</p>
+
+
+            <p>Ce code est plutôt clair, il permet d'être compris par un humain comprenant le langage C, tout en restant court et efficace.</p>
+            <p></p>
+            <p></p>
+            
+            <h2 id = "Bilan">Bilan</h2>
+            
+            <p>La réalisation de ce puzzle améliore la capacité de visualiser des situations comme une séquence de plis d'une feuille de papier, et d'en tirer des propriétés afin de le transposer en programme. Cela permet de travailler sur des situations plus concrètes que des problèmes numériques.</p>
+            </main>
+    </body>

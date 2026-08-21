@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <link href="styles/style.css" rel="stylesheet" type="text/css" />
+        <meta name = "viewport" content="width=device-width" />
+        <title>Rapport Ghost legs</title>
+        
+    </head>
+    <body>        
+        <div class="sidebar">
+            <a><strong>Table des Matières</strong></a>
+            <ul>
+                <li><a class="Chap" href="#Introduction">Introduction</a></li>
+                <ol>
+                    <li><a class="SousChap" href = "#Entrees">Données en entrée</a></li>
+                    <li><a class="SousChap" href = "#Sortie">Données en sortie</a></li>
+                </ol>
+                <li><a class="Chap" href="#Resolution">Résolution</a></li>           
+                <ol>
+                    <li><a class="SousChap" href = "#Resume">Résumé de la méthode</a></li>
+                    <li><a class="SousChap" href = "#Algo">Transposition en Python</a></li>
+                    <li><a class="SousChap" href = "#Code">Code python de la résolution</a></li>
+                    <li><a class="SousChap" href = "#Comparaison">Comparaison avec un autre Codingamer</a></li>
+                </ol> 
+                <li><a class="Chap" href="#Bilan">Bilan</a></li>
+            </ul>
+        </div>
+        <header>
+            <h1 class = "Title" >Ghost legs</h1>
+            <img id = "UCA" src="https://www.isima.fr/wp-content/uploads/2023/01/Logo_ISIMA_INP.jpg" alt="UCA">
+            <img id = "GhostLegPicture" src ="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRtk5NlIFoFEc18J0dHI8hLuJfRJ4Zrwv2Y3A&s" alt="Ghost Leg dans un métro à Seoul">
+            Source <a href="https://english.seoul.go.kr/" target="_blank">Seoul Korea</a> 
+            <subheader><h3>Par Guillaume BEUVOT, étudiant de prep'ISIMA 1, 2024/2025</h3></subheader>
+        </header>
+
+        <main>
+            <h2 id = "Introduction">Introduction au puzzle</h2>
+            <p>
+                Ghost leg, ou <em>amidakuji</em> est une sorte de jeu de lotterie populaire en Asie. Il permet d'associer une valeur à une autre, permettant de répartir des objets parmi un groupe de personne, créer des équipes ou bien de savoir quel plat manger pour quel repas.
+
+                Le principe du jeu est simple à comprendre. Le jeu commence par une séquence de valeurs (chiffres, noms, objets). Chaque valeur est reliée en ligne droite verticale à une valeur d'une deuxième séquence, située plus bas. Les valeurs sont donc reliées par des tubes. Cependant, chaque ligne verticale peut être reliée à une autre par une ou plusieures lignes horizontales, donc un autre tube, créant un lien. Une partie débute à la première valeur de la première séquence. Il suffit ensuite de longer le tube correspondant à cette valeur jusqu'à tomber sur un tube horizontal, qu'il faut emprunter afin de changer de tube vertical, il suffit de répéter ce procédé jusqu'à atteindre un valeur de la deuxième séquence, maintenant associée à la première valeur de la première séquence. Répéter cela pour toutes les valeurs de la première séquence pour associer toutes les valeurs.
+                Une partie peut ainsi ressembler à la suivante :
+
+            </p>
+            <img id = "DemoGhostLeg" src="https://upload.wikimedia.org/wikipedia/commons/6/64/Amidakuji_2022-05-10.gif" alt="Partie de Ghost leg">
+            <p>
+                Le problème python à traiter est donc de créer un programme qui puisse automatiquement, selon une grille donnée, associer les valeurs des deux séquences.
+                Cela revient à créer une sorte d'intelligence artificielle jouant à la place d'un humain.
+            </p>
+            <h3 id = "Entrees">Les données auxquelles nous disposons sont donc :</h3>
+                <ul>
+                    <li>h et w, respectivement la hauteur et la largeur de la grille (sachant qu'un tube horizontal possède une largeur 2 dans cette grille)</li>
+                    <li>h lignes où la première et dernière représentent les première et deuxième séquences et les autres les tubes verticaux et horizontaux.</li>
+                </ul>
+            <p>
+                Une précision est apportée pour ce problème : un tube vertical ne peut être relié, à un même niveau, qu'à un seul tube horizontal. Autrement dit, la situation : --|-- ne peut pas se produire.
+            </p>
+            <h3 id = "Sortie">Les données à renvoyer sont donc :</h3>
+            <ul><li>L'association des valeurs des deux séquences après une partie, en commençant par la valeur de la première séquence et en séparant chaque association par un retour à la ligne.</li></ul>
+            <h2 id = "Resolution">Résolution du puzzle</h2>
+
+            <h3 id = "Resume">Résumé de la méthode</h3>
+            <p>On peut facilement transformer la grille en une matrice, pour une compréhension plus facile pour un humain. En python, cela peut se réaliser avec une liste de listes, où chaque élément est soit une valeur d'une des deux séquence, un tube vertical ou horizontal, ou un espace vide (ce dernier ne sera cependant pas pris en compte par l'algorithme). On peut ainsi, pour chaque valeur de la première séquence parcourir le chemin "traditionnel" en regardant les cases adjacentes de la grille.</p>
+            <h3 id = "Algo">Transposition en Python</h3>
+                <p>La matrice, comme dit précédemment est créée à partir d'une liste de listes. </p>
+                <p>On créé donc une liste vide, qui va contenir les autres listes.</p>
+                <p>On initialise les variables de réponses et deux listes contenant les valeurs des première et deuxième séquences</p>
+                <p>Dans la boucle des entrées de valeurs(celles permettant de donner chaque ligne), on sauvegarde chaque caractère de la chaîne d'entrée et les dispose sur la ligne de notre grille correspondant à l'itération de la boucle, et on ajoute les valeurs des première ou deuxième séquences si l'on se trouve sur la prmière ou dernière ligne.</p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p>Pour chaque tour, la méthode est la suivante : </p>
+            <ol>
+                <li>Commencer à la valeur de la première séquence en y plaçant un "curseur",</li>
+                <li><strong>Si</strong> un tube horizontal se trouve à droite ou à gauche du curseur, déplacer le curseur le long de ce tube,</li>
+                <li>Faire descendre le curseur,</li>
+                <li>Ajouter la valeur de la première séquence suivie de la valeur de la deuxième séquence et d'un caractère de retour à la ligne dans la chaîne de caractères de réponse.</li>
+            </ol>
+
+            <h3 id = "Code">Code python de la résolution</h3>
+                <pre>
+                    <code>
+                        map = []
+                        answer = ""
+                        top = []
+                        bot = []
+                        ghost = 0
+                    </code>
+                </pre>
+            <p>Nous commençons par initialiser les variables, respectivement la matrice qui nous servira de grille, la chaîne de caractère de réponse, la liste contenant les valeurs de la première séquence, la liste des valeurs de la deuxième séquence et notre curseur</p>
+
+            <pre>
+                <code>
+                    for i in range(h):
+                        map.append([])
+                        <a id="There"></a>
+                        line = input()
+                    
+                        for j in range(len(line)):
+                            if (i == 0) and ((j+1)%3 == 1):
+                                top.append(line[j])
+                            elif (i == h-1) and ((j+1)%3 == 1):
+                                bot.append(line[j])
+                            map[i].append(line[j])
+                </code>
+            </pre>
+            <p>L'instruction <code>map.append([])</code> ajoute une ligne dans notre grille.</p>
+            <p>On ajoute ensuite, selon si la ligne donnée par l'utilisateur est la première ou dernière, les valeurs des séquences dans les listes correspondantes, tout en prenant en compte que les valeurs sont espacées entre elles de trois cases. On ajoute dans tous les cas chaque caractère de la ligne entrée dans notre grille à la ligne correspondante.</p>
+            
+            <pre>
+                <code>
+                    for i in range(len(top)):
+                        ghost = 3*i
+                        for j in range(1, h, 1):
+                            if ghost != 0 and map[j][ghost-1] == '-':
+                                ghost -= 3
+                            elif ghost != w-1 and map[j][ghost+1] == '-':
+                                ghost += 3
+                        answer += str(top[i]) + str(bot[ghost//3]) + '\n'
+                    answer = answer[:-1]
+                </code>
+            </pre>
+            <p>Pour chaque valeur de la première séquence, le curseur se place à la première ligne (après celle des valeurs de la première séquence) de la colonne correspondante. Il descend ensuite de h-2 (La hauteur moins deux) cases.</p>
+            <p>S'il croise, à gauche ou à droite, un tube horizontal, il l'emprunte (sachant qu'un tube horizontal a une longueur de trois cases)</p>
+            <p>À la fin de la boucle, le curseur étant arrivé sur une valeur (celle de la deuxième séquence), on ajoute à la chaîne de caractères réponse la valeur sur laquelle le curseur a commencé, suivie de la valeur sur laquelle le curseur a fini son parcours, et d'un retour à la ligne.</p>
+            <p>Avant de soumettre le résultat (la chaîne de caractères réponse), on retire le dernier caractère de la chaîne, c'est-à-dire un retour à la ligne. Cela évitera les bugs indésirables.</p>
+
+            <h3 id = "Comparaison">Comparaison avec un autre Codingamer</h3>
+
+            <p>Le code donné par l'utilisateur <a href="https://www.codingame.com/profile/8908717d71bd42f64904d0e3d2b24c538629202", target="_blank">m3m0ry</a> sur Codingame propose une solution différente du parcours classique de la grille.</p>
+            <p>En effet, au lieu de faire descendre un curseur à la fois, tous seront descendu en même temps et deux curseurs échangront leur place à la rencontre d'un tube horizontal. </p>
+            <p>Cette stratégie s'appuie sur le prédicat qui dit que la situation : --|-- ne puisse pas se produire, ce qui permet d'échanger les positions de deux curseurs</p>
+            <p>La réponse commencera par le point de départ du curseur, soit sa valeur correspondante, suivi par son point d'arrivé, soit la valeur sur laquelle il se trouve.</p>
+            <pre>
+                <code>
+                top = input().split()
+                original = top.copy()
+
+                legs = []
+                for i in range(h-2):
+                    i = 0
+                    line = input()
+                    for leg in line.split():
+                        if '-' in leg:
+                            tmp = top[i]
+                            top[i] = top[i+1]
+                            top[i+1] = tmp
+                            i += 2
+                        else:
+                            i += 1
+                    
+                bottom = input().split()
+
+                for a in original:
+                    print(f'{a}{bottom[top.index(a)]}')
+                </code>
+            </pre>
+
+
+            <p>La stratégie de faire descendre tous les curseurs en même temps est intéressante, car elle permet un gain de temps pour un joueur humain.</p>
+            <p>Un autre détail attirant particulièrement l'attention est le fait de s'approprier le fonctionnement de codingame. En effet les inputs des différentes lignes sont dispersés pour, dans un premier temps créer la liste top, parcourir la grille en second lieu, et enfin créer la liste bot.</p>
+            <p>En temps normal les inputs des lignes se font dans une boucle, sans être séparés, <a href="#There">(cf le code vu plus haut)</a></p>
+            
+            <h2 id = "Bilan">Bilan</h2>
+            
+            <p>Ce puzzle développe la réflexion sur la transformation d'un travail humain en algorithme, puis en un programme. Cela permet d'exprimer explicitement sa stratégie personnelle pour un tel jeu. Ce puzzle peut constituer une sorte introduction à la création d'intelligence artificielle non-générative capables de réaliser certaines missions, pour des jeux ou situations réelles.</p>
+            </main>
+    </body>
