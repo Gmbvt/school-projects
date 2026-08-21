@@ -1,0 +1,8 @@
+<map id="changeLetters" name="changeLetters">
+<area shape="rect" id="Node000001" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="5,29,120,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="40,30,36,21,38,11,47,5,63,3,81,6,89,14,85,18,78,11,63,8,49,10,42,14,41,20,45,28"/>
+<area shape="rect" id="Node000002" href="$main_8c.html#ac9633ea5d3fab9cad44568ca8b6cf735" title="Vérifie si une combinaison est valide ou non." alt="" coords="168,29,220,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="120,39,154,39,154,45,120,45"/>
+<area shape="rect" id="Node000003" href="$main_8c.html#a376609e0422960ef9d7fd8be8a00b0ac" title="Calcule la somme des lettres d&#39;un mot converties en chiffres." alt="" coords="268,29,316,55"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="220,39,254,39,254,45,220,45"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="place" name="place">
+<area shape="rect" id="Node000001" title="Renvoie l&#39;indice d&#39;une lettre dans le tableau de lettres. Si la lettre n&#39;y est pas présente,..." alt="" coords="108,5,165,31"/>
+<area shape="rect" id="Node000002" href="$main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,5,60,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>

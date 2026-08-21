@@ -1,0 +1,480 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Documentation cryptarithme: Référence du fichier sources/main.c</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="C.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">Documentation cryptarithme<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Documentation du puzzle CodinGame &#39;Cryptarithme&#39;</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_08d237fc27d4ecd563f71c5d52f2fecc.html">sources</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Structures de données</a> &#124;
+<a href="#typedef-members">Définitions de type</a> &#124;
+<a href="#func-members">Fonctions</a>  </div>
+  <div class="headertitle"><div class="title">Référence du fichier main.c</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Fichier contenant le code en C de la résolution du puzzle CodinGame "Cryptarithme", 3 éléments seront étudiés :  
+<a href="#details">Plus de détails...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Structures de données</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structletter__t.html">letter_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d'un mot, 0 sinon.  <a href="structletter__t.html#details">Plus de détails...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Définitions de type</h2></td></tr>
+<tr class="memitem:a78a6bf0003fed17488505472f8ee8941" id="r_a78a6bf0003fed17488505472f8ee8941"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structletter__t.html">letter_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a78a6bf0003fed17488505472f8ee8941">letter_t</a></td></tr>
+<tr class="separator:a78a6bf0003fed17488505472f8ee8941"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Fonctions</h2></td></tr>
+<tr class="memitem:a376609e0422960ef9d7fd8be8a00b0ac" id="r_a376609e0422960ef9d7fd8be8a00b0ac"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a376609e0422960ef9d7fd8be8a00b0ac">calc</a> (char *word, <a class="el" href="structletter__t.html">letter_t</a> cryptarithm[], int n)</td></tr>
+<tr class="memdesc:a376609e0422960ef9d7fd8be8a00b0ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calcule la somme des lettres d'un mot converties en chiffres.  <br /></td></tr>
+<tr class="separator:a376609e0422960ef9d7fd8be8a00b0ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9633ea5d3fab9cad44568ca8b6cf735" id="r_ac9633ea5d3fab9cad44568ca8b6cf735"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ac9633ea5d3fab9cad44568ca8b6cf735">verif</a> (<a class="el" href="structletter__t.html">letter_t</a> cryptarithm[], int n, int k, char words[6][100])</td></tr>
+<tr class="memdesc:ac9633ea5d3fab9cad44568ca8b6cf735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vérifie si une combinaison est valide ou non.  <br /></td></tr>
+<tr class="separator:ac9633ea5d3fab9cad44568ca8b6cf735"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af49f96c48ae0ce191d38084f68876b18" id="r_af49f96c48ae0ce191d38084f68876b18"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#af49f96c48ae0ce191d38084f68876b18">changeLetters</a> (<a class="el" href="structletter__t.html">letter_t</a> cryptarithm[], int n, int x, int k, char words[6][100])</td></tr>
+<tr class="memdesc:af49f96c48ae0ce191d38084f68876b18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifie la combinaison actuelle jusqu'à ce que la bonne soit trouvée.  <br /></td></tr>
+<tr class="separator:af49f96c48ae0ce191d38084f68876b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22ec93ccf397f0728c08e927c598aa32" id="r_a22ec93ccf397f0728c08e927c598aa32"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a22ec93ccf397f0728c08e927c598aa32">place</a> (<a class="el" href="structletter__t.html">letter_t</a> cryptarithm[], int n, char c)</td></tr>
+<tr class="memdesc:a22ec93ccf397f0728c08e927c598aa32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renvoie l'indice d'une lettre dans le tableau de lettres. Si la lettre n'y est pas présente, la fonction renvoie -1.  <br /></td></tr>
+<tr class="separator:a22ec93ccf397f0728c08e927c598aa32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4" id="r_ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
+<tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre alphabétique, puis affiche chaque lettre avec le chiffre correspondant.  <br /></td></tr>
+<tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
+<div class="textblock"><p>Fichier contenant le code en C de la résolution du puzzle CodinGame "Cryptarithme", 3 éléments seront étudiés : </p>
+<dl class="section author"><dt>Auteur</dt><dd>Guillaume BEUVOT - Prep'ISIMA 1 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>1.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>4 mai 2025<ul>
+<li>La structure =<a class="el" href="structletter__t.html" title="Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d&#39;un mot,...">letter_t</a>=</li>
+<li>La fonction =search=</li>
+<li>La fonction =search=</li>
+<li>La fonction =place=</li>
+<li>La fonction principale </li>
+</ul>
+</dd></dl>
+</div><h2 class="groupheader">Documentation des définitions de type</h2>
+<a id="a78a6bf0003fed17488505472f8ee8941" name="a78a6bf0003fed17488505472f8ee8941"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78a6bf0003fed17488505472f8ee8941">&#9670;&#160;</a></span>letter_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structletter__t.html">letter_t</a> <a class="el" href="structletter__t.html">letter_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des fonctions</h2>
+<a id="a376609e0422960ef9d7fd8be8a00b0ac" name="a376609e0422960ef9d7fd8be8a00b0ac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a376609e0422960ef9d7fd8be8a00b0ac">&#9670;&#160;</a></span>calc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int calc </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>word</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structletter__t.html">letter_t</a>&#160;</td>
+          <td class="paramname"><em>cryptarithm</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calcule la somme des lettres d'un mot converties en chiffres. </p>
+<dl class="section author"><dt>Auteur</dt><dd>Guillaume BEUVOT </dd></dl>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">word</td><td>une chaîne de caractères, cryptarithm un tableau de type <a class="el" href="structletter__t.html" title="Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d&#39;un mot,...">letter_t</a>, n un entier </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>Somme des lettres d'un mot converties en chiffres </dd></dl>
+<dl class="retval"><dt>Valeurs retournées</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">positive</td><td>ou nule </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_a376609e0422960ef9d7fd8be8a00b0ac_icgraph.png" border="0" usemap="#amain_8c_a376609e0422960ef9d7fd8be8a00b0ac_icgraph" alt=""/></div>
+<map name="amain_8c_a376609e0422960ef9d7fd8be8a00b0ac_icgraph" id="amain_8c_a376609e0422960ef9d7fd8be8a00b0ac_icgraph">
+<area shape="rect" title="Calcule la somme des lettres d&#39;un mot converties en chiffres." alt="" coords="371,29,419,55"/>
+<area shape="rect" href="main_8c.html#ac9633ea5d3fab9cad44568ca8b6cf735" title="Vérifie si une combinaison est valide ou non." alt="" coords="271,29,323,55"/>
+<area shape="poly" title=" " alt="" coords="357,45,323,45,323,39,357,39"/>
+<area shape="rect" href="main_8c.html#af49f96c48ae0ce191d38084f68876b18" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="108,29,223,55"/>
+<area shape="poly" title=" " alt="" coords="257,45,223,45,223,39,257,39"/>
+<area shape="poly" title=" " alt="" coords="187,18,181,11,165,8,152,10,145,14,144,20,148,28,143,30,138,21,141,11,150,5,165,3,183,6,191,14"/>
+<area shape="rect" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,29,60,55"/>
+<area shape="poly" title=" " alt="" coords="94,45,60,45,60,39,94,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="af49f96c48ae0ce191d38084f68876b18" name="af49f96c48ae0ce191d38084f68876b18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af49f96c48ae0ce191d38084f68876b18">&#9670;&#160;</a></span>changeLetters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">changeLetters </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structletter__t.html">letter_t</a>&#160;</td>
+          <td class="paramname"><em>cryptarithm</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>words</em>[6][100]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Modifie la combinaison actuelle jusqu'à ce que la bonne soit trouvée. </p>
+<dl class="section author"><dt>Auteur</dt><dd>Guillaume BEUVOT </dd></dl>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cryptarithm</td><td>un tableau de type <a class="el" href="structletter__t.html" title="Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d&#39;un mot,...">letter_t</a>, n un entier, x un entier, k un entier, words, un tableau de chaînes de caractères </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 si la combinaison est trouvée, 1 sinon </dd></dl>
+<dl class="retval"><dt>Valeurs retournées</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">positive</td><td>ou nule </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_af49f96c48ae0ce191d38084f68876b18_cgraph.png" border="0" usemap="#amain_8c_af49f96c48ae0ce191d38084f68876b18_cgraph" alt=""/></div>
+<map name="amain_8c_af49f96c48ae0ce191d38084f68876b18_cgraph" id="amain_8c_af49f96c48ae0ce191d38084f68876b18_cgraph">
+<area shape="rect" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="5,29,120,55"/>
+<area shape="poly" title=" " alt="" coords="40,30,36,21,38,11,47,5,63,3,81,6,89,14,85,18,78,11,63,8,49,10,42,14,41,20,45,28"/>
+<area shape="rect" href="main_8c.html#ac9633ea5d3fab9cad44568ca8b6cf735" title="Vérifie si une combinaison est valide ou non." alt="" coords="168,29,220,55"/>
+<area shape="poly" title=" " alt="" coords="120,39,154,39,154,45,120,45"/>
+<area shape="rect" href="main_8c.html#a376609e0422960ef9d7fd8be8a00b0ac" title="Calcule la somme des lettres d&#39;un mot converties en chiffres." alt="" coords="268,29,316,55"/>
+<area shape="poly" title=" " alt="" coords="220,39,254,39,254,45,220,45"/>
+</map>
+</div>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_af49f96c48ae0ce191d38084f68876b18_icgraph.png" border="0" usemap="#amain_8c_af49f96c48ae0ce191d38084f68876b18_icgraph" alt=""/></div>
+<map name="amain_8c_af49f96c48ae0ce191d38084f68876b18_icgraph" id="amain_8c_af49f96c48ae0ce191d38084f68876b18_icgraph">
+<area shape="rect" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="108,29,223,55"/>
+<area shape="poly" title=" " alt="" coords="187,18,181,11,165,8,152,10,145,14,144,20,148,28,143,30,138,21,141,11,150,5,165,3,183,6,191,14"/>
+<area shape="rect" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,29,60,55"/>
+<area shape="poly" title=" " alt="" coords="94,45,60,45,60,39,94,39"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae66f6b31b5ad750f1fe042a706a4e3d4" name="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">&#9670;&#160;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre alphabétique, puis affiche chaque lettre avec le chiffre correspondant. </p>
+<dl class="section author"><dt>Auteur</dt><dd>Guillaume BEUVOT </dd></dl>
+<dl class="section return"><dt>Renvoie</dt><dd>0 </dd></dl>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_ae66f6b31b5ad750f1fe042a706a4e3d4_cgraph.png" border="0" usemap="#amain_8c_ae66f6b31b5ad750f1fe042a706a4e3d4_cgraph" alt=""/></div>
+<map name="amain_8c_ae66f6b31b5ad750f1fe042a706a4e3d4_cgraph" id="amain_8c_ae66f6b31b5ad750f1fe042a706a4e3d4_cgraph">
+<area shape="rect" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,55,60,80"/>
+<area shape="rect" href="main_8c.html#af49f96c48ae0ce191d38084f68876b18" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="108,29,223,55"/>
+<area shape="poly" title=" " alt="" coords="60,60,94,53,95,58,61,65"/>
+<area shape="rect" href="main_8c.html#a22ec93ccf397f0728c08e927c598aa32" title="Renvoie l&#39;indice d&#39;une lettre dans le tableau de lettres. Si la lettre n&#39;y est pas présente,..." alt="" coords="137,79,194,104"/>
+<area shape="poly" title=" " alt="" coords="61,70,123,81,122,86,60,75"/>
+<area shape="poly" title=" " alt="" coords="143,30,138,21,141,11,150,5,165,3,183,6,191,14,187,18,181,11,165,8,152,10,145,14,144,20,148,28"/>
+<area shape="rect" href="main_8c.html#ac9633ea5d3fab9cad44568ca8b6cf735" title="Vérifie si une combinaison est valide ou non." alt="" coords="271,29,323,55"/>
+<area shape="poly" title=" " alt="" coords="223,39,256,39,256,45,223,45"/>
+<area shape="rect" href="main_8c.html#a376609e0422960ef9d7fd8be8a00b0ac" title="Calcule la somme des lettres d&#39;un mot converties en chiffres." alt="" coords="371,29,419,55"/>
+<area shape="poly" title=" " alt="" coords="323,39,357,39,357,45,323,45"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a22ec93ccf397f0728c08e927c598aa32" name="a22ec93ccf397f0728c08e927c598aa32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22ec93ccf397f0728c08e927c598aa32">&#9670;&#160;</a></span>place()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int place </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structletter__t.html">letter_t</a>&#160;</td>
+          <td class="paramname"><em>cryptarithm</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Renvoie l'indice d'une lettre dans le tableau de lettres. Si la lettre n'y est pas présente, la fonction renvoie -1. </p>
+<dl class="section author"><dt>Auteur</dt><dd>Guillaume BEUVOT </dd></dl>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cryptarithm</td><td>un tableau de type <a class="el" href="structletter__t.html" title="Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d&#39;un mot,...">letter_t</a>, n un entier et c un caractère </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>-1 si la lettre n'est pas présente dans le tableau, l'indice de la lettre dans le tableau sinon </dd></dl>
+<dl class="retval"><dt>Valeurs retournées</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">positive</td><td>ou nul si la lettre est présente dans le tableau, négative sinon </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_a22ec93ccf397f0728c08e927c598aa32_icgraph.png" border="0" usemap="#amain_8c_a22ec93ccf397f0728c08e927c598aa32_icgraph" alt=""/></div>
+<map name="amain_8c_a22ec93ccf397f0728c08e927c598aa32_icgraph" id="amain_8c_a22ec93ccf397f0728c08e927c598aa32_icgraph">
+<area shape="rect" title="Renvoie l&#39;indice d&#39;une lettre dans le tableau de lettres. Si la lettre n&#39;y est pas présente,..." alt="" coords="108,5,165,31"/>
+<area shape="rect" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,5,60,31"/>
+<area shape="poly" title=" " alt="" coords="94,21,60,21,60,15,94,15"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ac9633ea5d3fab9cad44568ca8b6cf735" name="ac9633ea5d3fab9cad44568ca8b6cf735"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9633ea5d3fab9cad44568ca8b6cf735">&#9670;&#160;</a></span>verif()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int verif </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structletter__t.html">letter_t</a>&#160;</td>
+          <td class="paramname"><em>cryptarithm</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>words</em>[6][100]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Vérifie si une combinaison est valide ou non. </p>
+<dl class="section author"><dt>Auteur</dt><dd>Guillaume BEUVOT </dd></dl>
+<dl class="params"><dt>Paramètres</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cryptarithm</td><td>un tableau de type <a class="el" href="structletter__t.html" title="Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d&#39;un mot,...">letter_t</a>, n un entier, k un entier, words, un tableau de chaînes de caractères </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie</dt><dd>1 si la combinaison est valide, 0 sinon </dd></dl>
+<dl class="retval"><dt>Valeurs retournées</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">positive</td><td>ou nule </td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="dynheader">
+Voici le graphe d'appel pour cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_ac9633ea5d3fab9cad44568ca8b6cf735_cgraph.png" border="0" usemap="#amain_8c_ac9633ea5d3fab9cad44568ca8b6cf735_cgraph" alt=""/></div>
+<map name="amain_8c_ac9633ea5d3fab9cad44568ca8b6cf735_cgraph" id="amain_8c_ac9633ea5d3fab9cad44568ca8b6cf735_cgraph">
+<area shape="rect" title="Vérifie si une combinaison est valide ou non." alt="" coords="5,5,57,31"/>
+<area shape="rect" href="main_8c.html#a376609e0422960ef9d7fd8be8a00b0ac" title="Calcule la somme des lettres d&#39;un mot converties en chiffres." alt="" coords="105,5,153,31"/>
+<area shape="poly" title=" " alt="" coords="58,15,91,15,91,21,58,21"/>
+</map>
+</div>
+<div class="dynheader">
+Voici le graphe des appelants de cette fonction :</div>
+<div class="dyncontent">
+<div class="center"><img src="main_8c_ac9633ea5d3fab9cad44568ca8b6cf735_icgraph.png" border="0" usemap="#amain_8c_ac9633ea5d3fab9cad44568ca8b6cf735_icgraph" alt=""/></div>
+<map name="amain_8c_ac9633ea5d3fab9cad44568ca8b6cf735_icgraph" id="amain_8c_ac9633ea5d3fab9cad44568ca8b6cf735_icgraph">
+<area shape="rect" title="Vérifie si une combinaison est valide ou non." alt="" coords="271,29,323,55"/>
+<area shape="rect" href="main_8c.html#af49f96c48ae0ce191d38084f68876b18" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="108,29,223,55"/>
+<area shape="poly" title=" " alt="" coords="257,45,223,45,223,39,257,39"/>
+<area shape="poly" title=" " alt="" coords="187,18,181,11,165,8,152,10,145,14,144,20,148,28,143,30,138,21,141,11,150,5,165,3,183,6,191,14"/>
+<area shape="rect" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,29,60,55"/>
+<area shape="poly" title=" " alt="" coords="94,45,60,45,60,39,94,39"/>
+</map>
+</div>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Généré par&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8
+</small></address>
+</body>
+</html>

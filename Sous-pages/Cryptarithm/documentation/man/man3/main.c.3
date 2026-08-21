@@ -1,0 +1,210 @@
+.TH "sources/main.c" 3 "Version 1.0" "Documentation cryptarithme" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+sources/main.c \- Fichier contenant le code en C de la résolution du puzzle CodinGame 'Cryptarithme', 3 éléments seront étudiés :  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Structures de données"
+
+.in +1c
+.ti -1c
+.RI "struct \fBletter_t\fP"
+.br
+.RI "Contient une lettre, sa valeur et un entier égal à 1 si la lettre se trouve au début d'un mot, 0 sinon\&. "
+.in -1c
+.SS "Définitions de type"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBletter_t\fP \fBletter_t\fP"
+.br
+.in -1c
+.SS "Fonctions"
+
+.in +1c
+.ti -1c
+.RI "int \fBcalc\fP (char *word, \fBletter_t\fP cryptarithm[], int n)"
+.br
+.RI "Calcule la somme des lettres d'un mot converties en chiffres\&. "
+.ti -1c
+.RI "int \fBverif\fP (\fBletter_t\fP cryptarithm[], int n, int k, char words[6][100])"
+.br
+.RI "Vérifie si une combinaison est valide ou non\&. "
+.ti -1c
+.RI "int \fBchangeLetters\fP (\fBletter_t\fP cryptarithm[], int n, int x, int k, char words[6][100])"
+.br
+.RI "Modifie la combinaison actuelle jusqu'à ce que la bonne soit trouvée\&. "
+.ti -1c
+.RI "int \fBplace\fP (\fBletter_t\fP cryptarithm[], int n, char c)"
+.br
+.RI "Renvoie l'indice d'une lettre dans le tableau de lettres\&. Si la lettre n'y est pas présente, la fonction renvoie -1\&. "
+.ti -1c
+.RI "int \fBmain\fP ()"
+.br
+.RI "Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre alphabétique, puis affiche chaque lettre avec le chiffre correspondant\&. "
+.in -1c
+.SH "Description détaillée"
+.PP 
+Fichier contenant le code en C de la résolution du puzzle CodinGame 'Cryptarithme', 3 éléments seront étudiés : 
+
+
+.PP
+\fBAuteur\fP
+.RS 4
+Guillaume BEUVOT - Prep'ISIMA 1 
+.RE
+.PP
+\fBVersion\fP
+.RS 4
+1\&.0 
+.RE
+.PP
+\fBDate\fP
+.RS 4
+4 mai 2025
+.IP "\(bu" 2
+La structure =\fBletter_t\fP=
+.IP "\(bu" 2
+La fonction =search=
+.IP "\(bu" 2
+La fonction =search=
+.IP "\(bu" 2
+La fonction =place=
+.IP "\(bu" 2
+La fonction principale 
+.PP
+.RE
+.PP
+
+.SH "Documentation des définitions de type"
+.PP 
+.SS "typedef struct \fBletter_t\fP \fBletter_t\fP"
+
+.SH "Documentation des fonctions"
+.PP 
+.SS "int calc (char * word, \fBletter_t\fP cryptarithm[], int n)"
+
+.PP
+Calcule la somme des lettres d'un mot converties en chiffres\&. 
+.PP
+\fBAuteur\fP
+.RS 4
+Guillaume BEUVOT 
+.RE
+.PP
+\fBParamètres\fP
+.RS 4
+\fIword\fP une chaîne de caractères, cryptarithm un tableau de type \fBletter_t\fP, n un entier 
+.RE
+.PP
+\fBRenvoie\fP
+.RS 4
+Somme des lettres d'un mot converties en chiffres 
+.RE
+.PP
+\fBValeurs retournées\fP
+.RS 4
+\fIpositive\fP ou nule 
+.RE
+.PP
+
+.SS "changeLetters (\fBletter_t\fP cryptarithm[], int n, int x, int k, char words[6][100])"
+
+.PP
+Modifie la combinaison actuelle jusqu'à ce que la bonne soit trouvée\&. 
+.PP
+\fBAuteur\fP
+.RS 4
+Guillaume BEUVOT 
+.RE
+.PP
+\fBParamètres\fP
+.RS 4
+\fIcryptarithm\fP un tableau de type \fBletter_t\fP, n un entier, x un entier, k un entier, words, un tableau de chaînes de caractères 
+.RE
+.PP
+\fBRenvoie\fP
+.RS 4
+0 si la combinaison est trouvée, 1 sinon 
+.RE
+.PP
+\fBValeurs retournées\fP
+.RS 4
+\fIpositive\fP ou nule 
+.RE
+.PP
+
+.SS "int main ()"
+
+.PP
+Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre alphabétique, puis affiche chaque lettre avec le chiffre correspondant\&. 
+.PP
+\fBAuteur\fP
+.RS 4
+Guillaume BEUVOT 
+.RE
+.PP
+\fBRenvoie\fP
+.RS 4
+0 
+.RE
+.PP
+
+.SS "int place (\fBletter_t\fP cryptarithm[], int n, char c)"
+
+.PP
+Renvoie l'indice d'une lettre dans le tableau de lettres\&. Si la lettre n'y est pas présente, la fonction renvoie -1\&. 
+.PP
+\fBAuteur\fP
+.RS 4
+Guillaume BEUVOT 
+.RE
+.PP
+\fBParamètres\fP
+.RS 4
+\fIcryptarithm\fP un tableau de type \fBletter_t\fP, n un entier et c un caractère 
+.RE
+.PP
+\fBRenvoie\fP
+.RS 4
+-1 si la lettre n'est pas présente dans le tableau, l'indice de la lettre dans le tableau sinon 
+.RE
+.PP
+\fBValeurs retournées\fP
+.RS 4
+\fIpositive\fP ou nul si la lettre est présente dans le tableau, négative sinon 
+.RE
+.PP
+
+.SS "int verif (\fBletter_t\fP cryptarithm[], int n, int k, char words[6][100])"
+
+.PP
+Vérifie si une combinaison est valide ou non\&. 
+.PP
+\fBAuteur\fP
+.RS 4
+Guillaume BEUVOT 
+.RE
+.PP
+\fBParamètres\fP
+.RS 4
+\fIcryptarithm\fP un tableau de type \fBletter_t\fP, n un entier, k un entier, words, un tableau de chaînes de caractères 
+.RE
+.PP
+\fBRenvoie\fP
+.RS 4
+1 si la combinaison est valide, 0 sinon 
+.RE
+.PP
+\fBValeurs retournées\fP
+.RS 4
+\fIpositive\fP ou nule 
+.RE
+.PP
+
+.SH "Auteur"
+.PP 
+Généré automatiquement par Doxygen pour Documentation cryptarithme à partir du code source\&.

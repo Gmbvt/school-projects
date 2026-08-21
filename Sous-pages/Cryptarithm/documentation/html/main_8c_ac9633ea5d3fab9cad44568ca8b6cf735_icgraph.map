@@ -1,0 +1,8 @@
+<map id="verif" name="verif">
+<area shape="rect" id="Node000001" title="Vérifie si une combinaison est valide ou non." alt="" coords="271,29,323,55"/>
+<area shape="rect" id="Node000002" href="$main_8c.html#af49f96c48ae0ce191d38084f68876b18" title="Modifie la combinaison actuelle jusqu&#39;à ce que la bonne soit trouvée." alt="" coords="108,29,223,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="257,45,223,45,223,39,257,39"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="187,18,181,11,165,8,152,10,145,14,144,20,148,28,143,30,138,21,141,11,150,5,165,3,183,6,191,14"/>
+<area shape="rect" id="Node000003" href="$main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="Fonction principale, récupère les mots et le résultat, extrait les lettres et les arrange par ordre a..." alt="" coords="5,29,60,55"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="94,45,60,45,60,39,94,39"/>
+</map>

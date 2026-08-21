@@ -1,0 +1,5 @@
+<map id="verif" name="verif">
+<area shape="rect" id="Node000001" title="Vérifie si une combinaison est valide ou non." alt="" coords="5,5,57,31"/>
+<area shape="rect" id="Node000002" href="$main_8c.html#a376609e0422960ef9d7fd8be8a00b0ac" title="Calcule la somme des lettres d&#39;un mot converties en chiffres." alt="" coords="105,5,153,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="58,15,91,15,91,21,58,21"/>
+</map>
