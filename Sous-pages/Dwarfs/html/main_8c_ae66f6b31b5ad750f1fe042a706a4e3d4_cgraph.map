@@ -1,0 +1,6 @@
+<map id="main" name="main">
+<area shape="rect" id="Node000001" title="Fonction principale, récupère le nombre de relations d&#39;influence, assigne l&#39;adresse du noeud suivant ..." alt="" coords="5,29,60,55"/>
+<area shape="rect" id="Node000002" href="$main_8c.html#a911d54baf53d932bdaf8f8f5fc874802" title="Calcule la longueur d&#39;une chaîne d&#39;influence." alt="" coords="108,29,173,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="60,39,95,39,95,45,60,45"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="122,30,118,21,120,12,128,5,141,3,156,6,162,14,158,18,153,11,141,8,130,10,125,14,123,20,127,28"/>
+</map>
