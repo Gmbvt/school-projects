@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2025-05-04 Sun 21:00 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cryptarithme</title>
+<meta name="author" content="Guillaume BEUVOT - Prep'ISIMA" />
+<meta name="generator" content="Org Mode" />
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<link rel="stylesheet" type="text/css" href="src/readtheorg_theme/css/search.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/search.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Cryptarithme</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orga16b647">1. Introduction au puzzle</a>
+<ul>
+<li><a href="#org8c09bc0">1.1. Les données auxquelles nous disposons sont donc</a></li>
+<li><a href="#org095ee7d">1.2. Les données à renvoyer sont donc</a></li>
+</ul>
+</li>
+<li><a href="#org3da8b9c">2. Résolution du puzzle</a>
+<ul>
+<li><a href="#org48d8229">2.1. Résumé de la solution</a></li>
+<li><a href="#org3931836">2.2. Transposition en langage C</a></li>
+<li><a href="#orgd6ab351">2.3. Code en langage C de la résolution</a></li>
+</ul>
+</li>
+<li><a href="#org4089d46">3. Solution d&rsquo;un autre CodinGamer</a></li>
+<li><a href="#orgf98a4d3">4. Bilan</a></li>
+</ul>
+</div>
+</div>
+
+<div id="org0df9fe0" class="figure">
+<p><img src="images/uca.jpg" alt="uca.jpg" />
+</p>
+</div>
+
+
+
+<div id="org577b44d" class="figure">
+<p><img src="images/images.png" alt="images.png" />
+</p>
+</div>
+
+
+<p>
+<a href="Cryptarithme.txt">Lien vers le fichier .org</a>
+</p>
+<div id="outline-container-orga16b647" class="outline-2">
+<h2 id="orga16b647"><span class="section-number-2">1.</span> Introduction au puzzle</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Un cryptarithme est un puzzle posé comme une opération entre des groupes de lettres donnant un résultat lui aussi sous forme d&rsquo;un groupe de lettres.
+</p>
+
+<p>
+Le but est de trouver quelle lettre corresppond à quel chiffre pour que l&rsquo;opération donne bien le résultat en ayant remplacé toutes les lettres par des chiffres.
+</p>
+
+<p>
+Cela peut être vu comme une équation où il faut trouver un correspondance entre les chiffres et les lettres
+</p>
+
+<p>
+Un opération peut ainsi ressembler à ça : 
+</p>
+
+<p>
+AA + BB = CC
+</p>
+
+<p>
+Ou à ça :
+</p>
+
+
+<p>
+AA
+</p>
+
+<p>
++BB
+</p>
+
+<p>
+<span class="underline">_</span>
+</p>
+
+<p>
+CC
+</p>
+
+<p>
+Ici, le résultat peut être, par exemple, 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-dot">    Digraph{x[label="1"]y[label="2"]z[label="3"]
+    A-&gt;x
+    B-&gt;y
+    C-&gt;z
+
+    }
+</pre>
+</div>
+
+
+<div id="org364bcb7" class="figure">
+<p><img src="gr1.png" alt="gr1.png" />
+</p>
+</div>
+
+<p>
+Dans le puzzle Codingame, l&rsquo;opération étudiée est l&rsquo;addition.
+</p>
+
+<p>
+De plus il n&rsquo;existe qu&rsquo;un seul résultat pour un cryptarithme, et une lettre correspond à un chiffre entre 0 et 9
+</p>
+
+<p>
+Nous pouvons donc en conclure qu&rsquo;il ne peut y avoir que 10 lettres au maximum dans ce style de cryptarithme.
+</p>
+</div>
+<div id="outline-container-org8c09bc0" class="outline-3">
+<h3 id="org8c09bc0"><span class="section-number-3">1.1.</span> Les données auxquelles nous disposons sont donc</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Le nombre de groupes de lettres, ou mots, dans une opération, un entier compris entre 2 et 5 inclus</li>
+<li>Tous les mots composant l&rsquo;opération, des chaînes de caractères</li>
+<li>Le mot correspondant au résultat de l&rsquo;opération</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org095ee7d" class="outline-3">
+<h3 id="org095ee7d"><span class="section-number-3">1.2.</span> Les données à renvoyer sont donc</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Une ligne pour chaque lettre composant l&rsquo;opération, suivie de sa valeur (le chiffre auquel elle correspond), un caractère suivi d&rsquo;un entier</li>
+</ul>
+
+<p>
+Les lettres doivent être ordonnées par ordre alphabétique
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org3da8b9c" class="outline-2">
+<h2 id="org3da8b9c"><span class="section-number-2">2.</span> Résolution du puzzle</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-org48d8229" class="outline-3">
+<h3 id="org48d8229"><span class="section-number-3">2.1.</span> Résumé de la solution</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Il existe une méthode pour résoudre les cryptarithmes de manière générale, mais son implémentation n&rsquo;est pas évidente en programmation, surtout en langage C.
+</p>
+
+<p>
+Nous allons plutôt tester toutes les combinaisons possibles, jusqu&rsquo;à trouver celle qui correspond aux critères suivant :
+</p>
+
+<ul class="org-ul">
+<li>Chaque lettre est associée à un chiffre unique</li>
+<li>En transformant chaque lettre en chiffre, l&rsquo;opération reste cohérente</li>
+</ul>
+
+<p>
+Cette méthode est aussi connue sous le nom de <i>brute-force</i>, une méthode qui est connu dans le piratage
+</p>
+
+<p>
+Elle présente cependant un défaut majeur : sa complexité.
+</p>
+
+<p>
+En effet, plus le nombre de possibilités est grand, plus l&rsquo;algorithme mettra de temps avant de trouver la bonne combinaison.
+</p>
+
+<p>
+Pour améliorer cette méthode, nous allons donc tenter de léduire le plus possible le nombre de possibilités, en évitant de tenter des combinaisons inutiles.
+</p>
+
+<p>
+Nous savons déjà que le nombre de possibilités est au maximum de 10 factoriels, car il n&rsquo;y a que 10 chiffres possibles.
+</p>
+
+<p>
+Nous pouvons aussi prendre en compte un autre axiome qui n&rsquo;a pas été présenté précédemment : Un groupe de lettres ne commence jamais par une lettre qui correspond à 0.
+</p>
+
+<p>
+Cela réduit le nombre de possibilités.
+</p>
+</div>
+</div>
+<div id="outline-container-org3931836" class="outline-3">
+<h3 id="org3931836"><span class="section-number-3">2.2.</span> Transposition en langage C</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+Nous commençons par sauvegarder tous les mots de l&rsquo;opération dans un tableau.
+</p>
+
+<p>
+Cette sauvegarde se fait en deux temps: 
+</p>
+<ul class="org-ul">
+<li>Dans un premier temps, ce sont les mots composant l&rsquo;opération qui sont sauvegardés</li>
+<li>Dans un second temps, nous sauvegardons le mot résultant de l&rsquo;opération</li>
+</ul>
+
+<p>
+Nous sauvegardons aussi les lettres dans le but de leur assigner une valeur plus tard
+</p>
+
+<p>
+Une lettre sera définie par :
+</p>
+
+<ul class="org-ul">
+<li>La lettre elle-même</li>
+<li>Sa valeur</li>
+<li>Sa première place ou non dans un des mots dans lequel elle se situe</li>
+</ul>
+
+
+<p>
+Les lettres étant maintenent sauvegardées dans un tableau, nous pouvons le trier pour que les lettres apparaissent dans l&rsquo;ordre alphabétique.
+</p>
+
+
+
+<p>
+Ensuite nous commençons à tester toutes les possibilités en appelant une fonction qui change la valeur des lettres:
+</p>
+
+<ul class="org-ul">
+<li>Nous regardons si la combinaison actuelle est valide</li>
+<li>Sinon, nous changeons la valeur des lettres jusqu&rsquo;à trouver la bonne combinaison</li>
+</ul>
+
+<p>
+Pour vérifier si la combinaison est valide, nous calculons la somme de toutes les lettres converties en chiffres des mots de l&rsquo;opération et la comparons à la somme des lettres converties en chiffres du résultat
+</p>
+
+
+<p>
+Pour convertir les lettres en chiffre, nous utilisons une fonction de calcul :
+</p>
+
+<ul class="org-ul">
+<li>Nous commençons par stocker toutes les lettres disponibles dans une tableau</li>
+<li>Nous initialisons ensuite un entier à 0</li>
+<li>Et pour chaque lettre du mot à calculer, nous multiplions l&rsquo;entier par 10, puis nous y ajoutons la valeur de la lettre suivante</li>
+</ul>
+
+
+
+
+
+<p>
+Si la combinaison en correcte, nous renvoyons le résultat.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd6ab351" class="outline-3">
+<h3 id="orgd6ab351"><span class="section-number-3">2.3.</span> Code en langage C de la résolution</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Nous commençons par créer une structure <code>letter_t</code>: 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">typedef</span> <span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">letter_t</span> <span style="color: #ECBE7B;">letter_t</span>;
+<span style="color: #51afef;">struct</span> <span style="color: #ECBE7B;">letter_t</span> {
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">letter</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">value</span>;
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">firstLetter</span>;
+};
+</pre>
+</div>
+
+<p>
+Elle contiendra :
+</p>
+
+<ul class="org-ul">
+<li>une lettre, <code>letter</code>,</li>
+<li>sa valeur, <code>value</code>,</li>
+<li>ainsi qu&rsquo;un entier informant sa première place ou non dans un mot (1 si c&rsquo;est la première lettre d&rsquo;un mot, 0 sinon), <code>firstLetter</code>.</li>
+</ul>
+
+
+
+
+
+<p>
+Nous créons ensuite la fonction de calcul de la somme de la valeur des lettres d&rsquo;un mot, <code>calc</code> :
+</p>
+
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">calc</span>(<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">word</span>, <span style="color: #ECBE7B;">letter_t</span> <span style="color: #dcaeea;">cryptarithm</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>) {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">values</span>[<span style="color: #da8548; font-weight: bold;">26</span>];
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; n; i++){
+        values[cryptarithm[i].letter-<span style="color: #98be65;">'A'</span>] = cryptarithm[i].value;
+    }
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">k</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">p</span> = word; *p &gt; <span style="color: #da8548; font-weight: bold;">0</span> ; p++){
+        k = <span style="color: #da8548; font-weight: bold;">10</span>*k + values[*p-<span style="color: #98be65;">'A'</span>];
+    }
+    <span style="color: #51afef;">return</span> k;
+}
+</pre>
+</div>
+
+<p>
+Elle renvoie un entier, qui est la somme pour un mot, prend en argument un mot(une chaîne de caractères), un tableaux de lettres(de la structure <code>letter_t</code>), ainsi que la taille du tableau.
+</p>
+
+<p>
+Elle commence par initialiser un tableau de 26 cases, contenant les valeurs des lettres du tableau
+</p>
+
+<p>
+Elle initialise ensuite un entier <code>k</code> à 0.
+</p>
+
+<p>
+Ensuite, pour chaque lettre du mot, elle multiplie k par 10 et y ajoute la valeur de la lettre actuelle.
+</p>
+
+<p>
+Elle renvoie k, un entier.
+</p>
+
+
+
+<p>
+Nous écrivons ensuite une fonction <code>verif</code>, qui vérifie si une combinaison est valide ou non :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">verif</span>(<span style="color: #ECBE7B;">letter_t</span> <span style="color: #dcaeea;">cryptarithm</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">k</span>, <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">words</span>[<span style="color: #da8548; font-weight: bold;">6</span>][<span style="color: #da8548; font-weight: bold;">100</span>]) {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">sum</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; k; i++){
+        sum += calc(words[i], cryptarithm, n);
+    }
+    <span style="color: #51afef;">return</span> sum == calc(words[k], cryptarithm, n);
+}
+</pre>
+</div>
+
+<p>
+Elle renvoie un entier, qui agit comme un booléen, et prend en argument un tableau de structures de type <code>letter_t</code>, la taille du tableau, le nombre de mots au total, ainsi que les mots eux-mêmes 
+</p>
+
+<p>
+Elle initialise une variable <code>sum</code> à 0, puis appelle la fonction <code>calc</code> sur chaque mot contenu dans l&rsquo;opération et ajoute le résultat à <code>sum</code>
+</p>
+
+<p>
+Elle renvoie 1 si la configuration est valide, c&rsquo;est-à-dire que <code>sum</code> est égal au résultat de la fonction <code>calc</code> sur le mot final, 0 sinon.
+</p>
+
+
+
+
+
+
+<p>
+Nous avons ensuite la fonction <code>changeLetters</code>, qui change de combinaisons jusqu&rsquo;à trouver la bonne combinaison.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">changeLetters</span>(<span style="color: #ECBE7B;">letter_t</span> <span style="color: #dcaeea;">cryptarithm</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">x</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">k</span>, <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">words</span>[<span style="color: #da8548; font-weight: bold;">6</span>][<span style="color: #da8548; font-weight: bold;">100</span>]) {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">seen</span>[<span style="color: #da8548; font-weight: bold;">10</span>] = {<span style="color: #da8548; font-weight: bold;">0</span>};
+
+    <span style="color: #51afef;">if</span>(cryptarithm[x].firstLetter){
+        seen[<span style="color: #da8548; font-weight: bold;">0</span>] = <span style="color: #da8548; font-weight: bold;">1</span>;
+    }
+
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; x; i++) {
+        seen[cryptarithm[i].value] = <span style="color: #da8548; font-weight: bold;">1</span>;
+    }
+
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; <span style="color: #da8548; font-weight: bold;">10</span>; i++) {
+        <span style="color: #51afef;">if</span>(<span style="color: #51afef; font-weight: bold;">!</span>seen[i]){
+            cryptarithm[x].value = i;
+            <span style="color: #51afef;">if</span>((x == n-<span style="color: #da8548; font-weight: bold;">1</span> &amp;&amp; verif(cryptarithm, n, k, words)) || (changeLetters(cryptarithm, n, x+<span style="color: #da8548; font-weight: bold;">1</span>, k, words))){
+                <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">1</span>;
+            }
+        }
+    }
+    <span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+}
+</pre>
+</div>
+
+<p>
+Elle renvoie aussi un booléen sous la forme d&rsquo;un entier et prend en argument un tableau de structures de type <code>letter_t</code> , la taille du tableau, l&rsquo;indice <code>x</code> d&rsquo;une lettre dans le tableau et le nombre de mots total.
+</p>
+
+<p>
+Elle initialise un tableau d&rsquo;entiers à 0, <code>seen</code>, qui répertorie les entrées déjà étudiées, et met la première valeur à 1 si la lettre d&rsquo;indice <code>x</code> du tableau est la première lettre d&rsquo;un mot.
+</p>
+
+<p>
+Ensuite, pour chaque lettre précédente dans le tableau, la valeur est marquée comme étudiée, donc la case correspondante dans le tableau <code>seen</code> est mise à 1.
+</p>
+
+<p>
+Ensuite, pour chaque chiffre possible restant(si la case correspondante dans le tableau <code>seen</code> est à 1), la valeur est modifiée.
+</p>
+
+<p>
+Si :
+</p>
+<ul class="org-ul">
+<li>la dernière case du tableau de lettres est atteinte et que la combinaison est valide</li>
+</ul>
+<p>
+<b>OU</b>
+</p>
+<ul class="org-ul">
+<li>que la fonction <code>changeLetters</code>, appelée sur la lettre suivante dans le tableau, renvoie 1</li>
+</ul>
+
+<p>
+Alors, la fonction renvoie 1.
+</p>
+
+<p>
+Si cela ne se produit à aucun moment dans la boucle, alors la fonction renvoie 0.
+</p>
+
+
+
+
+<p>
+Voici la fonction <code>place</code>, qui détermine la place d&rsquo;une lettre dans le tableau de lettres :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">place</span>(<span style="color: #ECBE7B;">letter_t</span> <span style="color: #dcaeea;">cryptarithm</span>[], <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">n</span>, <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">c</span>) {
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; n; i++) {
+        <span style="color: #51afef;">if</span> (cryptarithm[i].letter == c) <span style="color: #51afef;">return</span> i;
+    }
+    <span style="color: #51afef;">return</span> -<span style="color: #da8548; font-weight: bold;">1</span>;
+}
+</pre>
+</div>
+
+<p>
+Cette fonction renvoie un entier, et prend en argument un tableau de lettres, sa taille ainsi qu&rsquo;une lettre sous forme de caractère.
+</p>
+
+<p>
+Elle parcourt l&rsquo;ensemble du tableau et compare la lettre passée en argument avec chaque lettre.
+</p>
+
+<p>
+Si une correspondance est trouvée, la fonction renvoie l&rsquo;indice de la lettre.
+</p>
+
+<p>
+Sinon, la valeur -1 est renvoyée.
+</p>
+
+<p>
+Cette fonction nous aidera à déterminer si une lettre est déjà présente dans le tableau.
+</p>
+
+
+
+<p>
+Nous entrons enfin dans la fonction <code>main</code>, la fonction principale:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">letter_t</span> <span style="color: #dcaeea;">cryptarithm</span>[<span style="color: #da8548; font-weight: bold;">26</span>];
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">l</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">N</span>;
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">count</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+<span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">words</span>[<span style="color: #da8548; font-weight: bold;">6</span>][<span style="color: #da8548; font-weight: bold;">100</span>];
+</pre>
+</div>
+
+<p>
+Nous commençons par initialiser les variables dont nous aurons besoin :
+</p>
+
+<ul class="org-ul">
+<li><code>cryptarithm</code>, le tableau de structures de type <code>letter_t</code>,</li>
+<li><code>l</code>, le nombre de lettres différentes,</li>
+<li><code>N</code>, le nombre de mots présents dans l&rsquo;opération,</li>
+<li><code>words</code>, le tableau de mots.</li>
+</ul>
+
+
+
+
+
+
+<p>
+Nous ajoutons ensuite chaque lettre au tableau de lettres :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">scanf(<span style="color: #98be65;">"%d"</span>, &amp;N);
+<span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; N; i++) {
+    <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">word</span>[<span style="color: #da8548; font-weight: bold;">100</span>];
+    scanf(<span style="color: #98be65;">"%s"</span>, word);
+    strcpy(words[i], word);
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">p</span> = words[i], *<span style="color: #dcaeea;">j</span> = p; *p &gt; <span style="color: #da8548; font-weight: bold;">0</span>; p++) {
+        <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">k</span> = place(cryptarithm, l, *p);
+        <span style="color: #51afef;">if</span> (k == -<span style="color: #da8548; font-weight: bold;">1</span>) { 
+            cryptarithm[l].letter = *p;
+            cryptarithm[l].value = <span style="color: #da8548; font-weight: bold;">0</span>;
+            cryptarithm[l].firstLetter = j == p;
+            l++;
+        }
+    }
+}
+</pre>
+</div>
+
+<p>
+Pour chaque mot:
+</p>
+<ul class="org-ul">
+<li>Nous l&rsquo;ajoutons au tableau</li>
+<li>Pour chaque lettre du mot, si la lettre n&rsquo;est pas présente dans le tableau, alors elle y est ajoutée avec la valeur 0 et si c&rsquo;est la première lettre rencontrée, alors elle y est ajoutée en tant que première lettre d&rsquo;un mot</li>
+</ul>
+
+
+<p>
+Nous faisons de même pour le mot correspondant au résultat:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">total</span>[<span style="color: #da8548; font-weight: bold;">100</span>];
+scanf(<span style="color: #98be65;">"%s"</span>, total);
+<span style="color: #c678dd;">strcpy</span>(<span style="color: #ECBE7B;">words</span>[N], total);
+<span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">p</span> = words[N]; *p &gt; <span style="color: #da8548; font-weight: bold;">0</span>; p++) {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">k</span> = place(cryptarithm, l, *p);
+    <span style="color: #51afef;">if</span> (k == -<span style="color: #da8548; font-weight: bold;">1</span>) { 
+        cryptarithm[l].letter = *p;
+        cryptarithm[l].value = <span style="color: #da8548; font-weight: bold;">0</span>;
+        cryptarithm[l].firstLetter = <span style="color: #da8548; font-weight: bold;">0</span>;
+        k = l;
+        l++;
+    }
+    <span style="color: #51afef;">if</span>(first) {
+        cryptarithm[k].firstLetter = <span style="color: #da8548; font-weight: bold;">1</span>;
+    }
+    first = <span style="color: #da8548; font-weight: bold;">0</span>;
+}
+</pre>
+</div>
+
+
+
+<p>
+Nous ordonnons ensuite les lettres par ordre alphabétique:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>, <span style="color: #dcaeea;">count</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; <span style="color: #da8548; font-weight: bold;">26</span>; i++){
+    <span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">j</span> = count; j &lt; l; j++){
+        <span style="color: #51afef;">if</span>(cryptarithm[j].letter == i+<span style="color: #98be65;">'A'</span>){
+            <span style="color: #ECBE7B;">letter_t</span> <span style="color: #dcaeea;">temp</span> = cryptarithm[count];
+            cryptarithm[count] = cryptarithm[j];
+            cryptarithm[j] = temp;
+            count++;
+            <span style="color: #51afef;">break</span>;
+        }
+    } 
+}
+</pre>
+</div>
+
+<p>
+Pour chaque lettre de l&rsquo;alphabet:
+</p>
+<ul class="org-ul">
+<li>Si la lettre est présente dans le tableau, alors elle y est déplacée jusqu&rsquo;à sa position relative par rapport aux autres lettres présentes dans le tableau, c&rsquo;est-à-dire que la lettre dont la place dans l&rsquo;alphabet est la plus faible sera déplacée à la première case du tableau, et la lettre dont l&rsquo;indice est celui qui est le plus proche sera placé juste après etc&#x2026;</li>
+</ul>
+
+
+
+
+<p>
+Nous appelons maintenant la fonction <code>changeLetters</code>, qui s&rsquo;occupera de trouver la bonne combinaison :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-nil">changeLetters(cryptarithm, l, 0, N, words);
+</pre>
+</div>
+
+
+
+<p>
+Enfin, lorsque la bonne combinaison est trouvée, nous pouvons renvoyer le résultat :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c">
+<span style="color: #51afef;">for</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; l; i++) {
+    printf(<span style="color: #98be65;">"%c %d\n"</span>, cryptarithm[i].letter, cryptarithm[i].value);
+}
+<span style="color: #51afef;">return</span> <span style="color: #da8548; font-weight: bold;">0</span>;
+
+</pre>
+</div>
+
+
+<p>
+Certains morceaux de code sont inspirés de la solution de <a href="https://www.codingame.com/profile/d5c392afea168725e0415cd0afabd5d98358233">McKael</a>
+</p>
+
+<p>
+<a href="documentation/html/index.html">Documentation doxygen</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org4089d46" class="outline-2">
+<h2 id="org4089d46"><span class="section-number-2">3.</span> Solution d&rsquo;un autre CodinGamer</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+La solution de <a href="https://www.codingame.com/profile/768232ecb241a0005e5a765a61a68ffe846225">Rsrsl</a> utilise aussi le fait de trouver la bonne combinaison en passant par toutes les autres avant, en découpant son code en plus de fonctions, permettant une meilleure modularité :
+</p>
+
+<div class="org-src-container">
+<pre class="src src-c"><span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdbool.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdio.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;stdlib.h&gt;</span>
+<span style="color: #51afef; font-weight: bold;">#include</span> <span style="color: #98be65;">&lt;string.h&gt;</span>
+
+<span style="color: #51afef;">const</span> <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">nletters</span> = <span style="color: #da8548; font-weight: bold;">26</span>;
+<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">values</span>[<span style="color: #da8548; font-weight: bold;">26</span>];
+
+<span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">print_assignment</span>();
+
+<span style="color: #ECBE7B;">bool</span> <span style="color: #c678dd;">check_solution</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">N</span>, <span style="color: #ECBE7B;">char</span>  <span style="color: #dcaeea;">words</span>[N][<span style="color: #da8548; font-weight: bold;">100</span>], <span style="color: #ECBE7B;">char</span>*  <span style="color: #dcaeea;">total</span>) {
+
+    <span style="color: #51afef;">if</span> (values[total[<span style="color: #da8548; font-weight: bold;">0</span>] - <span style="color: #98be65;">'A'</span>] == <span style="color: #da8548; font-weight: bold;">0</span>) <span style="color: #51afef;">return</span> <span style="color: #a9a1e1;">false</span>;
+
+  <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">query_value</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; N; i++) {
+    <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">word_value</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">w</span> = words[i]; *w; w++) {
+      word_value = <span style="color: #da8548; font-weight: bold;">10</span> * word_value + values[*w - <span style="color: #98be65;">'A'</span>];
+    }
+    query_value += word_value;
+  }
+
+  <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">total_value</span> = <span style="color: #da8548; font-weight: bold;">0</span>;
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">t</span> = total; *t; t++) {
+    total_value = <span style="color: #da8548; font-weight: bold;">10</span> * total_value + values[*t - <span style="color: #98be65;">'A'</span>];
+  }
+
+  <span style="color: #51afef;">return</span> total_value == query_value;
+}
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">letter_to_assign</span>() {
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; nletters; i++) {
+    <span style="color: #51afef;">if</span> (values[i] == -<span style="color: #da8548; font-weight: bold;">1</span>) {
+      <span style="color: #51afef;">return</span> i;
+    }
+  }
+  <span style="color: #51afef;">return</span> -<span style="color: #da8548; font-weight: bold;">1</span>;
+}
+
+<span style="color: #ECBE7B;">bool</span> <span style="color: #c678dd;">assign_letter_to_digit</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">letter</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">digit</span>) {
+
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; nletters; i++) {
+    <span style="color: #51afef;">if</span> (values[i] == digit) {
+      <span style="color: #51afef;">return</span> <span style="color: #a9a1e1;">false</span>;
+    }
+  } 
+  values[letter] = digit;
+  <span style="color: #51afef;">return</span> <span style="color: #a9a1e1;">true</span>;
+}
+
+<span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">unassign_letter_from_digit</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">letter</span>, <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">digit</span>) { values[letter] = -<span style="color: #da8548; font-weight: bold;">1</span>; }
+
+<span style="color: #ECBE7B;">bool</span> <span style="color: #c678dd;">solve</span>(<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">N</span>, <span style="color: #ECBE7B;">char</span> **<span style="color: #dcaeea;">words</span>, <span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">total</span>) {
+  <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">letter</span> = letter_to_assign();
+  <span style="color: #51afef;">if</span> (letter == -<span style="color: #da8548; font-weight: bold;">1</span>) {
+    <span style="color: #ECBE7B;">bool</span> <span style="color: #dcaeea;">val</span> = check_solution(N, words, total);
+    <span style="color: #51afef;">if</span> (val)
+      print_assignment();
+    <span style="color: #51afef;">return</span> val;
+  }
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">digit</span> = <span style="color: #da8548; font-weight: bold;">0</span>; digit &lt;= <span style="color: #da8548; font-weight: bold;">9</span>; digit++) 
+  {
+    <span style="color: #51afef;">if</span> (assign_letter_to_digit(letter, digit)) {
+
+      <span style="color: #51afef;">if</span> (solve(N, words, total))
+        <span style="color: #51afef;">return</span> <span style="color: #a9a1e1;">true</span>;
+      unassign_letter_from_digit(letter, digit);
+    }
+  }
+  <span style="color: #51afef;">return</span> <span style="color: #a9a1e1;">false</span>;
+}
+
+<span style="color: #ECBE7B;">void</span> <span style="color: #c678dd;">print_assignment</span>() {
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; nletters; i++) {
+    <span style="color: #51afef;">if</span> (values[i] &gt;= <span style="color: #da8548; font-weight: bold;">0</span>)
+      printf(<span style="color: #98be65;">"%c %d\n"</span>, i + <span style="color: #98be65;">'A'</span>, values[i]);
+  }
+}
+
+<span style="color: #ECBE7B;">int</span> <span style="color: #c678dd;">main</span>() {
+  <span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">N</span>;
+  scanf(<span style="color: #98be65;">"%d"</span>, &amp;N);
+
+  <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">words</span>[N][<span style="color: #da8548; font-weight: bold;">100</span>];
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; N; i++) {
+    scanf(<span style="color: #98be65;">"%s"</span>, words[i]);
+  }
+
+  <span style="color: #ECBE7B;">char</span> <span style="color: #dcaeea;">total</span>[<span style="color: #da8548; font-weight: bold;">100</span>];
+  scanf(<span style="color: #98be65;">"%s"</span>, total);
+
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; nletters; i++) {
+    values[i] = -<span style="color: #da8548; font-weight: bold;">2</span>;
+  }
+
+
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">int</span> <span style="color: #dcaeea;">i</span> = <span style="color: #da8548; font-weight: bold;">0</span>; i &lt; N; i++) {
+    <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">w</span> = words[i]; *w; w++) {
+      values[*w - <span style="color: #98be65;">'A'</span>] = -<span style="color: #da8548; font-weight: bold;">1</span>;
+    }
+  }
+  <span style="color: #51afef;">for</span> (<span style="color: #ECBE7B;">char</span> *<span style="color: #dcaeea;">w</span> = total; *w; w++) {
+    values[*w - <span style="color: #98be65;">'A'</span>] = -<span style="color: #da8548; font-weight: bold;">1</span>;
+  }
+
+  solve(N, words, total);
+}
+
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf98a4d3" class="outline-2">
+<h2 id="orgf98a4d3"><span class="section-number-2">4.</span> Bilan</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+C&rsquo;est un puzzle qui permet d&rsquo;accroître ses connaissances en langage C en écrivant un algorithme répondant à un problème plus complexe.
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: Guillaume BEUVOT - Prep&rsquo;ISIMA</p>
+<p class="date">Created: 2025-05-04 Sun 21:00</p>
+</div>
+</body>
+</html>
