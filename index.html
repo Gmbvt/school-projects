@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <link href="styles/style2.css" rel="stylesheet" type="text/css" />
+        <title>Guillaume BEUVOT - Page Étudiant</title>
+    </head>
+    <body>
+        
+        <header>
+            <div>
+                <h1>BEUVOT Guillaume</h1>
+            </div>
+            <div>
+                <h2>Étudiant en Prep'ISIMA 2</h2>
+            </div>
+
+            <div class="Schools">
+                <a class="Studies" id="ISIMA" href="https://www.isima.fr/" target="_blank">
+                   <img class="BIG" src="https://www.isima.fr/wp-content/uploads/2023/01/Logo_ISIMA_INP.jpg" alt="ISIMA"> 
+                   <p><strong>ISIMA</strong></p>
+                </a>
+                <a class="Studies" id="UCA" href="https://www.uca.fr/" target="_blank">
+                    <img class="BIG" src="images/UCA.png" alt="UCA">
+                    <p><strong>UCA</strong></p>
+                </a>
+                
+            </div>
+        </header>   
+        <div class="tabs" id="navbar">
+            <button class="tablinks" onclick="openTab(event, 'Accueil')">Accueil</button>
+            <button class="tablinks" onclick="openTab(event, 'Projets')">Projets</button>
+            <button class="tablinks" onclick="openTab(event, 'Me Contacter')">Me contacter</button>
+            <button class="tablinks" onclick="openTab(event, 'Autres')">Autres</button>
+        </div>
+        <div id = "Accueil" class="tabcontent">
+            <div id = "Presentation" class = "Descbox">
+                <div class="box">
+                    <p class = "Btitle">Parcours personnel et universitaire</p>
+                    <p class = "Description">
+                        <ul>
+                            <li>
+                                Je suis un étudiant en Prep'ISIMA à Clermont-Ferrand. Cette page est, pour l'heure, 
+                                dédiée à ma présentation et à la mise en avant de projets universitaires. Il est cependant possible que son contenu soit modifié.
+                                <strong>Pour accéder aux projets, il suffit de cliquer sur "Projets" dans le menu supérieur.</strong>
+                            </li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id = "Projets" class="tabcontent">
+            <a id = "DevLinux" class = "ProjectBox" href="Sous-pages/projets.html">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Développement Linux</strong></p>
+                </div>
+            </a>
+            <a id = "Demo" class = "ProjectBox" href="Sous-pages/demo/web/www/index.html">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Démonstration de HTML</strong></p>
+                </div>
+            </a>
+            <a id = "MdDemo" class = "ProjectBox" href="Sous-pages/demo/MdLibre.html">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Démonstration de Markdown</strong></p>
+                </div>
+            </a>
+            <a id = "MdDemomd" class = "ProjectBox" href="Sous-pages/demo/MdLibre.md">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Démonstration de Markdown(en Markdown)</strong></p>
+                </div>
+            </a>
+            <a id = "Colors" class = "ProjectBox" href="Sous-pages/Colors.c">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Programme couleur en C</strong></p>
+                </div>
+            </a>
+            <a id = "Colors" class = "ProjectBox" href="Sous-pages/Projets/POO.html">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Projet Programmation Orientée Objet (Java)</strong></p>
+                </div>
+            </a>
+            <a id = "Colors" class = "ProjectBox" href="Sous-pages/Projets/WebClient.html">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Projet Web Côté Client (html/css/js)</strong></p>
+                </div>
+            </a>
+            <a id = "Colors" class = "ProjectBox" href="Sous-pages/Projets/ProgAvancee.html">
+                <div class="box">
+                    <p class = "Ptitle"><strong>Projet Programmation Avancée (C/SDL2)</strong></p>
+                </div>
+            </a>
+        </div>
+        <div id="Me Contacter" class="tabcontent">
+            <a id="Mail" class="ProjectBox" href="mailto:Guillaume.BEUVOT@etu.uca.fr">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/2/26/Electronic.mail.png" width="2%">    
+                <p>
+                    Par Mail
+                </p>
+            </a>
+        </div>
+        <div id="Autres" class="tabcontent">
+            <p>WIP</p>
+        </div>
+        <footer>
+            <p>Guillaume BEUVOT, page personnelle 2026</p>
+        </footer>
+    <script src="script/script.js"></script>
+    </body>
+</html>
+
+<!--Live Today, Love Tomorrow, Unite Forever-->
